@@ -1,0 +1,6 @@
+interface:
+  display_name: "Watch Video"
+  short_description: "Analyze videos from URLs or local files"
+  default_prompt: "Use $watch to summarize this video and cite key timestamps."
+policy:
+  allow_implicit_invocation: false
