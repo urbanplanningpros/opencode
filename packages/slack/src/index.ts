@@ -20,6 +20,14 @@ const opencode = await createOpencode({
 console.log("✅ Opencode server ready")
 
 const sessions = new Map<string, { client: any; server: any; sessionId: string; channel: string; thread: string }>()
+
+function sessionTitle(text: string, thread: string) {
+  const match = text.match(/title\s+["“](.+?)["”]/i) ?? text.match(/title\s+(.+)/i)
+  if (!match) return `Slack thread ${thread}`
+  const cleaned = match[1].trim().replace(/["”]+$/g, "")
+  return cleaned || `Slack thread ${thread}`
+}
+
 void (async () => {
   const events = await opencode.client.event.subscribe()
   for await (const event of events.stream) {
@@ -76,7 +84,7 @@ app.message(async ({ message, say }) => {
     const { client, server } = opencode
 
     const createResult = await client.session.create({
-      body: { title: `Slack thread ${thread}` },
+      body: { title: sessionTitle(message.text, thread) },
     })
 
     if (createResult.error) {
