@@ -1,0 +1,34 @@
+Run structured git operations against the current repository.
+
+Use this tool instead of running raw `git` commands through Bash when you need clean, structured output from git — status, diffs, history, branches, blame, or inspecting commits.
+
+## Operations
+
+### status
+Show the working tree state: staged changes, unstaged changes, and untracked files.
+- `path` (optional): limit to a subdirectory or file
+
+### diff
+Show changes as a unified diff.
+- `staged` (optional, default false): diff staged changes (index vs HEAD) instead of unstaged (working tree vs index)
+- `ref` (optional): compare working tree against a specific ref (e.g. "HEAD~3", "main", a commit SHA)
+- `path` (optional): limit diff to a file or directory
+
+### log
+Show commit history.
+- `limit` (optional, default 20): number of commits to show
+- `ref` (optional): start from a specific branch, tag, or commit (defaults to HEAD)
+- `path` (optional): only show commits that touched this file or directory
+
+### branch
+List branches.
+- `all` (optional, default false): include remote-tracking branches
+
+### blame
+Show which commit last modified each line of a file.
+- `path` (required): path to the file to annotate
+- `ref` (optional): blame at a specific ref instead of the working tree
+
+### show
+Inspect a specific commit: message, author, date, and full diff.
+- `ref` (required): the commit SHA, tag, or branch tip to show
