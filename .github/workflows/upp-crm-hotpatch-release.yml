@@ -38,7 +38,7 @@ jobs:
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             gh release upload "$RELEASE_TAG" "$PATCH_NAME" --clobber
           else
-            gh release create "$RELEASE_TAG" "$PATCH_NAME" --title "UPP CRM GIS Source Resolver Hotpatch" --notes "$NOTES" --latest=false
+            gh release create "$RELEASE_TAG" "$PATCH_NAME" --title "UPP CRM GIS Source Resolver Hotpatch" --notes "$NOTES"
           fi
 
       - name: Print VPS download command
