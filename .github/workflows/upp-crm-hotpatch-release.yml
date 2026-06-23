@@ -1,0 +1,47 @@
+name: UPP CRM Hotpatch Release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev
+    paths:
+      - .github/workflows/upp-crm-hotpatch-release.yml
+
+permissions:
+  contents: write
+
+env:
+  PATCH_NAME: upp-crm-gis-source-resolver-hotpatch.zip
+  PATCH_URL: https://files.catbox.moe/rqdank.zip
+  EXPECTED_SHA256: D5C1210D4A6173F5947D5AD73A92BF5C23FCC5A86F3CF903DF65D14378A1A6A9
+  RELEASE_TAG: upp-crm-gis-source-resolver-latest
+
+jobs:
+  publish-hotpatch:
+    name: Publish UPP CRM hotpatch release asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download verified CRM hotpatch
+        run: |
+          set -euo pipefail
+          curl -L --fail --retry 8 --retry-delay 2 --retry-all-errors -o "$PATCH_NAME" "$PATCH_URL"
+          echo "$EXPECTED_SHA256  $PATCH_NAME" | sha256sum -c -
+          ls -lah "$PATCH_NAME"
+
+      - name: Publish GitHub release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          NOTES="Urban Planning Pros CRM GIS source resolver hotpatch. SHA256: $EXPECTED_SHA256"
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$PATCH_NAME" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$PATCH_NAME" --title "UPP CRM GIS Source Resolver Hotpatch" --notes "$NOTES" --latest=false
+          fi
+
+      - name: Print VPS download command
+        run: |
+          echo "curl -L -o /home/rocky/$PATCH_NAME https://github.com/${{ github.repository }}/releases/download/$RELEASE_TAG/$PATCH_NAME"
+          echo "Expected SHA256: $EXPECTED_SHA256"
