@@ -12,7 +12,7 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -21,4 +21,5 @@ jobs:
       - name: Close stale issues
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          STALE_ISSUES_REPO: ${{ github.repository }}
         run: bun script/github/close-issues.ts
