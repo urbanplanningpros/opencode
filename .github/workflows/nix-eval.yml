@@ -16,11 +16,11 @@ permissions:
 
 jobs:
   nix-eval:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup Nix
         uses: nixbuild/nix-quick-install-action@v34
@@ -50,9 +50,9 @@ jobs:
             for pkg in $PACKAGES; do
               printf "  %s: " "$pkg"
               if output=$(nix eval ".#packages.$system.$pkg.drvPath" --raw 2>&1); then
-                echo "✓"
+                echo "OK"
               else
-                echo "✗"
+                echo "FAIL"
                 echo "::error::Evaluation failed for packages.$system.$pkg"
                 echo "$output"
                 exit 1
@@ -68,9 +68,9 @@ jobs:
             for pkg in $OPTIONAL_PACKAGES; do
               printf "  %s: " "$pkg"
               if output=$(nix eval ".#packages.$system.$pkg.drvPath" --raw 2>&1); then
-                echo "✓"
+                echo "OK"
               else
-                echo "✗"
+                echo "WARN"
                 echo "::warning::Evaluation failed for packages.$system.$pkg"
                 echo "$output"
               fi
@@ -82,9 +82,9 @@ jobs:
           for system in $SYSTEMS; do
             printf "%s: " "$system"
             if output=$(nix eval ".#devShells.$system.default.drvPath" --raw 2>&1); then
-              echo "✓"
+              echo "OK"
             else
-              echo "✗"
+              echo "FAIL"
               echo "::error::Evaluation failed for devShells.$system.default"
               echo "$output"
               exit 1
