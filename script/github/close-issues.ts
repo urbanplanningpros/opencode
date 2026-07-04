@@ -1,8 +1,18 @@
 #!/usr/bin/env bun
 
-const repo = "anomalyco/opencode"
-const days = 60
+const repo = process.env.STALE_ISSUES_REPO ?? process.env.GITHUB_REPOSITORY ?? "anomalyco/opencode"
+const days = Number(process.env.STALE_ISSUES_DAYS ?? "60")
 const msg = `To stay organized issues are automatically closed after ${days} days of no activity. If the issue is still relevant please open a new one.`
+
+if (!/^[\w.-]+\/[\w.-]+$/.test(repo)) {
+  console.error(`Invalid repository target: ${repo}`)
+  process.exit(1)
+}
+
+if (!Number.isFinite(days) || days <= 0) {
+  console.error(`Invalid stale issue day threshold: ${days}`)
+  process.exit(1)
+}
 
 const token = process.env.GITHUB_TOKEN
 if (!token) {
@@ -11,10 +21,21 @@ if (!token) {
 }
 
 const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000)
+const agentLogin = "opencode-agent[bot]"
+const teamMembers = new Set(
+  (await Bun.file(new URL("../../.github/TEAM_MEMBERS", import.meta.url)).text())
+    .split("\n")
+    .map((line) => line.trim().toLowerCase())
+    .filter(Boolean),
+)
+const teamAssociations = new Set(["OWNER", "MEMBER"])
 
 type Issue = {
   number: number
   updated_at: string
+  author_association: string
+  pull_request?: unknown
+  user: { login: string } | null
 }
 
 const headers = {
@@ -22,6 +43,18 @@ const headers = {
   "Content-Type": "application/json",
   Accept: "application/vnd.github+json",
   "X-GitHub-Api-Version": "2022-11-28",
+}
+
+function shouldSkip(i: Issue) {
+  if (i.pull_request) return true
+
+  const login = i.user?.login.toLowerCase()
+  return login === agentLogin || (login ? teamMembers.has(login) : false) || teamAssociations.has(i.author_association)
+}
+
+async function responseMessage(res: Response) {
+  const detail = await res.text().catch(() => "")
+  return `${res.status} ${res.statusText}${detail ? `: ${detail}` : ""}`
 }
 
 async function close(num: number) {
@@ -32,28 +65,39 @@ async function close(num: number) {
     headers,
     body: JSON.stringify({ body: msg }),
   })
-  if (!comment.ok) throw new Error(`Failed to comment #${num}: ${comment.status} ${comment.statusText}`)
+  if (!comment.ok) throw new Error(`Failed to comment #${num}: ${await responseMessage(comment)}`)
 
   const patch = await fetch(base, {
     method: "PATCH",
     headers,
-    body: JSON.stringify({ state: "closed", state_reason: "completed" }),
+    body: JSON.stringify({ state: "closed", state_reason: "not_planned" }),
   })
-  if (!patch.ok) throw new Error(`Failed to close #${num}: ${patch.status} ${patch.statusText}`)
+  if (!patch.ok) throw new Error(`Failed to close #${num}: ${await responseMessage(patch)}`)
 
   console.log(`Closed https://github.com/${repo}/issues/${num}`)
+}
+
+async function closeAll(stale: number[]) {
+  let closed = 0
+  for (const num of stale) {
+    await close(num)
+    closed++
+  }
+  return closed
 }
 
 async function main() {
   let page = 1
   let closed = 0
 
+  console.log(`Closing issues older than ${days} days in ${repo}`)
+
   while (true) {
     const res = await fetch(
       `https://api.github.com/repos/${repo}/issues?state=open&sort=updated&direction=asc&per_page=100&page=${page}`,
       { headers },
     )
-    if (!res.ok) throw new Error(res.statusText)
+    if (!res.ok) throw new Error(await responseMessage(res))
 
     const all = (await res.json()) as Issue[]
     if (all.length === 0) break
@@ -63,27 +107,20 @@ async function main() {
     for (const i of all) {
       const updated = new Date(i.updated_at)
       if (updated < cutoff) {
+        if (shouldSkip(i)) {
+          console.log(`Skipping stale issue #${i.number}; author ${i.user?.login ?? "unknown"} is exempt`)
+          continue
+        }
         stale.push(i.number)
       } else {
         console.log(`\nFound fresh issue #${i.number}, stopping`)
-        if (stale.length > 0) {
-          for (const num of stale) {
-            await close(num)
-            closed++
-          }
-        }
+        closed += await closeAll(stale)
         console.log(`Closed ${closed} issues total`)
         return
       }
     }
 
-    if (stale.length > 0) {
-      for (const num of stale) {
-        await close(num)
-        closed++
-      }
-    }
-
+    closed += await closeAll(stale)
     page++
   }
 
