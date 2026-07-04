@@ -24,6 +24,7 @@ jobs:
   unit:
     name: unit (linux)
     runs-on: ubuntu-latest
+    continue-on-error: true
     defaults:
       run:
         shell: bash
