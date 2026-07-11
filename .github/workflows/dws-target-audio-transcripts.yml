@@ -1,0 +1,76 @@
+name: DWS Target Audio Transcripts
+
+on:
+  push:
+    branches:
+      - dws-dashboard-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/transcribe_target_audio.py
+      - .github/workflows/dws-target-audio-transcripts.yml
+  workflow_dispatch:
+
+concurrency:
+  group: dws-target-audio-transcripts
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  transcribe:
+    strategy:
+      fail-fast: false
+      matrix:
+        source_id: [SRC-006, SRC-017]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dws-dashboard-preview
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check requests faster-whisper
+      - run: python packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/transcribe_target_audio.py ${{ matrix.source_id }} --output-dir target-transcripts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: target-transcript-${{ matrix.source_id }}
+          path: target-transcripts/${{ matrix.source_id }}.json
+          retention-days: 2
+
+  publish:
+    needs: transcribe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dws-dashboard-preview
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: target-transcript-*
+          path: target-transcripts
+          merge-multiple: true
+      - name: Merge transcript files
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files=sorted(Path('target-transcripts').glob('SRC-*.json'))
+          output={}
+          for path in files:
+              item=json.loads(path.read_text(encoding='utf-8'))
+              output[item['source_id']]=item
+          destination=Path('packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/target-audio-transcripts.json')
+          destination.write_text(json.dumps(output,ensure_ascii=False,separators=(',',':'))+'\n',encoding='utf-8')
+          print({key:value['segment_count'] for key,value in output.items()})
+          PY
+      - name: Commit target transcripts
+        run: |
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/target-audio-transcripts.json
+          git commit -m "Transcribe chapterless DWS source audio"
+          git pull --rebase origin dws-dashboard-preview
+          git push origin HEAD:dws-dashboard-preview
