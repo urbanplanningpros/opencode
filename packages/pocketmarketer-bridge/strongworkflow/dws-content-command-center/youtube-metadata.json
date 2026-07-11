@@ -1,0 +1,1516 @@
+{
+  "SRC-001": {
+    "video_id": "DEjw2Txc9oo",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Understanding Valuation Components",
+        "time_text": "1:30",
+        "start_seconds": 90
+      },
+      {
+        "title": "The Role of Seller Psychology in Valuation",
+        "time_text": "3:03",
+        "start_seconds": 183
+      },
+      {
+        "title": "Using DealStats for Valuation Insights",
+        "time_text": "6:26",
+        "start_seconds": 386
+      },
+      {
+        "title": "Calculating EBITDA and Profit Margins",
+        "time_text": "9:23",
+        "start_seconds": 563
+      },
+      {
+        "title": "Understanding Seller's Discretionary Earnings (SDE)",
+        "time_text": "12:42",
+        "start_seconds": 762
+      },
+      {
+        "title": "Recasting EBITDA for Accurate Valuation",
+        "time_text": "16:26",
+        "start_seconds": 986
+      },
+      {
+        "title": "Red Flags in Business Trends",
+        "time_text": "19:53",
+        "start_seconds": 1193
+      },
+      {
+        "title": "Surplus Cash and Its Impact on Valuation",
+        "time_text": "22:30",
+        "start_seconds": 1350
+      },
+      {
+        "title": "Understanding Liquidation Value",
+        "time_text": "27:37",
+        "start_seconds": 1657
+      },
+      {
+        "title": "The Concept of Goodwill in Business Valuation",
+        "time_text": "29:50",
+        "start_seconds": 1790
+      },
+      {
+        "title": "Key Components of Goodwill",
+        "time_text": "31:59",
+        "start_seconds": 1919
+      },
+      {
+        "title": "Evaluating Business Transfer Value",
+        "time_text": "35:14",
+        "start_seconds": 2114
+      },
+      {
+        "title": "Understanding Business Valuation Dynamics",
+        "time_text": "37:54",
+        "start_seconds": 2274
+      },
+      {
+        "title": "Seller Psychology and Its Impact",
+        "time_text": "39:16",
+        "start_seconds": 2356
+      },
+      {
+        "title": "The Importance of Deal Structure",
+        "time_text": "40:52",
+        "start_seconds": 2452
+      },
+      {
+        "title": "Evaluating Business Performance Metrics",
+        "time_text": "42:42",
+        "start_seconds": 2562
+      },
+      {
+        "title": "Assessing Goodwill and Market Value",
+        "time_text": "44:23",
+        "start_seconds": 2663
+      },
+      {
+        "title": "Structuring Payment Plans for Acquisitions",
+        "time_text": "52:44",
+        "start_seconds": 3164
+      },
+      {
+        "title": "Evaluating Different Deal Options",
+        "time_text": "54:54",
+        "start_seconds": 3294
+      },
+      {
+        "title": "Exploring SBA Loan Benefits",
+        "time_text": "56:17",
+        "start_seconds": 3377
+      },
+      {
+        "title": "Traditional Deal Structures Explained",
+        "time_text": "57:44",
+        "start_seconds": 3464
+      },
+      {
+        "title": "Comparing Deal Structures",
+        "time_text": "59:07",
+        "start_seconds": 3547
+      },
+      {
+        "title": "Outro",
+        "time_text": "1:00:58",
+        "start_seconds": 3658
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Understanding Valuation Components",
+        "time_text": "1:30",
+        "start_seconds": 90
+      },
+      {
+        "title": "The Role of Seller Psychology in Valuation",
+        "time_text": "3:03",
+        "start_seconds": 183
+      },
+      {
+        "title": "Using DealStats for Valuation Insights",
+        "time_text": "6:26",
+        "start_seconds": 386
+      },
+      {
+        "title": "Calculating EBITDA and Profit Margins",
+        "time_text": "9:23",
+        "start_seconds": 563
+      },
+      {
+        "title": "Understanding Seller's Discretionary Earnings (SDE)",
+        "time_text": "12:42",
+        "start_seconds": 762
+      },
+      {
+        "title": "Recasting EBITDA for Accurate Valuation",
+        "time_text": "16:26",
+        "start_seconds": 986
+      },
+      {
+        "title": "Red Flags in Business Trends",
+        "time_text": "19:53",
+        "start_seconds": 1193
+      },
+      {
+        "title": "Surplus Cash and Its Impact on Valuation",
+        "time_text": "22:30",
+        "start_seconds": 1350
+      },
+      {
+        "title": "Understanding Liquidation Value",
+        "time_text": "27:37",
+        "start_seconds": 1657
+      },
+      {
+        "title": "The Concept of Goodwill in Business Valuation",
+        "time_text": "29:50",
+        "start_seconds": 1790
+      },
+      {
+        "title": "Key Components of Goodwill",
+        "time_text": "31:59",
+        "start_seconds": 1919
+      },
+      {
+        "title": "Evaluating Business Transfer Value",
+        "time_text": "35:14",
+        "start_seconds": 2114
+      },
+      {
+        "title": "Understanding Business Valuation Dynamics",
+        "time_text": "37:54",
+        "start_seconds": 2274
+      },
+      {
+        "title": "Seller Psychology and Its Impact",
+        "time_text": "39:16",
+        "start_seconds": 2356
+      },
+      {
+        "title": "The Importance of Deal Structure",
+        "time_text": "40:52",
+        "start_seconds": 2452
+      },
+      {
+        "title": "Evaluating Business Performance Metrics",
+        "time_text": "42:42",
+        "start_seconds": 2562
+      },
+      {
+        "title": "Assessing Goodwill and Market Value",
+        "time_text": "44:23",
+        "start_seconds": 2663
+      },
+      {
+        "title": "Structuring Payment Plans for Acquisitions",
+        "time_text": "52:44",
+        "start_seconds": 3164
+      },
+      {
+        "title": "Evaluating Different Deal Options",
+        "time_text": "54:54",
+        "start_seconds": 3294
+      },
+      {
+        "title": "Exploring SBA Loan Benefits",
+        "time_text": "56:17",
+        "start_seconds": 3377
+      },
+      {
+        "title": "Traditional Deal Structures Explained",
+        "time_text": "57:44",
+        "start_seconds": 3464
+      },
+      {
+        "title": "Comparing Deal Structures",
+        "time_text": "59:07",
+        "start_seconds": 3547
+      },
+      {
+        "title": "Outro",
+        "time_text": "1:00:58",
+        "start_seconds": 3658
+      }
+    ],
+    "watch_bytes": 1452923
+  },
+  "SRC-002": {
+    "video_id": "9lrPJH55rtw",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Why Businesses Sell",
+        "time_text": "1:23",
+        "start_seconds": 83
+      },
+      {
+        "title": "Why Startups Fail",
+        "time_text": "6:15",
+        "start_seconds": 375
+      },
+      {
+        "title": "The Acquisition Market Explained",
+        "time_text": "7:23",
+        "start_seconds": 443
+      },
+      {
+        "title": "Baby Boomers & Business Sales",
+        "time_text": "11:09",
+        "start_seconds": 669
+      },
+      {
+        "title": "Why Owners Really Exit",
+        "time_text": "15:04",
+        "start_seconds": 904
+      },
+      {
+        "title": "Seller Psychology Explained",
+        "time_text": "19:35",
+        "start_seconds": 1175
+      },
+      {
+        "title": "Defining Your Buy Box",
+        "time_text": "21:40",
+        "start_seconds": 1300
+      },
+      {
+        "title": "Keys to Buying Successfully",
+        "time_text": "29:37",
+        "start_seconds": 1777
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Why Businesses Sell",
+        "time_text": "1:23",
+        "start_seconds": 83
+      },
+      {
+        "title": "Why Startups Fail",
+        "time_text": "6:15",
+        "start_seconds": 375
+      },
+      {
+        "title": "The Acquisition Market Explained",
+        "time_text": "7:23",
+        "start_seconds": 443
+      },
+      {
+        "title": "Baby Boomers & Business Sales",
+        "time_text": "11:09",
+        "start_seconds": 669
+      },
+      {
+        "title": "Why Owners Really Exit",
+        "time_text": "15:04",
+        "start_seconds": 904
+      },
+      {
+        "title": "Seller Psychology Explained",
+        "time_text": "19:35",
+        "start_seconds": 1175
+      },
+      {
+        "title": "Defining Your Buy Box",
+        "time_text": "21:40",
+        "start_seconds": 1300
+      },
+      {
+        "title": "Keys to Buying Successfully",
+        "time_text": "29:37",
+        "start_seconds": 1777
+      }
+    ],
+    "watch_bytes": 1207695
+  },
+  "SRC-003": {
+    "video_id": "PMoLVmTQypY",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Market Trends in Business Sales",
+        "time_text": "1:14",
+        "start_seconds": 74
+      },
+      {
+        "title": "How COVID Changed Seller Behavior",
+        "time_text": "4:48",
+        "start_seconds": 288
+      },
+      {
+        "title": "Why Most Deals Fail to Close",
+        "time_text": "8:26",
+        "start_seconds": 506
+      },
+      {
+        "title": "Measuring Seller Psychology",
+        "time_text": "13:23",
+        "start_seconds": 803
+      },
+      {
+        "title": "Core Seller Profiles Explained",
+        "time_text": "17:32",
+        "start_seconds": 1052
+      },
+      {
+        "title": "What Really Drives Seller Decisions",
+        "time_text": "20:16",
+        "start_seconds": 1216
+      },
+      {
+        "title": "Patterns in Successful Deals",
+        "time_text": "26:55",
+        "start_seconds": 1615
+      },
+      {
+        "title": "Using Psychology to Structure Deals",
+        "time_text": "37:00",
+        "start_seconds": 2220
+      },
+      {
+        "title": "Case Study & Real-World Examples",
+        "time_text": "39:03",
+        "start_seconds": 2343
+      },
+      {
+        "title": "Outro",
+        "time_text": "52:37",
+        "start_seconds": 3157
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Market Trends in Business Sales",
+        "time_text": "1:14",
+        "start_seconds": 74
+      },
+      {
+        "title": "How COVID Changed Seller Behavior",
+        "time_text": "4:48",
+        "start_seconds": 288
+      },
+      {
+        "title": "Why Most Deals Fail to Close",
+        "time_text": "8:26",
+        "start_seconds": 506
+      },
+      {
+        "title": "Measuring Seller Psychology",
+        "time_text": "13:23",
+        "start_seconds": 803
+      },
+      {
+        "title": "Core Seller Profiles Explained",
+        "time_text": "17:32",
+        "start_seconds": 1052
+      },
+      {
+        "title": "What Really Drives Seller Decisions",
+        "time_text": "20:16",
+        "start_seconds": 1216
+      },
+      {
+        "title": "Patterns in Successful Deals",
+        "time_text": "26:55",
+        "start_seconds": 1615
+      },
+      {
+        "title": "Using Psychology to Structure Deals",
+        "time_text": "37:00",
+        "start_seconds": 2220
+      },
+      {
+        "title": "Case Study & Real-World Examples",
+        "time_text": "39:03",
+        "start_seconds": 2343
+      },
+      {
+        "title": "Outro",
+        "time_text": "52:37",
+        "start_seconds": 3157
+      }
+    ],
+    "watch_bytes": 1248301
+  },
+  "SRC-004": {
+    "video_id": "Pj0p9-G-DME",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1163981
+  },
+  "SRC-005": {
+    "video_id": "n9sBKW5UHno",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "MINDSET",
+        "time_text": "0:51",
+        "start_seconds": 51
+      },
+      {
+        "title": "BUY BOX",
+        "time_text": "1:26",
+        "start_seconds": 86
+      },
+      {
+        "title": "DEAL ORIGINATION",
+        "time_text": "1:52",
+        "start_seconds": 112
+      },
+      {
+        "title": "MEETINGS",
+        "time_text": "2:27",
+        "start_seconds": 147
+      },
+      {
+        "title": "NON-DISCLOSURE AGREEMENT",
+        "time_text": "2:58",
+        "start_seconds": 178
+      },
+      {
+        "title": "OFFERS",
+        "time_text": "3:54",
+        "start_seconds": 234
+      },
+      {
+        "title": "DEAL EXECUTION",
+        "time_text": "4:24",
+        "start_seconds": 264
+      },
+      {
+        "title": "CLOSING TABLE",
+        "time_text": "5:35",
+        "start_seconds": 335
+      },
+      {
+        "title": "GROWTH",
+        "time_text": "6:15",
+        "start_seconds": 375
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "MINDSET",
+        "time_text": "0:51",
+        "start_seconds": 51
+      },
+      {
+        "title": "BUY BOX",
+        "time_text": "1:26",
+        "start_seconds": 86
+      },
+      {
+        "title": "DEAL ORIGINATION",
+        "time_text": "1:52",
+        "start_seconds": 112
+      },
+      {
+        "title": "MEETINGS",
+        "time_text": "2:27",
+        "start_seconds": 147
+      },
+      {
+        "title": "NON-DISCLOSURE AGREEMENT",
+        "time_text": "2:58",
+        "start_seconds": 178
+      },
+      {
+        "title": "OFFERS",
+        "time_text": "3:54",
+        "start_seconds": 234
+      },
+      {
+        "title": "DEAL EXECUTION",
+        "time_text": "4:24",
+        "start_seconds": 264
+      },
+      {
+        "title": "CLOSING TABLE",
+        "time_text": "5:35",
+        "start_seconds": 335
+      },
+      {
+        "title": "GROWTH",
+        "time_text": "6:15",
+        "start_seconds": 375
+      }
+    ],
+    "watch_bytes": 1245136
+  },
+  "SRC-006": {
+    "video_id": "hll8HIkKlDY",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1189314
+  },
+  "SRC-007": {
+    "video_id": "K31HX227ZPM",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro & Business Pressures",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Marketing Dominator System & Cointelligence",
+        "time_text": "2:53",
+        "start_seconds": 173
+      },
+      {
+        "title": "Live Marketing Demo with Guest Speaker",
+        "time_text": "6:40",
+        "start_seconds": 400
+      },
+      {
+        "title": "Building Marketing Strategies & Content",
+        "time_text": "11:41",
+        "start_seconds": 701
+      },
+      {
+        "title": "Takeaways & Empowerment Through Technology",
+        "time_text": "27:49",
+        "start_seconds": 1669
+      },
+      {
+        "title": "Solutions, Benefits & Opportunity Sharing",
+        "time_text": "37:24",
+        "start_seconds": 2244
+      },
+      {
+        "title": "Intro & Business Pressures",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Marketing Dominator System & Cointelligence",
+        "time_text": "2:53",
+        "start_seconds": 173
+      },
+      {
+        "title": "Live Marketing Demo with Guest Speaker",
+        "time_text": "6:40",
+        "start_seconds": 400
+      },
+      {
+        "title": "Building Marketing Strategies & Content",
+        "time_text": "11:41",
+        "start_seconds": 701
+      },
+      {
+        "title": "Takeaways & Empowerment Through Technology",
+        "time_text": "27:49",
+        "start_seconds": 1669
+      },
+      {
+        "title": "Solutions, Benefits & Opportunity Sharing",
+        "time_text": "37:24",
+        "start_seconds": 2244
+      }
+    ],
+    "watch_bytes": 1171196
+  },
+  "SRC-008": {
+    "video_id": "dG_mQ05v46Y",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro & Business Model Insights",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Marketing Strategy & Training the AI Brain",
+        "time_text": "2:20",
+        "start_seconds": 140
+      },
+      {
+        "title": "Lead Generation Campaign Planning",
+        "time_text": "4:42",
+        "start_seconds": 282
+      },
+      {
+        "title": "Lead Magnet & Case Study Tools",
+        "time_text": "7:51",
+        "start_seconds": 471
+      },
+      {
+        "title": "Lead Capture & Follow-Up System Setup",
+        "time_text": "9:14",
+        "start_seconds": 554
+      },
+      {
+        "title": "Email Marketing & Sales Process Framework",
+        "time_text": "16:52",
+        "start_seconds": 1012
+      },
+      {
+        "title": "Marketing Challenges & Next Steps",
+        "time_text": "22:55",
+        "start_seconds": 1375
+      },
+      {
+        "title": "Intro & Business Model Insights",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Marketing Strategy & Training the AI Brain",
+        "time_text": "2:20",
+        "start_seconds": 140
+      },
+      {
+        "title": "Lead Generation Campaign Planning",
+        "time_text": "4:42",
+        "start_seconds": 282
+      },
+      {
+        "title": "Lead Magnet & Case Study Tools",
+        "time_text": "7:51",
+        "start_seconds": 471
+      },
+      {
+        "title": "Lead Capture & Follow-Up System Setup",
+        "time_text": "9:14",
+        "start_seconds": 554
+      },
+      {
+        "title": "Email Marketing & Sales Process Framework",
+        "time_text": "16:52",
+        "start_seconds": 1012
+      },
+      {
+        "title": "Marketing Challenges & Next Steps",
+        "time_text": "22:55",
+        "start_seconds": 1375
+      }
+    ],
+    "watch_bytes": 1179086
+  },
+  "SRC-009": {
+    "video_id": "r_pmmIWu814",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Introduction to dealmaking",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Moving to Austin",
+        "time_text": "1:18",
+        "start_seconds": 78.599998
+      },
+      {
+        "title": "The bestseller book launch",
+        "time_text": "3:04",
+        "start_seconds": 184.89999
+      },
+      {
+        "title": "Mission over money",
+        "time_text": "5:59",
+        "start_seconds": 359.20001
+      },
+      {
+        "title": "The noble capitalist",
+        "time_text": "8:24",
+        "start_seconds": 504.89999
+      },
+      {
+        "title": "Abundance mindset",
+        "time_text": "11:55",
+        "start_seconds": 715.466
+      },
+      {
+        "title": "Innovating the annuity deal",
+        "time_text": "14:02",
+        "start_seconds": 842.59998
+      },
+      {
+        "title": "Imitation as flattery",
+        "time_text": "18:19",
+        "start_seconds": 1099.4659
+      },
+      {
+        "title": "Consulting for equity",
+        "time_text": "19:43",
+        "start_seconds": 1183.1331
+      },
+      {
+        "title": "Magnetic negotiation",
+        "time_text": "24:44",
+        "start_seconds": 1484.866
+      },
+      {
+        "title": "Solving owner loneliness",
+        "time_text": "27:22",
+        "start_seconds": 1642.6
+      },
+      {
+        "title": "The equity partner",
+        "time_text": "31:41",
+        "start_seconds": 1901.1
+      },
+      {
+        "title": "Transferring business value",
+        "time_text": "33:53",
+        "start_seconds": 2033.666
+      },
+      {
+        "title": "The art of the deal",
+        "time_text": "38:56",
+        "start_seconds": 2336.6001
+      },
+      {
+        "title": "Real estate and rollups",
+        "time_text": "41:17",
+        "start_seconds": 2477.866
+      },
+      {
+        "title": "Cross selling opportunities",
+        "time_text": "44:06",
+        "start_seconds": 2646.7329
+      },
+      {
+        "title": "The power of masterminds",
+        "time_text": "46:42",
+        "start_seconds": 2802.866
+      },
+      {
+        "title": "Building a community",
+        "time_text": "48:14",
+        "start_seconds": 2894.6001
+      },
+      {
+        "title": "Conclusion",
+        "time_text": "50:48",
+        "start_seconds": 3048.333
+      },
+      {
+        "title": "Introduction to dealmaking",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Moving to Austin",
+        "time_text": "1:18",
+        "start_seconds": 78.599998
+      },
+      {
+        "title": "The bestseller book launch",
+        "time_text": "3:04",
+        "start_seconds": 184.89999
+      },
+      {
+        "title": "Mission over money",
+        "time_text": "5:59",
+        "start_seconds": 359.20001
+      },
+      {
+        "title": "The noble capitalist",
+        "time_text": "8:24",
+        "start_seconds": 504.89999
+      },
+      {
+        "title": "Abundance mindset",
+        "time_text": "11:55",
+        "start_seconds": 715.466
+      },
+      {
+        "title": "Innovating the annuity deal",
+        "time_text": "14:02",
+        "start_seconds": 842.59998
+      },
+      {
+        "title": "Imitation as flattery",
+        "time_text": "18:19",
+        "start_seconds": 1099.4659
+      },
+      {
+        "title": "Consulting for equity",
+        "time_text": "19:43",
+        "start_seconds": 1183.1331
+      },
+      {
+        "title": "Magnetic negotiation",
+        "time_text": "24:44",
+        "start_seconds": 1484.866
+      },
+      {
+        "title": "Solving owner loneliness",
+        "time_text": "27:22",
+        "start_seconds": 1642.6
+      },
+      {
+        "title": "The equity partner",
+        "time_text": "31:41",
+        "start_seconds": 1901.1
+      },
+      {
+        "title": "Transferring business value",
+        "time_text": "33:53",
+        "start_seconds": 2033.666
+      },
+      {
+        "title": "The art of the deal",
+        "time_text": "38:56",
+        "start_seconds": 2336.6001
+      },
+      {
+        "title": "Real estate and rollups",
+        "time_text": "41:17",
+        "start_seconds": 2477.866
+      },
+      {
+        "title": "Cross selling opportunities",
+        "time_text": "44:06",
+        "start_seconds": 2646.7329
+      },
+      {
+        "title": "The power of masterminds",
+        "time_text": "46:42",
+        "start_seconds": 2802.866
+      },
+      {
+        "title": "Building a community",
+        "time_text": "48:14",
+        "start_seconds": 2894.6001
+      },
+      {
+        "title": "Conclusion",
+        "time_text": "50:48",
+        "start_seconds": 3048.333
+      }
+    ],
+    "watch_bytes": 1357452
+  },
+  "SRC-010": {
+    "video_id": "A223C62KMVg",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1164459
+  },
+  "SRC-011": {
+    "video_id": "DqQAFG5kW1E",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "My Mission",
+        "time_text": "0:37",
+        "start_seconds": 37
+      },
+      {
+        "title": "What is Consulting for Equity",
+        "time_text": "2:16",
+        "start_seconds": 136
+      },
+      {
+        "title": "Option 1 Solution",
+        "time_text": "3:37",
+        "start_seconds": 217
+      },
+      {
+        "title": "Option 2 Solution",
+        "time_text": "4:34",
+        "start_seconds": 274
+      },
+      {
+        "title": "Option 3 Solution",
+        "time_text": "6:35",
+        "start_seconds": 395
+      },
+      {
+        "title": "Option 4 Solution",
+        "time_text": "7:39",
+        "start_seconds": 459
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "My Mission",
+        "time_text": "0:37",
+        "start_seconds": 37
+      },
+      {
+        "title": "What is Consulting for Equity",
+        "time_text": "2:16",
+        "start_seconds": 136
+      },
+      {
+        "title": "Option 1 Solution",
+        "time_text": "3:37",
+        "start_seconds": 217
+      },
+      {
+        "title": "Option 2 Solution",
+        "time_text": "4:34",
+        "start_seconds": 274
+      },
+      {
+        "title": "Option 3 Solution",
+        "time_text": "6:35",
+        "start_seconds": 395
+      },
+      {
+        "title": "Option 4 Solution",
+        "time_text": "7:39",
+        "start_seconds": 459
+      }
+    ],
+    "watch_bytes": 1121279
+  },
+  "SRC-012": {
+    "video_id": "JPprh0MeW6U",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1137456
+  },
+  "SRC-013": {
+    "video_id": "yK3SV5dTsi8",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1207884
+  },
+  "SRC-014": {
+    "video_id": "ubMrOQDxtOk",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Introduction",
+        "time_text": "0:17",
+        "start_seconds": 17
+      },
+      {
+        "title": "Deal Structure",
+        "time_text": "1:59",
+        "start_seconds": 119
+      },
+      {
+        "title": "Seller Psychology",
+        "time_text": "4:02",
+        "start_seconds": 242
+      },
+      {
+        "title": "Transfer of Value",
+        "time_text": "5:49",
+        "start_seconds": 349
+      },
+      {
+        "title": "Introduction",
+        "time_text": "0:17",
+        "start_seconds": 17
+      },
+      {
+        "title": "Deal Structure",
+        "time_text": "1:59",
+        "start_seconds": 119
+      },
+      {
+        "title": "Seller Psychology",
+        "time_text": "4:02",
+        "start_seconds": 242
+      },
+      {
+        "title": "Transfer of Value",
+        "time_text": "5:49",
+        "start_seconds": 349
+      }
+    ],
+    "watch_bytes": 1231888
+  },
+  "SRC-015": {
+    "video_id": "tgRs-9PKb_w",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Seller",
+        "time_text": "0:55",
+        "start_seconds": 55
+      },
+      {
+        "title": "Annuity Deal",
+        "time_text": "1:41",
+        "start_seconds": 101
+      },
+      {
+        "title": "Summary",
+        "time_text": "7:10",
+        "start_seconds": 430
+      },
+      {
+        "title": "Annuity Deal Origins",
+        "time_text": "7:33",
+        "start_seconds": 453
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Seller",
+        "time_text": "0:55",
+        "start_seconds": 55
+      },
+      {
+        "title": "Annuity Deal",
+        "time_text": "1:41",
+        "start_seconds": 101
+      },
+      {
+        "title": "Summary",
+        "time_text": "7:10",
+        "start_seconds": 430
+      },
+      {
+        "title": "Annuity Deal Origins",
+        "time_text": "7:33",
+        "start_seconds": 453
+      }
+    ],
+    "watch_bytes": 1247384
+  },
+  "SRC-016": {
+    "video_id": "ib5ojVstPvM",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Sreenath Kizhakkedath",
+        "time_text": "2:27",
+        "start_seconds": 147
+      },
+      {
+        "title": "Valerie & Jonathan Shirah",
+        "time_text": "13:14",
+        "start_seconds": 794
+      },
+      {
+        "title": "Jamie Busby",
+        "time_text": "24:03",
+        "start_seconds": 1443
+      },
+      {
+        "title": "Justin Hertz",
+        "time_text": "34:07",
+        "start_seconds": 2047
+      },
+      {
+        "title": "Alok Gupta",
+        "time_text": "46:34",
+        "start_seconds": 2794
+      },
+      {
+        "title": "Laura Reeves",
+        "time_text": "57:17",
+        "start_seconds": 3437
+      },
+      {
+        "title": "Leonard Feinstein",
+        "time_text": "1:09:34",
+        "start_seconds": 4174
+      },
+      {
+        "title": "Outro",
+        "time_text": "1:16:09",
+        "start_seconds": 4569
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Sreenath Kizhakkedath",
+        "time_text": "2:27",
+        "start_seconds": 147
+      },
+      {
+        "title": "Valerie & Jonathan Shirah",
+        "time_text": "13:14",
+        "start_seconds": 794
+      },
+      {
+        "title": "Jamie Busby",
+        "time_text": "24:03",
+        "start_seconds": 1443
+      },
+      {
+        "title": "Justin Hertz",
+        "time_text": "34:07",
+        "start_seconds": 2047
+      },
+      {
+        "title": "Alok Gupta",
+        "time_text": "46:34",
+        "start_seconds": 2794
+      },
+      {
+        "title": "Laura Reeves",
+        "time_text": "57:17",
+        "start_seconds": 3437
+      },
+      {
+        "title": "Leonard Feinstein",
+        "time_text": "1:09:34",
+        "start_seconds": 4174
+      },
+      {
+        "title": "Outro",
+        "time_text": "1:16:09",
+        "start_seconds": 4569
+      }
+    ],
+    "watch_bytes": 1297684
+  },
+  "SRC-017": {
+    "video_id": "cHjTr1943ks",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1213539
+  },
+  "SRC-018": {
+    "video_id": "cLSnuGR1opQ",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Get Personal",
+        "time_text": "1:38",
+        "start_seconds": 98
+      },
+      {
+        "title": "Bearing Gifts",
+        "time_text": "3:00",
+        "start_seconds": 180
+      },
+      {
+        "title": "What Can I Do To Help You?",
+        "time_text": "6:33",
+        "start_seconds": 393
+      },
+      {
+        "title": "Outro",
+        "time_text": "8:53",
+        "start_seconds": 533
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Get Personal",
+        "time_text": "1:38",
+        "start_seconds": 98
+      },
+      {
+        "title": "Bearing Gifts",
+        "time_text": "3:00",
+        "start_seconds": 180
+      },
+      {
+        "title": "What Can I Do To Help You?",
+        "time_text": "6:33",
+        "start_seconds": 393
+      },
+      {
+        "title": "Outro",
+        "time_text": "8:53",
+        "start_seconds": 533
+      }
+    ],
+    "watch_bytes": 1242330
+  },
+  "SRC-019": {
+    "video_id": "gxx_s-RMvYg",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1129579
+  },
+  "SRC-020": {
+    "video_id": "q35pUe2kwJg",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Carls 5 key sectors",
+        "time_text": "0:48",
+        "start_seconds": 48
+      },
+      {
+        "title": "Ecom",
+        "time_text": "1:11",
+        "start_seconds": 71
+      },
+      {
+        "title": "Home Services",
+        "time_text": "1:29",
+        "start_seconds": 89
+      },
+      {
+        "title": "Professional Services",
+        "time_text": "1:58",
+        "start_seconds": 118
+      },
+      {
+        "title": "Engineering Manufacturing",
+        "time_text": "2:10",
+        "start_seconds": 130
+      },
+      {
+        "title": "Healthcare",
+        "time_text": "2:40",
+        "start_seconds": 160
+      },
+      {
+        "title": "Focus",
+        "time_text": "4:12",
+        "start_seconds": 252
+      },
+      {
+        "title": "Strategy Beat",
+        "time_text": "4:50",
+        "start_seconds": 290
+      },
+      {
+        "title": "Methodology",
+        "time_text": "5:26",
+        "start_seconds": 326
+      },
+      {
+        "title": "Masterminds",
+        "time_text": "8:57",
+        "start_seconds": 537
+      },
+      {
+        "title": "Intro",
+        "time_text": "0:00",
+        "start_seconds": 0
+      },
+      {
+        "title": "Carls 5 key sectors",
+        "time_text": "0:48",
+        "start_seconds": 48
+      },
+      {
+        "title": "Ecom",
+        "time_text": "1:11",
+        "start_seconds": 71
+      },
+      {
+        "title": "Home Services",
+        "time_text": "1:29",
+        "start_seconds": 89
+      },
+      {
+        "title": "Professional Services",
+        "time_text": "1:58",
+        "start_seconds": 118
+      },
+      {
+        "title": "Engineering Manufacturing",
+        "time_text": "2:10",
+        "start_seconds": 130
+      },
+      {
+        "title": "Healthcare",
+        "time_text": "2:40",
+        "start_seconds": 160
+      },
+      {
+        "title": "Focus",
+        "time_text": "4:12",
+        "start_seconds": 252
+      },
+      {
+        "title": "Strategy Beat",
+        "time_text": "4:50",
+        "start_seconds": 290
+      },
+      {
+        "title": "Methodology",
+        "time_text": "5:26",
+        "start_seconds": 326
+      },
+      {
+        "title": "Masterminds",
+        "time_text": "8:57",
+        "start_seconds": 537
+      }
+    ],
+    "watch_bytes": 1246910
+  },
+  "SRC-021": {
+    "video_id": "zS3FebPaqSw",
+    "title": "",
+    "length_seconds": 0,
+    "channel_id": "",
+    "author": "",
+    "short_description": "",
+    "keywords": [],
+    "chapters": [],
+    "watch_bytes": 1206123
+  }
+}
