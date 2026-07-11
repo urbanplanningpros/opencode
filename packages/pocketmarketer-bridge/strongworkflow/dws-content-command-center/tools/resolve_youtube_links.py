@@ -39,6 +39,23 @@ YOUTUBE_ID_PATTERNS = [
     re.compile(r"(?:youtubeId|videoId|data-video-id)[\\\"'=: ]+([A-Za-z0-9_-]{11})", re.I),
 ]
 
+PIPED_BASES = [
+    "https://pipedapi.kavin.rocks",
+    "https://pipedapi.adminforge.de",
+    "https://pipedapi.reallyaweso.me",
+    "https://pipedapi.r4fo.com",
+    "https://pipedapi.leptons.xyz",
+    "https://pipedapi.darkness.services",
+]
+
+INVIDIOUS_BASES = [
+    "https://inv.zoomerville.com",
+    "https://inv.nadeko.net",
+    "https://invidious.nerdvpn.de",
+    "https://invidious.f5.si",
+    "https://yt.chocolatemoo53.com",
+]
+
 SESSION = requests.Session()
 SESSION.headers.update({
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
@@ -99,11 +116,11 @@ def video_renderers(value: object) -> list[dict]:
     return found
 
 
-def youtube_search(query: str) -> tuple[list[dict], dict]:
+def youtube_html_search(query: str) -> tuple[list[dict], dict]:
     url = f"https://www.youtube.com/results?search_query={quote_plus(query)}&sp=EgIQAQ%253D%253D&hl=en&gl=US"
     debug = {"url": url, "status": None, "bytes": 0, "initial_data": False, "renderer_count": 0}
     try:
-        response = SESSION.get(url, timeout=35)
+        response = SESSION.get(url, timeout=30)
         debug.update(status=response.status_code, bytes=len(response.content))
         response.raise_for_status()
     except Exception as exc:
@@ -123,13 +140,13 @@ def youtube_search(query: str) -> tuple[list[dict], dict]:
         if not video_id or video_id in seen:
             continue
         seen.add(video_id)
-        channel = text_value(renderer.get("ownerText")) or text_value(renderer.get("longBylineText")) or text_value(renderer.get("shortBylineText"))
-        browse = (((renderer.get("ownerText") or renderer.get("longBylineText") or {}).get("runs") or [{}])[0].get("navigationEndpoint") or {}).get("browseEndpoint") or {}
+        byline = renderer.get("ownerText") or renderer.get("longBylineText") or renderer.get("shortBylineText") or {}
+        browse = (((byline.get("runs") or [{}])[0].get("navigationEndpoint") or {}).get("browseEndpoint") or {}) if isinstance(byline, dict) else {}
         candidates.append({
             "video_id": video_id,
             "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
             "title": text_value(renderer.get("title")),
-            "channel": channel,
+            "channel": text_value(byline),
             "channel_id": browse.get("browseId", ""),
             "channel_path": browse.get("canonicalBaseUrl", ""),
             "duration_text": text_value(renderer.get("lengthText")),
@@ -146,7 +163,7 @@ def page_ids(url: str) -> tuple[list[str], dict]:
         return [], {"skipped": True}
     debug = {"url": url, "status": None, "bytes": 0}
     try:
-        response = SESSION.get(url, timeout=35)
+        response = SESSION.get(url, timeout=30)
         debug.update(status=response.status_code, bytes=len(response.content))
         response.raise_for_status()
     except Exception as exc:
@@ -159,32 +176,108 @@ def page_ids(url: str) -> tuple[list[str], dict]:
             if video_id not in ids:
                 ids.append(video_id)
     debug["video_ids"] = ids
+    debug["html_has_youtube"] = "youtube" in decoded.lower()
     return ids, debug
 
 
 def oembed(video_id: str) -> dict:
     url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json"
     try:
-        response = SESSION.get(url, timeout=20)
+        response = SESSION.get(url, timeout=15)
         response.raise_for_status()
         data = response.json()
     except Exception:
-        return {"video_id": video_id, "youtube_url": f"https://www.youtube.com/watch?v={video_id}", "title": "", "channel": "", "search_method": "page_embed"}
+        return {"video_id": video_id, "youtube_url": f"https://www.youtube.com/watch?v={video_id}", "title": "", "channel": "", "search_method": "id_only"}
     return {
         "video_id": video_id,
         "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
         "title": data.get("title", ""),
         "channel": data.get("author_name", ""),
         "channel_url": data.get("author_url", ""),
-        "search_method": "page_embed",
+        "search_method": "oembed",
     }
 
 
-def bing_video_ids(query: str) -> tuple[list[str], dict]:
-    url = f"https://www.bing.com/search?q={quote_plus('site:youtube.com/watch ' + query)}&count=20"
+def invidious_search(query: str) -> tuple[list[dict], list[dict]]:
+    debug: list[dict] = []
+    for base in INVIDIOUS_BASES:
+        url = f"{base}/api/v1/search"
+        try:
+            response = SESSION.get(url, params={"q": query, "type": "video", "page": 1, "sort_by": "relevance"}, timeout=18)
+            record = {"base": base, "status": response.status_code, "bytes": len(response.content)}
+            response.raise_for_status()
+            payload = response.json()
+            record["items"] = len(payload) if isinstance(payload, list) else 0
+            debug.append(record)
+            if not isinstance(payload, list) or not payload:
+                continue
+            candidates = []
+            for item in payload[:15]:
+                video_id = item.get("videoId")
+                if not video_id:
+                    continue
+                candidates.append({
+                    "video_id": video_id,
+                    "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
+                    "title": item.get("title", ""),
+                    "channel": item.get("author", ""),
+                    "channel_id": item.get("authorId", ""),
+                    "duration_text": str(item.get("lengthSeconds") or ""),
+                    "view_text": str(item.get("viewCount") or ""),
+                    "published_text": item.get("publishedText", ""),
+                    "search_method": f"invidious:{base}",
+                })
+            if candidates:
+                return candidates, debug
+        except Exception as exc:
+            debug.append({"base": base, "error": str(exc)})
+    return [], debug
+
+
+def piped_search(query: str) -> tuple[list[dict], list[dict]]:
+    debug: list[dict] = []
+    for base in PIPED_BASES:
+        url = f"{base}/search"
+        try:
+            response = SESSION.get(url, params={"q": query, "filter": "videos"}, timeout=18)
+            record = {"base": base, "status": response.status_code, "bytes": len(response.content)}
+            response.raise_for_status()
+            payload = response.json()
+            items = payload.get("items", []) if isinstance(payload, dict) else []
+            record["items"] = len(items)
+            debug.append(record)
+            if not items:
+                continue
+            candidates = []
+            for item in items[:15]:
+                path = item.get("url", "")
+                match = re.search(r"(?:v=|/watch/)([A-Za-z0-9_-]{11})", path)
+                if not match:
+                    continue
+                video_id = match.group(1)
+                candidates.append({
+                    "video_id": video_id,
+                    "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
+                    "title": item.get("title", ""),
+                    "channel": item.get("uploaderName", ""),
+                    "channel_path": item.get("uploaderUrl", ""),
+                    "duration_text": str(item.get("duration") or ""),
+                    "view_text": str(item.get("views") or ""),
+                    "published_text": item.get("uploadedDate", ""),
+                    "search_method": f"piped:{base}",
+                })
+            if candidates:
+                return candidates, debug
+        except Exception as exc:
+            debug.append({"base": base, "error": str(exc)})
+    return [], debug
+
+
+def bing_ids(query: str) -> tuple[list[str], dict]:
+    url = f"https://www.bing.com/search?q={quote_plus('site:youtube.com/watch ' + query)}&count=30"
     debug = {"url": url, "status": None, "bytes": 0}
     try:
-        response = SESSION.get(url, timeout=35)
+        response = SESSION.get(url, timeout=30)
         debug.update(status=response.status_code, bytes=len(response.content))
         response.raise_for_status()
     except Exception as exc:
@@ -221,11 +314,11 @@ def choose(candidates: list[dict]) -> tuple[dict | None, str]:
     if not candidates:
         return None, "MANUAL_REVIEW_REQUIRED"
     top = candidates[0]
-    if top["embedded_on_source_page"] and (top["title_similarity"] >= 0.55 or not top.get("title")):
+    if top["embedded_on_source_page"] and (top["title_similarity"] >= 0.45 or not top.get("title")):
         return top, "VERIFIED_SOURCE_PAGE_EMBED"
-    if top["title_similarity"] >= 0.82 and top["creator_similarity"] >= 0.5:
+    if top["title_similarity"] >= 0.78 and top["creator_similarity"] >= 0.5:
         return top, "HIGH_CONFIDENCE_TITLE_AND_CHANNEL"
-    if top["title_similarity"] >= 0.92:
+    if top["title_similarity"] >= 0.9:
         return top, "HIGH_CONFIDENCE_TITLE_MATCH"
     return None, "MANUAL_REVIEW_REQUIRED"
 
@@ -234,19 +327,24 @@ def main() -> None:
     output_path = Path(__file__).resolve().parents[1] / "youtube-link-audit.json"
     audit: list[dict] = []
     for source in SOURCES:
+        query = f"{source['title']} {source['creator']}"
         embedded, page_debug = page_ids(source["source_url"])
         candidates: list[dict] = [oembed(video_id) for video_id in embedded]
-        youtube_candidates, youtube_debug = youtube_search(f"{source['title']} {source['creator']}")
+        youtube_candidates, youtube_debug = youtube_html_search(query)
         candidates.extend(youtube_candidates)
-        bing_ids: list[str] = []
-        bing_debug: dict = {}
-        if not candidates:
-            bing_ids, bing_debug = bing_video_ids(f"{source['title']} {source['creator']}")
-            candidates.extend(oembed(video_id) for video_id in bing_ids)
+        invidious_candidates, invidious_debug = invidious_search(query)
+        candidates.extend(invidious_candidates)
+        piped_candidates, piped_debug = piped_search(query)
+        candidates.extend(piped_candidates)
+        bing_video_ids, bing_debug = bing_ids(query)
+        candidates.extend(oembed(video_id) for video_id in bing_video_ids)
         unique: dict[str, dict] = {}
         for candidate in candidates:
             video_id = candidate.get("video_id")
-            if video_id and video_id not in unique:
+            if not video_id:
+                continue
+            current = unique.get(video_id)
+            if current is None or len(candidate.get("title", "")) > len(current.get("title", "")):
                 unique[video_id] = candidate
         ranked = [scored(candidate, source, set(embedded)) for candidate in unique.values()]
         ranked.sort(key=lambda item: (item["embedded_on_source_page"], item["score"]), reverse=True)
@@ -256,8 +354,14 @@ def main() -> None:
             "embedded_video_ids": embedded,
             "selected": selected,
             "selection_state": state,
-            "candidates": ranked[:10],
-            "debug": {"source_page": page_debug, "youtube": youtube_debug, "bing": bing_debug, "bing_video_ids": bing_ids},
+            "candidates": ranked[:12],
+            "debug": {
+                "source_page": page_debug,
+                "youtube": youtube_debug,
+                "invidious": invidious_debug,
+                "piped": piped_debug,
+                "bing": bing_debug,
+            },
         }
         audit.append(record)
         print(source["source_id"], state, selected["youtube_url"] if selected else "", file=sys.stderr)
