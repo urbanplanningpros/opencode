@@ -1,0 +1,30 @@
+{
+  "rss_debug": [
+    {
+      "url": "https://rss.buzzsprout.com/2306481.rss",
+      "status": 200,
+      "bytes": 102035,
+      "final_url": "https://rss.buzzsprout.com/2306481.rss"
+    }
+  ],
+  "sources": {
+    "SRC-016": {
+      "title": "How These Dealmakers Bought Their First (and Multiple) Businesses!",
+      "link": "",
+      "guid": "Buzzsprout-16623981",
+      "duration": "4703",
+      "chapters_url": "",
+      "transcript_urls": [],
+      "chapters": []
+    },
+    "SRC-017": {
+      "title": "Carlos Reyes on Buying Cash-Flowing Businesses (Instead of Building)",
+      "link": "",
+      "guid": "Buzzsprout-17014099",
+      "duration": "5210",
+      "chapters_url": "",
+      "transcript_urls": [],
+      "chapters": []
+    }
+  }
+}
