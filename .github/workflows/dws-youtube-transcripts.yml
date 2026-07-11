@@ -1,0 +1,39 @@
+name: DWS YouTube Transcripts
+
+on:
+  push:
+    branches:
+      - dws-dashboard-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/fetch_youtube_transcripts.py
+      - .github/workflows/dws-youtube-transcripts.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  transcripts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dws-dashboard-preview
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --disable-pip-version-check requests youtube-transcript-api
+      - run: python packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/fetch_youtube_transcripts.py
+      - name: Commit transcripts
+        run: |
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/youtube-transcripts.json
+          if git diff --cached --quiet; then
+            echo "No transcript changes"
+            exit 0
+          fi
+          git commit -m "Fetch DWS YouTube transcripts"
+          git push origin HEAD:dws-dashboard-preview
