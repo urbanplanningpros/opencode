@@ -1,0 +1,102 @@
+name: DWS Dashboard Smoke Test
+
+on:
+  push:
+    branches:
+      - dws-dashboard-preview
+    paths:
+      - .github/workflows/dws-dashboard-smoke.yml
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/index.html
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/payload-*.js
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dws-dashboard-preview
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate source map and dashboard payload
+        id: validate
+        run: |
+          python - <<'PY'
+          import base64, gzip, json, re
+          from pathlib import Path
+
+          root = Path('packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center')
+          index = (root / 'index.html').read_text(encoding='utf-8')
+          map_match = re.search(r'const DWS_SOURCE_MAP=(\{.*?\});\nfunction patchDashboard', index, re.S)
+          assert map_match, 'DWS_SOURCE_MAP missing'
+          source_map = json.loads(map_match.group(1))
+          assert len(source_map) == 21, len(source_map)
+          assert all(re.fullmatch(r'https://www\.youtube\.com/watch\?v=[A-Za-z0-9_-]{11}', value[0]) for value in source_map.values())
+
+          chunks = []
+          for name in ['payload-1.js','payload-2.js','payload-3.js','payload-4a.js','payload-4b.js','payload-4c.js','payload-4d.js','payload-4e.js']:
+              text = (root / name).read_text(encoding='utf-8')
+              match = re.search(r"\+'([^']*)';", text)
+              assert match, name
+              chunks.append(match.group(1))
+          dashboard = gzip.decompress(base64.b64decode(''.join(chunks))).decode('utf-8')
+          prefix = 'const BASE_DATA = '
+          start = dashboard.index(prefix) + len(prefix)
+          end = dashboard.index(';\nconst STORAGE_KEY', start)
+          data = json.loads(dashboard[start:end])
+          assert len(data['sources']) == 21
+          assert len(data['assets']) == 75
+          assert {source['sourceId'] for source in data['sources']} == set(source_map)
+
+          timestamped = sum(isinstance(asset.get('startSeconds'), (int, float)) and not isinstance(asset.get('startSeconds'), bool) for asset in data['assets'])
+          report = {
+              'commit': '${{ github.sha }}',
+              'source_count': 21,
+              'asset_count': 75,
+              'exact_source_links': 21,
+              'exact_asset_links': 75,
+              'timestamped_asset_links': timestamped,
+              'base_links_without_numeric_timestamp': 75 - timestamped,
+              'source_map_complete': True,
+              'payload_matches_source_map': True,
+          }
+          Path('/tmp/dws-smoke.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+          PY
+          python - <<'PY'
+          from pathlib import Path
+          index = Path('packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/index.html').read_text(encoding='utf-8')
+          script = index.split('<script>\n', 1)[1].rsplit('\n</script>', 1)[0]
+          Path('/tmp/dws-loader.js').write_text(script, encoding='utf-8')
+          PY
+          node --check /tmp/dws-loader.js
+      - name: Verify temporary host serves this commit
+        run: |
+          LIVE_URL="https://raw.githack.com/urbanplanningpros/opencode/${GITHUB_SHA}/packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/index.html"
+          curl -fsSL --retry 10 --retry-delay 3 --retry-all-errors "$LIVE_URL" -o /tmp/live-index.html
+          grep -F "75 assets · 21 exact YouTube source links" /tmp/live-index.html
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('/tmp/dws-smoke.json')
+          report = json.loads(path.read_text())
+          report['temporary_url'] = f"https://raw.githack.com/urbanplanningpros/opencode/{os.environ['GITHUB_SHA']}/packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/index.html"
+          report['temporary_host_http_check'] = True
+          path.write_text(json.dumps(report, indent=2) + '\n')
+          PY
+      - name: Publish smoke report
+        run: |
+          cp /tmp/dws-smoke.json packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/dashboard-live-smoke.json
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/dashboard-live-smoke.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Verify live DWS dashboard source links"
+          git push origin HEAD:dws-dashboard-preview
