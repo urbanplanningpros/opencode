@@ -9,6 +9,10 @@ on:
       - .github/workflows/dws-youtube-transcripts.yml
   workflow_dispatch:
 
+concurrency:
+  group: dws-youtube-transcripts
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -36,4 +40,5 @@ jobs:
             exit 0
           fi
           git commit -m "Fetch DWS YouTube transcripts"
+          git pull --rebase origin dws-dashboard-preview
           git push origin HEAD:dws-dashboard-preview
