@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+import html
 import json
 import re
 import sys
 from difflib import SequenceMatcher
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import quote_plus, unquote, urlparse
 
 import requests
-from yt_dlp import YoutubeDL
 
 SOURCES = [
     {"source_id":"SRC-001","creator":"Carl Allen","title":"The Real Reason Most Entrepreneurs Stay Broke","source_url":"https://www.youtube.com/@carlallenofficial/search?query=entrepreneurs%20stay%20broke"},
@@ -33,11 +33,18 @@ SOURCES = [
 ]
 
 YOUTUBE_ID_PATTERNS = [
-    re.compile(r"youtube(?:-nocookie)?\.com/embed/([A-Za-z0-9_-]{11})"),
-    re.compile(r"youtube\.com/watch\?v=([A-Za-z0-9_-]{11})"),
-    re.compile(r"youtu\.be/([A-Za-z0-9_-]{11})"),
-    re.compile(r"(?:youtubeId|videoId|data-video-id)[\"'=: ]+([A-Za-z0-9_-]{11})", re.I),
+    re.compile(r"youtube(?:-nocookie)?\.com/embed/([A-Za-z0-9_-]{11})", re.I),
+    re.compile(r"youtube\.com/watch\?(?:[^\"'<> ]*&)?v=([A-Za-z0-9_-]{11})", re.I),
+    re.compile(r"youtu\.be/([A-Za-z0-9_-]{11})", re.I),
+    re.compile(r"(?:youtubeId|videoId|data-video-id)[\\\"'=: ]+([A-Za-z0-9_-]{11})", re.I),
 ]
+
+SESSION = requests.Session()
+SESSION.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cookie": "CONSENT=YES+cb.20210328-17-p0.en+FX+410; SOCS=CAI",
+})
 
 
 def normalized(value: str) -> str:
@@ -48,114 +55,212 @@ def similarity(left: str, right: str) -> float:
     return SequenceMatcher(None, normalized(left), normalized(right)).ratio()
 
 
-def youtube_ids_from_page(url: str) -> list[str]:
-    if urlparse(url).netloc not in {"thecarlallen.com", "www.thecarlallen.com", "buzzsprout.com", "www.buzzsprout.com"}:
-        return []
+def text_value(value: object) -> str:
+    if not isinstance(value, dict):
+        return ""
+    if isinstance(value.get("simpleText"), str):
+        return value["simpleText"]
+    runs = value.get("runs")
+    if isinstance(runs, list):
+        return "".join(run.get("text", "") for run in runs if isinstance(run, dict))
+    return ""
+
+
+def initial_data(page: str) -> dict | None:
+    decoder = json.JSONDecoder()
+    for marker in ("var ytInitialData =", "ytInitialData =", 'window[\"ytInitialData\"] ='):
+        position = page.find(marker)
+        if position < 0:
+            continue
+        start = page.find("{", position + len(marker))
+        if start < 0:
+            continue
+        try:
+            result, _ = decoder.raw_decode(page[start:])
+            if isinstance(result, dict):
+                return result
+        except json.JSONDecodeError:
+            continue
+    return None
+
+
+def video_renderers(value: object) -> list[dict]:
+    found: list[dict] = []
+    if isinstance(value, dict):
+        for key in ("videoRenderer", "gridVideoRenderer", "compactVideoRenderer"):
+            renderer = value.get(key)
+            if isinstance(renderer, dict) and renderer.get("videoId"):
+                found.append(renderer)
+        for child in value.values():
+            found.extend(video_renderers(child))
+    elif isinstance(value, list):
+        for child in value:
+            found.extend(video_renderers(child))
+    return found
+
+
+def youtube_search(query: str) -> tuple[list[dict], dict]:
+    url = f"https://www.youtube.com/results?search_query={quote_plus(query)}&sp=EgIQAQ%253D%253D&hl=en&gl=US"
+    debug = {"url": url, "status": None, "bytes": 0, "initial_data": False, "renderer_count": 0}
     try:
-        response = requests.get(url, timeout=30, headers={"User-Agent":"Mozilla/5.0"})
+        response = SESSION.get(url, timeout=35)
+        debug.update(status=response.status_code, bytes=len(response.content))
         response.raise_for_status()
     except Exception as exc:
-        print(f"page fetch failed for {url}: {exc}", file=sys.stderr)
-        return []
-    seen: list[str] = []
+        debug["error"] = str(exc)
+        return [], debug
+    data = initial_data(response.text)
+    debug["initial_data"] = bool(data)
+    if not data:
+        debug["page_prefix"] = response.text[:180]
+        return [], debug
+    renderers = video_renderers(data)
+    debug["renderer_count"] = len(renderers)
+    candidates: list[dict] = []
+    seen: set[str] = set()
+    for renderer in renderers:
+        video_id = renderer.get("videoId")
+        if not video_id or video_id in seen:
+            continue
+        seen.add(video_id)
+        channel = text_value(renderer.get("ownerText")) or text_value(renderer.get("longBylineText")) or text_value(renderer.get("shortBylineText"))
+        browse = (((renderer.get("ownerText") or renderer.get("longBylineText") or {}).get("runs") or [{}])[0].get("navigationEndpoint") or {}).get("browseEndpoint") or {}
+        candidates.append({
+            "video_id": video_id,
+            "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
+            "title": text_value(renderer.get("title")),
+            "channel": channel,
+            "channel_id": browse.get("browseId", ""),
+            "channel_path": browse.get("canonicalBaseUrl", ""),
+            "duration_text": text_value(renderer.get("lengthText")),
+            "view_text": text_value(renderer.get("viewCountText")),
+            "published_text": text_value(renderer.get("publishedTimeText")),
+            "search_method": "youtube_html",
+        })
+    return candidates, debug
+
+
+def page_ids(url: str) -> tuple[list[str], dict]:
+    host = urlparse(url).netloc.lower()
+    if host not in {"thecarlallen.com", "www.thecarlallen.com", "buzzsprout.com", "www.buzzsprout.com"}:
+        return [], {"skipped": True}
+    debug = {"url": url, "status": None, "bytes": 0}
+    try:
+        response = SESSION.get(url, timeout=35)
+        debug.update(status=response.status_code, bytes=len(response.content))
+        response.raise_for_status()
+    except Exception as exc:
+        debug["error"] = str(exc)
+        return [], debug
+    decoded = unquote(html.unescape(response.text))
+    ids: list[str] = []
     for pattern in YOUTUBE_ID_PATTERNS:
-        for match in pattern.findall(response.text):
-            if match not in seen:
-                seen.append(match)
-    return seen
+        for video_id in pattern.findall(decoded):
+            if video_id not in ids:
+                ids.append(video_id)
+    debug["video_ids"] = ids
+    return ids, debug
 
 
-def compact(entry: dict, source: dict, embedded: bool = False) -> dict:
-    video_id = entry.get("id") or entry.get("url")
-    title = entry.get("title") or ""
-    channel = entry.get("channel") or entry.get("uploader") or ""
-    title_score = similarity(source["title"], title)
-    creator_tokens = [token for token in normalized(source["creator"]).split() if token not in {"and", "member", "panel"}]
-    channel_norm = normalized(channel)
-    creator_score = sum(token in channel_norm for token in creator_tokens) / max(len(creator_tokens), 1)
-    total = min(1.0, title_score * 0.82 + creator_score * 0.18 + (0.2 if embedded else 0.0))
+def oembed(video_id: str) -> dict:
+    url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json"
+    try:
+        response = SESSION.get(url, timeout=20)
+        response.raise_for_status()
+        data = response.json()
+    except Exception:
+        return {"video_id": video_id, "youtube_url": f"https://www.youtube.com/watch?v={video_id}", "title": "", "channel": "", "search_method": "page_embed"}
     return {
         "video_id": video_id,
-        "youtube_url": f"https://www.youtube.com/watch?v={video_id}" if video_id else "",
-        "title": title,
-        "channel": channel,
-        "channel_id": entry.get("channel_id") or entry.get("uploader_id") or "",
-        "duration": entry.get("duration"),
-        "view_count": entry.get("view_count"),
-        "upload_date": entry.get("upload_date") or entry.get("release_date"),
-        "embedded_on_source_page": embedded,
+        "youtube_url": f"https://www.youtube.com/watch?v={video_id}",
+        "title": data.get("title", ""),
+        "channel": data.get("author_name", ""),
+        "channel_url": data.get("author_url", ""),
+        "search_method": "page_embed",
+    }
+
+
+def bing_video_ids(query: str) -> tuple[list[str], dict]:
+    url = f"https://www.bing.com/search?q={quote_plus('site:youtube.com/watch ' + query)}&count=20"
+    debug = {"url": url, "status": None, "bytes": 0}
+    try:
+        response = SESSION.get(url, timeout=35)
+        debug.update(status=response.status_code, bytes=len(response.content))
+        response.raise_for_status()
+    except Exception as exc:
+        debug["error"] = str(exc)
+        return [], debug
+    body = unquote(html.unescape(response.text))
+    ids: list[str] = []
+    for video_id in re.findall(r"(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})", body, re.I):
+        if video_id not in ids:
+            ids.append(video_id)
+    debug["video_ids"] = ids
+    return ids, debug
+
+
+def scored(candidate: dict, source: dict, embedded_ids: set[str]) -> dict:
+    title_score = similarity(source["title"], candidate.get("title", ""))
+    creator_tokens = [token for token in normalized(source["creator"]).split() if token not in {"and", "member", "panel"}]
+    channel_norm = normalized(candidate.get("channel", ""))
+    creator_score = sum(token in channel_norm for token in creator_tokens) / max(len(creator_tokens), 1)
+    official_path = (candidate.get("channel_path") or candidate.get("channel_url") or "").lower()
+    official_bonus = 0.14 if "carlallenofficial" in official_path or "chrismoorespeaks" in official_path else 0.0
+    embedded_bonus = 0.25 if candidate["video_id"] in embedded_ids else 0.0
+    total = min(1.0, title_score * 0.72 + creator_score * 0.18 + official_bonus + embedded_bonus)
+    return {
+        **candidate,
+        "embedded_on_source_page": candidate["video_id"] in embedded_ids,
         "title_similarity": round(title_score, 4),
         "creator_similarity": round(creator_score, 4),
         "score": round(total, 4),
     }
 
 
-def metadata_for_ids(ydl: YoutubeDL, ids: list[str], source: dict) -> list[dict]:
-    candidates: list[dict] = []
-    for video_id in ids:
-        try:
-            entry = ydl.extract_info(f"https://www.youtube.com/watch?v={video_id}", download=False)
-        except Exception as exc:
-            print(f"metadata failed for {video_id}: {exc}", file=sys.stderr)
-            continue
-        candidates.append(compact(entry, source, embedded=True))
-    return candidates
-
-
-def search_candidates(ydl: YoutubeDL, source: dict) -> list[dict]:
-    query = f"{source['title']} {source['creator']}"
-    try:
-        results = ydl.extract_info(f"ytsearch12:{query}", download=False)
-    except Exception as exc:
-        print(f"search failed for {source['source_id']}: {exc}", file=sys.stderr)
-        return []
-    return [compact(entry, source) for entry in (results.get("entries") or []) if entry and entry.get("id")]
-
-
-def choose(candidates: list[dict]) -> dict | None:
+def choose(candidates: list[dict]) -> tuple[dict | None, str]:
     if not candidates:
-        return None
-    ordered = sorted(candidates, key=lambda item: (item["embedded_on_source_page"], item["score"], item.get("view_count") or 0), reverse=True)
-    top = ordered[0]
-    if top["embedded_on_source_page"]:
-        return top
-    if top["title_similarity"] >= 0.78 and top["creator_similarity"] >= 0.5:
-        return top
-    if top["title_similarity"] >= 0.9:
-        return top
-    return None
+        return None, "MANUAL_REVIEW_REQUIRED"
+    top = candidates[0]
+    if top["embedded_on_source_page"] and (top["title_similarity"] >= 0.55 or not top.get("title")):
+        return top, "VERIFIED_SOURCE_PAGE_EMBED"
+    if top["title_similarity"] >= 0.82 and top["creator_similarity"] >= 0.5:
+        return top, "HIGH_CONFIDENCE_TITLE_AND_CHANNEL"
+    if top["title_similarity"] >= 0.92:
+        return top, "HIGH_CONFIDENCE_TITLE_MATCH"
+    return None, "MANUAL_REVIEW_REQUIRED"
 
 
 def main() -> None:
     output_path = Path(__file__).resolve().parents[1] / "youtube-link-audit.json"
-    ydl = YoutubeDL({
-        "quiet": True,
-        "no_warnings": True,
-        "skip_download": True,
-        "extract_flat": False,
-        "socket_timeout": 30,
-        "retries": 3,
-        "playlistend": 12,
-    })
     audit: list[dict] = []
     for source in SOURCES:
-        embedded_ids = youtube_ids_from_page(source["source_url"])
-        candidates = metadata_for_ids(ydl, embedded_ids, source)
-        seen = {candidate["video_id"] for candidate in candidates}
-        for candidate in search_candidates(ydl, source):
-            if candidate["video_id"] not in seen:
-                candidates.append(candidate)
-                seen.add(candidate["video_id"])
-        candidates.sort(key=lambda item: (item["embedded_on_source_page"], item["score"], item.get("view_count") or 0), reverse=True)
-        selected = choose(candidates)
-        audit.append({
+        embedded, page_debug = page_ids(source["source_url"])
+        candidates: list[dict] = [oembed(video_id) for video_id in embedded]
+        youtube_candidates, youtube_debug = youtube_search(f"{source['title']} {source['creator']}")
+        candidates.extend(youtube_candidates)
+        bing_ids: list[str] = []
+        bing_debug: dict = {}
+        if not candidates:
+            bing_ids, bing_debug = bing_video_ids(f"{source['title']} {source['creator']}")
+            candidates.extend(oembed(video_id) for video_id in bing_ids)
+        unique: dict[str, dict] = {}
+        for candidate in candidates:
+            video_id = candidate.get("video_id")
+            if video_id and video_id not in unique:
+                unique[video_id] = candidate
+        ranked = [scored(candidate, source, set(embedded)) for candidate in unique.values()]
+        ranked.sort(key=lambda item: (item["embedded_on_source_page"], item["score"]), reverse=True)
+        selected, state = choose(ranked)
+        record = {
             **source,
-            "embedded_video_ids": embedded_ids,
+            "embedded_video_ids": embedded,
             "selected": selected,
-            "selection_state": "AUTO_VERIFIED_EMBED" if selected and selected["embedded_on_source_page"] else "HIGH_CONFIDENCE_TITLE_MATCH" if selected else "MANUAL_REVIEW_REQUIRED",
-            "candidates": candidates[:8],
-        })
-        print(source["source_id"], audit[-1]["selection_state"], selected["youtube_url"] if selected else "")
+            "selection_state": state,
+            "candidates": ranked[:10],
+            "debug": {"source_page": page_debug, "youtube": youtube_debug, "bing": bing_debug, "bing_video_ids": bing_ids},
+        }
+        audit.append(record)
+        print(source["source_id"], state, selected["youtube_url"] if selected else "", file=sys.stderr)
     output_path.write_text(json.dumps(audit, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
