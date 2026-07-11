@@ -1,0 +1,13 @@
+{
+  "commit": "a4150a3156e400b8403fdc9875b2b271ee83101f",
+  "source_count": 21,
+  "asset_count": 75,
+  "exact_source_links": 21,
+  "exact_asset_links": 75,
+  "timestamped_asset_links": 55,
+  "base_links_without_numeric_timestamp": 20,
+  "source_map_complete": true,
+  "payload_matches_source_map": true,
+  "temporary_url": "https://raw.githack.com/urbanplanningpros/opencode/a4150a3156e400b8403fdc9875b2b271ee83101f/packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/index.html",
+  "temporary_host_http_check": true
+}
