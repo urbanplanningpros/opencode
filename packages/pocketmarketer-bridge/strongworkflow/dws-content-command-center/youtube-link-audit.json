@@ -47,7 +47,7 @@
         "channel_id": "UCqFzWxSCi39LnW1JKFR3efg",
         "channel_path": "/@SaturdayNightLive",
         "duration_text": "3:20",
-        "view_text": "6,503,874 views",
+        "view_text": "6,503,884 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -95,7 +95,7 @@
         "channel_id": "UCOntTQrEbD94Gjfc0UXC46A",
         "channel_path": "/@prestondennett577",
         "duration_text": "1:13:56",
-        "view_text": "4,857 views",
+        "view_text": "5,022 views",
         "published_text": "6 hours ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -111,29 +111,13 @@
         "channel_id": "UC60xqiAR4BTsYwhPvSg9IWA",
         "channel_path": "/@VibrantTVBStories",
         "duration_text": "1:49:33",
-        "view_text": "5,615 views",
+        "view_text": "5,666 views",
         "published_text": "11 hours ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2754,
         "creator_similarity": 0.0,
         "score": 0.1983
-      },
-      {
-        "video_id": "GpRvL8jIHKM",
-        "youtube_url": "https://www.youtube.com/watch?v=GpRvL8jIHKM",
-        "title": "Inside Wisconsin's Prison Economy & Political Scandals",
-        "channel": "WNOV The Voice",
-        "channel_id": "UCtjvea1PZxsClEdi_1v1ibA",
-        "channel_path": "/@wnovthevoice",
-        "duration_text": "1:32:29",
-        "view_text": "15 views",
-        "published_text": "2 days ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.268,
-        "creator_similarity": 0.0,
-        "score": 0.193
       },
       {
         "video_id": "zOJeGGE9Qm0",
@@ -159,13 +143,29 @@
         "channel_id": "UCb3fJ09Jw2nUX9TpSiUNBQw",
         "channel_path": "/@CarlMurawski",
         "duration_text": "9:50",
-        "view_text": "894,578 views",
+        "view_text": "894,585 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.1412,
         "creator_similarity": 0.5,
         "score": 0.1916
+      },
+      {
+        "video_id": "kTJOxdeNdVo",
+        "youtube_url": "https://www.youtube.com/watch?v=kTJOxdeNdVo",
+        "title": "Apollo 11 Moon Landing: Hoax or History? Body Language Analysis",
+        "channel": "Dr. G Explains",
+        "channel_id": "UCOmjR-JVOshlZbUoQYOCxWg",
+        "channel_path": "/@drgexplains",
+        "duration_text": "33:14",
+        "view_text": "1,532,294 views",
+        "published_text": "1 year ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2642,
+        "creator_similarity": 0.0,
+        "score": 0.1902
       },
       {
         "video_id": "UOTAdvc1MJM",
@@ -175,13 +175,45 @@
         "channel_id": "UCth1JdU_n065AJjWomYXmWg",
         "channel_path": "/@OfficialGeorgeCarlin",
         "duration_text": "3:31",
-        "view_text": "426,729 views",
+        "view_text": "426,731 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.1373,
         "creator_similarity": 0.5,
         "score": 0.1888
+      },
+      {
+        "video_id": "qTeM0fM8IGM",
+        "youtube_url": "https://www.youtube.com/watch?v=qTeM0fM8IGM",
+        "title": "Hollywood Crimes | THRILLER | Full Movie in English",
+        "channel": "Boxoffice | THRILLERS | Full Movies",
+        "channel_id": "UCvxeYDOSv2PKcSgIckhgsbQ",
+        "channel_path": "/@BoxofficeTHRILLERS",
+        "duration_text": "1:31:49",
+        "view_text": "6,723 views",
+        "published_text": "1 day ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2609,
+        "creator_similarity": 0.0,
+        "score": 0.1878
+      },
+      {
+        "video_id": "YC4iOurQOMU",
+        "youtube_url": "https://www.youtube.com/watch?v=YC4iOurQOMU",
+        "title": "Idiot Threatens Judge Judy, Then Gets Stuck Inside Courtoom!",
+        "channel": "aerial0",
+        "channel_id": "UCKxCMTdW2-7s4Hi2crQgXoQ",
+        "channel_path": "/@aerial0",
+        "duration_text": "2:23",
+        "view_text": "11,177,531 views",
+        "published_text": "10 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2524,
+        "creator_similarity": 0.0,
+        "score": 0.1817
       }
     ],
     "debug": {
@@ -191,12 +223,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1222084,
+        "bytes": 1200239,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 44936,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73126,
+        "video_ids": []
+      }
     }
   },
   {
@@ -214,7 +300,7 @@
       "channel_path": "/@carlallenofficial",
       "duration_text": "31:00",
       "view_text": "72,474 views",
-      "published_text": "9 months ago",
+      "published_text": "9mo ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
       "title_similarity": 1.0,
@@ -232,7 +318,7 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "31:00",
         "view_text": "72,474 views",
-        "published_text": "9 months ago",
+        "published_text": "9mo ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 1.0,
@@ -248,7 +334,7 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "7:52",
         "view_text": "16,986 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4242,
@@ -264,7 +350,7 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "14:07",
         "view_text": "7,065 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4112,
@@ -280,7 +366,7 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "5:07",
         "view_text": "684 views",
-        "published_text": "1 year ago",
+        "published_text": "1y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4,
@@ -296,7 +382,7 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "8:16",
         "view_text": "25,246 views",
-        "published_text": "1 year ago",
+        "published_text": "1y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3093,
@@ -311,8 +397,8 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "42:54",
-        "view_text": "42,602 views",
-        "published_text": "5 months ago",
+        "view_text": "42,600 views",
+        "published_text": "5mo ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3025,
@@ -328,12 +414,28 @@
         "channel_path": "/@carlallenofficial",
         "duration_text": "12:02",
         "view_text": "4,471 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2759,
         "creator_similarity": 1.0,
         "score": 0.5186
+      },
+      {
+        "video_id": "pgFRhwQ997k",
+        "youtube_url": "https://www.youtube.com/watch?v=pgFRhwQ997k",
+        "title": "The Hidden Trick To Increasing Your ISA Allowance",
+        "channel": "Carl Roberts",
+        "channel_id": "UCpbC4jRR-yUTd75Du8nbvqQ",
+        "channel_path": "/@carlrobertsonmoney",
+        "duration_text": "12:58",
+        "view_text": "10,372 views",
+        "published_text": "1y ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3404,
+        "creator_similarity": 0.5,
+        "score": 0.3351
       },
       {
         "video_id": "S5luU8W-X2Y",
@@ -343,8 +445,8 @@
         "channel_id": "UCOntTQrEbD94Gjfc0UXC46A",
         "channel_path": "/@prestondennett577",
         "duration_text": "1:13:56",
-        "view_text": "4,857 views",
-        "published_text": "6 hours ago",
+        "view_text": "5,022 views",
+        "published_text": "6h ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3505,
@@ -352,20 +454,20 @@
         "score": 0.2524
       },
       {
-        "video_id": "EniNvCyTmas",
-        "youtube_url": "https://www.youtube.com/watch?v=EniNvCyTmas",
-        "title": "Jack Reacher DESTROYS A Child Hijacker | Reacher Season 2 (Alan Ritchson)",
-        "channel": "Clips & Chill",
-        "channel_id": "UC9No_NcwXn_FOVKTJS16Img",
-        "channel_path": "/@ClipsChill",
-        "duration_text": "2:10",
-        "view_text": "11,430,020 views",
-        "published_text": "2 years ago",
+        "video_id": "lbvetI9L_0o",
+        "youtube_url": "https://www.youtube.com/watch?v=lbvetI9L_0o",
+        "title": "Month in My Life Building a $100M Portfolio | Learning Private Equity + Capital Conversations",
+        "channel": "Brittany Bell",
+        "channel_id": "UCVIy2lIKdDWW_Lki9BdSAtw",
+        "channel_path": "/@itzbrittanymarie",
+        "duration_text": "1:03:14",
+        "view_text": "120 views",
+        "published_text": "5mo ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.3333,
+        "title_similarity": 0.3459,
         "creator_similarity": 0.0,
-        "score": 0.24
+        "score": 0.249
       },
       {
         "video_id": "yM-QxZows94",
@@ -376,12 +478,28 @@
         "channel_path": "/@iamwealthier",
         "duration_text": "5:40",
         "view_text": "22,699 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3333,
         "creator_similarity": 0.0,
         "score": 0.24
+      },
+      {
+        "video_id": "PMt7C3COiVM",
+        "youtube_url": "https://www.youtube.com/watch?v=PMt7C3COiVM",
+        "title": "Norm Macdonald - Kojak & Prostitutes",
+        "channel": "Bob Kendall",
+        "channel_id": "UCU96WH038IoKNVg2hWyBCjg",
+        "channel_path": "/@bobkendall3251",
+        "duration_text": "1:12",
+        "view_text": "2,837,833 views",
+        "published_text": "9y ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3117,
+        "creator_similarity": 0.0,
+        "score": 0.2244
       }
     ],
     "debug": {
@@ -391,12 +509,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1140290,
+        "bytes": 1154591,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 44817,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 74827,
+        "video_ids": []
+      }
     }
   },
   {
@@ -520,6 +692,22 @@
         "score": 0.6157
       },
       {
+        "video_id": "yGrF7C9gQFI",
+        "youtube_url": "https://www.youtube.com/watch?v=yGrF7C9gQFI",
+        "title": "Deal Specification: How to groom the business for your exit",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "8:38",
+        "view_text": "1,186 views",
+        "published_text": "9 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4074,
+        "creator_similarity": 1.0,
+        "score": 0.6133
+      },
+      {
         "video_id": "gvU3UHekfg0",
         "youtube_url": "https://www.youtube.com/watch?v=gvU3UHekfg0",
         "title": "Why Buying An Existing Business Is Smarter Than Starting Your Own | CarlAllenDealmaker",
@@ -534,6 +722,22 @@
         "title_similarity": 0.3881,
         "creator_similarity": 1.0,
         "score": 0.5994
+      },
+      {
+        "video_id": "hry_WMEXgoU",
+        "youtube_url": "https://www.youtube.com/watch?v=hry_WMEXgoU",
+        "title": "Business Traders: How to sell the business  Video 5 of 5.",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "10:41",
+        "view_text": "1,384 views",
+        "published_text": "9 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3654,
+        "creator_similarity": 1.0,
+        "score": 0.5831
       },
       {
         "video_id": "M_8qh17IOEs",
@@ -568,20 +772,19 @@
         "score": 0.5491
       },
       {
-        "video_id": "i8ch6xtwUcg",
-        "youtube_url": "https://www.youtube.com/watch?v=i8ch6xtwUcg",
-        "title": "Welcome To My Youtube Channel - Join The Investment Community! | CarlAllenDealmaker",
+        "video_id": "jTHyBQWsG64",
+        "youtube_url": "https://www.youtube.com/watch?v=jTHyBQWsG64",
+        "title": "The Beginning of My Business Acquisition Story - The First Business I Bought| CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "4:52",
-        "view_text": "4,403 views",
+        "duration_text": "578",
+        "view_text": "1599",
         "published_text": "3 years ago",
-        "search_method": "youtube_html",
+        "search_method": "invidious:https://yt.chocolatemoo53.com",
         "embedded_on_source_page": false,
-        "title_similarity": 0.2969,
+        "title_similarity": 0.4615,
         "creator_similarity": 1.0,
-        "score": 0.5337
+        "score": 0.5123
       }
     ],
     "debug": {
@@ -591,12 +794,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1279401,
+        "bytes": 1243441,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45469,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73535,
+        "video_ids": []
+      }
     }
   },
   {
@@ -663,12 +920,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 772484,
+        "bytes": 778551,
         "initial_data": true,
         "renderer_count": 2
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 4594,
+          "items": 2
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73834,
+        "video_ids": []
+      }
     }
   },
   {
@@ -760,6 +1071,22 @@
         "score": 0.5862
       },
       {
+        "video_id": "VUJFOdZh7ZY",
+        "youtube_url": "https://www.youtube.com/watch?v=VUJFOdZh7ZY",
+        "title": "Master Your Journey: the Four Stages of Success",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "7:48",
+        "view_text": "360 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3441,
+        "creator_similarity": 1.0,
+        "score": 0.5677
+      },
+      {
         "video_id": "dG_mQ05v46Y",
         "youtube_url": "https://www.youtube.com/watch?v=dG_mQ05v46Y",
         "title": "He Needed More Leads. We Built the Entire System Live.",
@@ -776,22 +1103,6 @@
         "score": 0.5673
       },
       {
-        "video_id": "BmZeVd_vZhE",
-        "youtube_url": "https://www.youtube.com/watch?v=BmZeVd_vZhE",
-        "title": "Most Businesses Struggle to Scale Because of This",
-        "channel": "Chris Moore",
-        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
-        "channel_path": "/@Chrismoorespeaks",
-        "duration_text": "1:08:15",
-        "view_text": "63,227 views",
-        "published_text": "6 months ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3333,
-        "creator_similarity": 1.0,
-        "score": 0.56
-      },
-      {
         "video_id": "03yXY9rfqLg",
         "youtube_url": "https://www.youtube.com/watch?v=03yXY9rfqLg",
         "title": "Build a Referral Engine That Actually Delivers Consistent Leads (No More Luck)",
@@ -799,7 +1110,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "1:14:11",
-        "view_text": "4,135 views",
+        "view_text": "4,142 views",
         "published_text": "4 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -854,6 +1165,38 @@
         "title_similarity": 0.2947,
         "creator_similarity": 1.0,
         "score": 0.5322
+      },
+      {
+        "video_id": "MRK-uw7d-ps",
+        "youtube_url": "https://www.youtube.com/watch?v=MRK-uw7d-ps",
+        "title": "Supercharge Your Business Growth: Finding Your Niche in Home Services and Real Estate",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "16:58",
+        "view_text": "114 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2901,
+        "creator_similarity": 1.0,
+        "score": 0.5289
+      },
+      {
+        "video_id": "iE4TZ6-t_dE",
+        "youtube_url": "https://www.youtube.com/watch?v=iE4TZ6-t_dE",
+        "title": "The Secret to Business Growth: A Five-Step Lead Generation Process",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "3:44",
+        "view_text": "108 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2857,
+        "creator_similarity": 1.0,
+        "score": 0.5257
       }
     ],
     "debug": {
@@ -863,12 +1206,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1268909,
+        "bytes": 1227942,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45535,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&count=30",
+        "status": 200,
+        "bytes": 73771,
+        "video_ids": []
+      }
     }
   },
   {
@@ -885,7 +1282,7 @@
       "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
       "channel_path": "/@Chrismoorespeaks",
       "duration_text": "25:53",
-      "view_text": "1,655 views",
+      "view_text": "1,653 views",
       "published_text": "2 weeks ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
@@ -903,7 +1300,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "25:53",
-        "view_text": "1,655 views",
+        "view_text": "1,653 views",
         "published_text": "2 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -942,6 +1339,22 @@
         "title_similarity": 0.359,
         "creator_similarity": 1.0,
         "score": 0.5785
+      },
+      {
+        "video_id": "hBF7pxjGy4M",
+        "youtube_url": "https://www.youtube.com/watch?v=hBF7pxjGy4M",
+        "title": "Marketing will never be the same again ￼",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "50:24",
+        "view_text": "73,930 views",
+        "published_text": "10 months ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3556,
+        "creator_similarity": 1.0,
+        "score": 0.576
       },
       {
         "video_id": "t0_c9TDIkjE",
@@ -999,7 +1412,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:26",
-        "view_text": "8,119 views",
+        "view_text": "8,110 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1024,6 +1437,22 @@
         "score": 0.5
       },
       {
+        "video_id": "fsqZ-uMz-x8",
+        "youtube_url": "https://www.youtube.com/watch?v=fsqZ-uMz-x8",
+        "title": "How to Craft a Profitable Offer People Actually Want",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "1:09:11",
+        "view_text": "20,333 views",
+        "published_text": "6 months ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.25,
+        "creator_similarity": 1.0,
+        "score": 0.5
+      },
+      {
         "video_id": "03yXY9rfqLg",
         "youtube_url": "https://www.youtube.com/watch?v=03yXY9rfqLg",
         "title": "Build a Referral Engine That Actually Delivers Consistent Leads (No More Luck)",
@@ -1031,7 +1460,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "1:14:11",
-        "view_text": "4,135 views",
+        "view_text": "4,140 views",
         "published_text": "4 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1063,12 +1492,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 2202493,
+        "bytes": 1185918,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45055,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&count=30",
+        "status": 200,
+        "bytes": 73183,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1086,7 +1569,7 @@
       "title": "How to Teach People How to Offer You Equity in Their Company",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 0.5,
@@ -1100,7 +1583,7 @@
         "title": "How to Teach People How to Offer You Equity in Their Company",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 0.5,
@@ -1112,7 +1595,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.176,
         "creator_similarity": 0.0,
@@ -1245,6 +1728,38 @@
         "title_similarity": 0.3284,
         "creator_similarity": 0.5,
         "score": 0.4664
+      },
+      {
+        "video_id": "dQjf9h6CSFw",
+        "youtube_url": "https://www.youtube.com/watch?v=dQjf9h6CSFw",
+        "title": "Prioritize your health over wealth.",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "1:02",
+        "view_text": "346 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3191,
+        "creator_similarity": 0.5,
+        "score": 0.4598
+      },
+      {
+        "video_id": "acDjkwg9Ccg",
+        "youtube_url": "https://www.youtube.com/watch?v=acDjkwg9Ccg",
+        "title": "Buying Real Estate Deals With My Partner Chris - Pace Morby Method",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "2:35",
+        "view_text": "846 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2903,
+        "creator_similarity": 0.5,
+        "score": 0.439
       }
     ],
     "debug": {
@@ -1255,17 +1770,72 @@
         "video_ids": [
           "r_pmmIWu814",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1815660,
+        "bytes": 1277597,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 43283,
+          "items": 19
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&count=30",
+        "status": 200,
+        "bytes": 75744,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1283,7 +1853,7 @@
       "title": "Why $3 Million in Profit is Worthless | CAR-L ep 6",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 0.8675,
       "creator_similarity": 1.0,
@@ -1297,7 +1867,7 @@
         "title": "Why $3 Million in Profit is Worthless | CAR-L ep 6",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.8675,
         "creator_similarity": 1.0,
@@ -1309,7 +1879,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.3168,
         "creator_similarity": 0.0,
@@ -1419,7 +1989,7 @@
         "channel_id": "UCth1JdU_n065AJjWomYXmWg",
         "channel_path": "/@OfficialGeorgeCarlin",
         "duration_text": "10:07",
-        "view_text": "1,870,431 views",
+        "view_text": "1,870,435 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1435,13 +2005,45 @@
         "channel_id": "UC1KmNKYC1l0stjctkGswl6g",
         "channel_path": "/@AfterSkool",
         "duration_text": "10:37",
-        "view_text": "7,900,383 views",
+        "view_text": "7,900,389 views",
         "published_text": "5 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3636,
         "creator_similarity": 0.0,
         "score": 0.2618
+      },
+      {
+        "video_id": "ABtXzNcEMx4",
+        "youtube_url": "https://www.youtube.com/watch?v=ABtXzNcEMx4",
+        "title": "Book Review: How I Invest My Money",
+        "channel": "Adam Grossman",
+        "channel_id": "UCHZyXEdXY15OD_krmu5dFKA",
+        "channel_path": "/@adamgrossman",
+        "duration_text": "2:04",
+        "view_text": "238 views",
+        "published_text": "5 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3478,
+        "creator_similarity": 0.0,
+        "score": 0.2504
+      },
+      {
+        "video_id": "QQ6IvzjI22Q",
+        "youtube_url": "https://www.youtube.com/watch?v=QQ6IvzjI22Q",
+        "title": "Sir Paul McCartney's rise to rock royalty - Good Bad Billionaire podcast, BBC World Service",
+        "channel": "BBC World Service",
+        "channel_id": "UCQXHTFnQYFTqN0MqmNh9EIA",
+        "channel_path": "/@BBCWorldService",
+        "duration_text": "47:11",
+        "view_text": "2,169 views",
+        "published_text": "1 day ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3387,
+        "creator_similarity": 0.0,
+        "score": 0.2439
       }
     ],
     "debug": {
@@ -1452,17 +2054,72 @@
         "video_ids": [
           "A223C62KMVg",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1192047,
+        "bytes": 1110951,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45079,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73067,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1480,7 +2137,7 @@
       "channel_path": "/@Chrismoorespeaks",
       "duration_text": "11:44",
       "view_text": "1,216 views",
-      "published_text": "3 years ago",
+      "published_text": "3y ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
       "title_similarity": 1.0,
@@ -1498,7 +2155,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "11:44",
         "view_text": "1,216 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 1.0,
@@ -1514,7 +2171,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "7:17",
         "view_text": "112 views",
-        "published_text": "2 years ago",
+        "published_text": "2y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.5806,
@@ -1530,7 +2187,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "5:54",
         "view_text": "516 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.5255,
@@ -1546,7 +2203,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "15:17",
         "view_text": "236 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4909,
@@ -1562,7 +2219,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:33",
         "view_text": "302 views",
-        "published_text": "3 years ago",
+        "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4364,
@@ -1578,7 +2235,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "15:28",
         "view_text": "16,693 views",
-        "published_text": "1 year ago",
+        "published_text": "1y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3704,
@@ -1594,7 +2251,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "32:31",
         "view_text": "64,354 views",
-        "published_text": "6 months ago",
+        "published_text": "6mo ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3689,
@@ -1610,7 +2267,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "2:38",
         "view_text": "21,092 views",
-        "published_text": "1 year ago",
+        "published_text": "1y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3636,
@@ -1626,7 +2283,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:05",
         "view_text": "72 views",
-        "published_text": "2 years ago",
+        "published_text": "2y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.336,
@@ -1642,12 +2299,44 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "48:29",
         "view_text": "4,300 views",
-        "published_text": "1 year ago",
+        "published_text": "1y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3333,
         "creator_similarity": 1.0,
         "score": 0.56
+      },
+      {
+        "video_id": "cIu-30AfC8Q",
+        "youtube_url": "https://www.youtube.com/watch?v=cIu-30AfC8Q",
+        "title": "Welcome to My Channel | The Intentional Investor - Chris Moore",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "6:05",
+        "view_text": "543 views",
+        "published_text": "3y ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3051,
+        "creator_similarity": 1.0,
+        "score": 0.5397
+      },
+      {
+        "video_id": "t6QCSlfYFPw",
+        "youtube_url": "https://www.youtube.com/watch?v=t6QCSlfYFPw",
+        "title": "You Don’t Need Capital—You Need Leverage",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "43:57",
+        "view_text": "4,330 views",
+        "published_text": "1y ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3,
+        "creator_similarity": 1.0,
+        "score": 0.536
       }
     ],
     "debug": {
@@ -1657,12 +2346,66 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1763221,
+        "bytes": 1286002,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45623,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&count=30",
+        "status": 200,
+        "bytes": 74487,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1680,7 +2423,7 @@
       "title": "Real-Estate Compared To Business Buying! | CarlAllenDealmaker",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 0.8041,
       "creator_similarity": 1.0,
@@ -1694,7 +2437,7 @@
         "title": "Real-Estate Compared To Business Buying! | CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.8041,
         "creator_similarity": 1.0,
@@ -1706,7 +2449,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.3462,
         "creator_similarity": 0.0,
@@ -1745,6 +2488,38 @@
         "score": 0.6416
       },
       {
+        "video_id": "dzKQ3F3I2ns",
+        "youtube_url": "https://www.youtube.com/watch?v=dzKQ3F3I2ns",
+        "title": "Inside the World of High-Stakes Business Acquisitions",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "28:10",
+        "view_text": "1,361 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4348,
+        "creator_similarity": 1.0,
+        "score": 0.633
+      },
+      {
+        "video_id": "MebrtRAF2Ec",
+        "youtube_url": "https://www.youtube.com/watch?v=MebrtRAF2Ec",
+        "title": "Ultimate Guide to Business Valuations  (ONE Secret Nobody Tells You)",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "16:56",
+        "view_text": "6,757 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4231,
+        "creator_similarity": 1.0,
+        "score": 0.6246
+      },
+      {
         "video_id": "QH94Qc8EZ4A",
         "youtube_url": "https://www.youtube.com/watch?v=QH94Qc8EZ4A",
         "title": "Investors are SHIFTING to Buying Businesses | CarlAllenOfficial",
@@ -1775,6 +2550,22 @@
         "title_similarity": 0.3968,
         "creator_similarity": 1.0,
         "score": 0.6057
+      },
+      {
+        "video_id": "GlM8DUlRY3A",
+        "youtube_url": "https://www.youtube.com/watch?v=GlM8DUlRY3A",
+        "title": "LIVE: Deal Review - Buy this company or not?",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "1:24:05",
+        "view_text": "3,514 views",
+        "published_text": "Streamed 6 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3797,
+        "creator_similarity": 1.0,
+        "score": 0.5934
       },
       {
         "video_id": "DGO8s-d7AAU",
@@ -1809,22 +2600,6 @@
         "score": 0.5673
       },
       {
-        "video_id": "kABHbfkYmks",
-        "youtube_url": "https://www.youtube.com/watch?v=kABHbfkYmks",
-        "title": "Visiting America: Exclusive Insights on Buying, Growing, and Selling Businesses | CarlAllenDealmaker",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "8:57",
-        "view_text": "874 views",
-        "published_text": "3 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3284,
-        "creator_similarity": 1.0,
-        "score": 0.5564
-      },
-      {
         "video_id": "VSLxGNYV35E",
         "youtube_url": "https://www.youtube.com/watch?v=VSLxGNYV35E",
         "title": "Top 5 Reasons To Choose Business Acquisition Over Other Investment Options | CarlAllenDealmaker",
@@ -1849,17 +2624,72 @@
         "video_ids": [
           "JPprh0MeW6U",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1616283,
+        "bytes": 1199109,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45923,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73670,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1877,7 +2707,7 @@
       "title": "Revealed: The Secrets to Transforming Your Business for a Lucrative Sale",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 0.5,
@@ -1891,7 +2721,7 @@
         "title": "Revealed: The Secrets to Transforming Your Business for a Lucrative Sale",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 0.5,
@@ -1903,7 +2733,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.2353,
         "creator_similarity": 0.0,
@@ -1918,17 +2748,72 @@
         "video_ids": [
           "yK3SV5dTsi8",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 772666,
+        "bytes": 754257,
         "initial_data": true,
         "renderer_count": 1
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 2300,
+          "items": 1
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&count=30",
+        "status": 200,
+        "bytes": 73792,
+        "video_ids": []
+      }
     }
   },
   {
@@ -1946,7 +2831,7 @@
       "title": "Business Valuation: Your Expert Guide - Part 1",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 1.0,
@@ -1960,7 +2845,7 @@
         "title": "Business Valuation: Your Expert Guide - Part 1",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 1.0,
@@ -1972,7 +2857,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.1852,
         "creator_similarity": 0.0,
@@ -2105,6 +2990,38 @@
         "title_similarity": 0.2393,
         "creator_similarity": 1.0,
         "score": 0.4923
+      },
+      {
+        "video_id": "Pj0p9-G-DME",
+        "youtube_url": "https://www.youtube.com/watch?v=Pj0p9-G-DME",
+        "title": "Day 1 - 10-Days To Buying Your First Business | \"Business Buying Mindset”",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "20:32",
+        "view_text": "21,590 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2,
+        "creator_similarity": 1.0,
+        "score": 0.464
+      },
+      {
+        "video_id": "i8ch6xtwUcg",
+        "youtube_url": "https://www.youtube.com/watch?v=i8ch6xtwUcg",
+        "title": "Welcome To My Youtube Channel - Join The Investment Community! | CarlAllenDealmaker",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "4:52",
+        "view_text": "4,403 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.1983,
+        "creator_similarity": 1.0,
+        "score": 0.4628
       }
     ],
     "debug": {
@@ -2115,17 +3032,72 @@
         "video_ids": [
           "ubMrOQDxtOk",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1635665,
+        "bytes": 1230534,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45473,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73858,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2143,7 +3115,7 @@
       "title": "Business Acquisition Deal Structures: Seller Financing vs. Annuity Deals",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 1.0,
@@ -2157,7 +3129,7 @@
         "title": "Business Acquisition Deal Structures: Seller Financing vs. Annuity Deals",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 1.0,
@@ -2169,7 +3141,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.2519,
         "creator_similarity": 0.0,
@@ -2256,22 +3228,6 @@
         "score": 0.6054
       },
       {
-        "video_id": "vW7kM5KGJNI",
-        "youtube_url": "https://www.youtube.com/watch?v=vW7kM5KGJNI",
-        "title": "Being a Wall Street veteran has given me two invaluable things.",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "1:01",
-        "view_text": "499 views",
-        "published_text": "2 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3788,
-        "creator_similarity": 1.0,
-        "score": 0.5927
-      },
-      {
         "video_id": "T-Im9h4Vyyg",
         "youtube_url": "https://www.youtube.com/watch?v=T-Im9h4Vyyg",
         "title": "Buying Existing Businesses: An Alternative to Starting From Scratch",
@@ -2302,6 +3258,54 @@
         "title_similarity": 0.3664,
         "creator_similarity": 1.0,
         "score": 0.5838
+      },
+      {
+        "video_id": "rvlmVCKQg14",
+        "youtube_url": "https://www.youtube.com/watch?v=rvlmVCKQg14",
+        "title": "The Secret to Winning Deals: Seller Psychology Explained",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "5:07",
+        "view_text": "684 views",
+        "published_text": "1 year ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.352,
+        "creator_similarity": 1.0,
+        "score": 0.5734
+      },
+      {
+        "video_id": "HS7Ib7IKQik",
+        "youtube_url": "https://www.youtube.com/watch?v=HS7Ib7IKQik",
+        "title": "How to Negotiate Annuity and Partnership Deals Like a PRO | CAR-L ep.2",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "11:13",
+        "view_text": "2,685 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2754,
+        "creator_similarity": 1.0,
+        "score": 0.5183
+      },
+      {
+        "video_id": "OiUrCFpPst4",
+        "youtube_url": "https://www.youtube.com/watch?v=OiUrCFpPst4",
+        "title": "How to Buy a Business Without Banks, Investors, or Upfront Cash",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "42:54",
+        "view_text": "176,746 views",
+        "published_text": "1 year ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2595,
+        "creator_similarity": 1.0,
+        "score": 0.5069
       }
     ],
     "debug": {
@@ -2312,17 +3316,72 @@
         "video_ids": [
           "tgRs-9PKb_w",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1954072,
+        "bytes": 1323404,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45858,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73985,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2342,7 +3401,7 @@
         "channel_id": "UCpDy26_LjXFpSB7qxXyRgAQ",
         "channel_path": "/@greenlywood5652",
         "duration_text": "0:24",
-        "view_text": "2,588,159 views",
+        "view_text": "2,588,166 views",
         "published_text": "4 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2356,17 +3415,72 @@
         "url": "https://www.buzzsprout.com/2306481/episodes/16623981-how-these-dealmakers-bought-their-first-and-multiple-businesses",
         "status": 200,
         "bytes": 159066,
-        "video_ids": []
+        "video_ids": [],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 770705,
+        "bytes": 751324,
         "initial_data": true,
         "renderer_count": 1
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 2,
+          "items": 0
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&count=30",
+        "status": 200,
+        "bytes": 73026,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2416,17 +3530,72 @@
         "url": "https://www.buzzsprout.com/2306481/episodes",
         "status": 200,
         "bytes": 94504,
-        "video_ids": []
+        "video_ids": [],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 786828,
+        "bytes": 783820,
         "initial_data": true,
         "renderer_count": 2
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 4614,
+          "items": 2
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&count=30",
+        "status": 200,
+        "bytes": 74670,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2444,7 +3613,7 @@
       "title": "3 Power Plays to Build Rapport With Business Owners",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 1.0,
@@ -2458,7 +3627,7 @@
         "title": "3 Power Plays to Build Rapport With Business Owners",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 1.0,
@@ -2470,7 +3639,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.2241,
         "creator_similarity": 0.0,
@@ -2484,13 +3653,29 @@
         "channel_id": "UCKMw3_CSA7UCtpGmrSZABzw",
         "channel_path": "/@MotiversityQuotes",
         "duration_text": "14:47",
-        "view_text": "1,732,753 views",
+        "view_text": "1,732,765 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3696,
         "creator_similarity": 0.0,
         "score": 0.2661
+      },
+      {
+        "video_id": "Vsdh_yKuD2w",
+        "youtube_url": "https://www.youtube.com/watch?v=Vsdh_yKuD2w",
+        "title": "Master Negotiator Chris Voss Returns with All the Right Answers",
+        "channel": "Tom Ferry",
+        "channel_id": "UC3ZAfS1Z3J_Itfy7Rp745cg",
+        "channel_path": "/@TomFerry",
+        "duration_text": "1:11:06",
+        "view_text": "24,192 views",
+        "published_text": "4 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3684,
+        "creator_similarity": 0.0,
+        "score": 0.2653
       },
       {
         "video_id": "DSOjB123k98",
@@ -2514,15 +3699,45 @@
         "title": "How to Use Your Mind to Heal Your Body With the #1 Harvard Psychologist",
         "channel": "Mel Robbins",
         "channel_id": "UCk2U-Oqn7RXf-ydPqfSxG5g",
-        "channel_path": "/@melrobbins",
-        "duration_text": "1:21:21",
-        "view_text": "953,395 views",
+        "duration_text": "4881",
+        "view_text": "953403",
         "published_text": "9 months ago",
-        "search_method": "youtube_html",
+        "search_method": "invidious:https://yt.chocolatemoo53.com",
         "embedded_on_source_page": false,
         "title_similarity": 0.3471,
         "creator_similarity": 0.0,
         "score": 0.2499
+      },
+      {
+        "video_id": "Solb9uA-tgQ",
+        "youtube_url": "https://www.youtube.com/watch?v=Solb9uA-tgQ",
+        "title": "The Power of Your Subconscious Mind (1963) by Joseph Murphy",
+        "channel": "Master Key Society",
+        "channel_id": "UCXEns75ExsEwvw6UNmOQcNQ",
+        "duration_text": "25933",
+        "view_text": "7505498",
+        "published_text": "4 years ago",
+        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3333,
+        "creator_similarity": 0.0,
+        "score": 0.24
+      },
+      {
+        "video_id": "MF7RzKFMuT4",
+        "youtube_url": "https://www.youtube.com/watch?v=MF7RzKFMuT4",
+        "title": "How to Get What You Want By Letting Go [The Backwards Law]",
+        "channel": "Mark Manson",
+        "channel_id": "UC0TnW9acNxqeojxXDMbohcA",
+        "channel_path": "/@IAmMarkManson",
+        "duration_text": "9:44",
+        "view_text": "3,517,646 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3178,
+        "creator_similarity": 0.0,
+        "score": 0.2288
       },
       {
         "video_id": "SemHh0n19LA",
@@ -2532,7 +3747,7 @@
         "channel_id": "UCsT0YIqwnpJCM-mx7-gSA4Q",
         "channel_path": "/@TEDx",
         "duration_text": "25:21",
-        "view_text": "11,196,341 views",
+        "view_text": "11,196,344 views",
         "published_text": "9 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2564,7 +3779,7 @@
         "channel_id": "UCFyAgi9phA7ErVY_bPC1Cjg",
         "channel_path": "/@tradgedyandhope",
         "duration_text": "10:31",
-        "view_text": "1,899,338 views",
+        "view_text": "1,899,357 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2580,29 +3795,13 @@
         "channel_id": "UCinGuqbTPmHgPOkBlxBhkfw",
         "channel_path": "/@quotesandlifelessonsspace8871",
         "duration_text": "3:59",
-        "view_text": "3,332,262 views",
+        "view_text": "3,332,264 views",
         "published_text": "6 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2914,
         "creator_similarity": 0.0,
         "score": 0.2098
-      },
-      {
-        "video_id": "d9zUVFzPtJ4",
-        "youtube_url": "https://www.youtube.com/watch?v=d9zUVFzPtJ4",
-        "title": "How To Win Friends And Influence People By Dale Carnegie (Audiobook)",
-        "channel": "Self Improvement Audiobooks",
-        "channel_id": "UCwVmQ56UxhuuQFd_ARnT56Q",
-        "channel_path": "/@SelfImprovementAudiobooks1",
-        "duration_text": "7:17:59",
-        "view_text": "1,398,921 views",
-        "published_text": "3 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2906,
-        "creator_similarity": 0.0,
-        "score": 0.2092
       }
     ],
     "debug": {
@@ -2613,17 +3812,72 @@
         "video_ids": [
           "cLSnuGR1opQ",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 2045356,
+        "bytes": 1236017,
         "initial_data": true,
-        "renderer_count": 19
+        "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45331,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 72891,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2641,7 +3895,7 @@
       "title": "Use Theses 3 Strategies To Find Off-Market Deals | CarlAllenDealmaker",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 0.8348,
       "creator_similarity": 1.0,
@@ -2655,7 +3909,7 @@
         "title": "Use Theses 3 Strategies To Find Off-Market Deals | CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.8348,
         "creator_similarity": 1.0,
@@ -2667,7 +3921,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.0885,
         "creator_similarity": 0.0,
@@ -2706,6 +3960,22 @@
         "score": 0.6386
       },
       {
+        "video_id": "ePKjIcDbsbk",
+        "youtube_url": "https://www.youtube.com/watch?v=ePKjIcDbsbk",
+        "title": "Day 8 - Execution | 10 days to Your First Deal",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "12:02",
+        "view_text": "4,471 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4,
+        "creator_similarity": 1.0,
+        "score": 0.608
+      },
+      {
         "video_id": "wX3eTJxxcEQ",
         "youtube_url": "https://www.youtube.com/watch?v=wX3eTJxxcEQ",
         "title": "18 Proven Steps To Negotiate Like a Pro With Carl Allen's System | CarlAllenDealmaker",
@@ -2720,22 +3990,6 @@
         "title_similarity": 0.3511,
         "creator_similarity": 1.0,
         "score": 0.5728
-      },
-      {
-        "video_id": "VmIPUMNDv68",
-        "youtube_url": "https://www.youtube.com/watch?v=VmIPUMNDv68",
-        "title": "How I Use Data To Predict Deal Outcomes (PROVEN FRAMEWOK)",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "16:00",
-        "view_text": "1,021 views",
-        "published_text": "3 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3495,
-        "creator_similarity": 1.0,
-        "score": 0.5717
       },
       {
         "video_id": "u9av3hX9szw",
@@ -2800,6 +4054,38 @@
         "title_similarity": 0.3019,
         "creator_similarity": 1.0,
         "score": 0.5374
+      },
+      {
+        "video_id": "yGwrjI2lq_4",
+        "youtube_url": "https://www.youtube.com/watch?v=yGwrjI2lq_4",
+        "title": "Live Q&A: Offer Sequencing and Negotiation",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "1:07:46",
+        "view_text": "1,534 views",
+        "published_text": "Streamed 5 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2921,
+        "creator_similarity": 1.0,
+        "score": 0.5303
+      },
+      {
+        "video_id": "Hd0eu7hWs_Q",
+        "youtube_url": "https://www.youtube.com/watch?v=Hd0eu7hWs_Q",
+        "title": "Day 3 - 10-Days To Buying Your First Business | \"Deal Origination” |CarlAllenDealmaker",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "17:24",
+        "view_text": "11,208 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2835,
+        "creator_similarity": 1.0,
+        "score": 0.5241
       }
     ],
     "debug": {
@@ -2810,17 +4096,72 @@
         "video_ids": [
           "gxx_s-RMvYg",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1870553,
+        "bytes": 1180602,
         "initial_data": true,
         "renderer_count": 20
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 45652,
+          "items": 20
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73940,
+        "video_ids": []
+      }
     }
   },
   {
@@ -2838,7 +4179,7 @@
       "title": "Why FOCUS is Critical In A Rollup | CAR-L ep 7 | CarlAllenDealmaker",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 0.6875,
       "creator_similarity": 1.0,
@@ -2852,7 +4193,7 @@
         "title": "Why FOCUS is Critical In A Rollup | CAR-L ep 7 | CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.6875,
         "creator_similarity": 1.0,
@@ -2864,7 +4205,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.3061,
         "creator_similarity": 0.0,
@@ -2997,6 +4338,22 @@
         "title_similarity": 0.3218,
         "creator_similarity": 0.0,
         "score": 0.2317
+      },
+      {
+        "video_id": "dEwtQC_Fy-g",
+        "youtube_url": "https://www.youtube.com/watch?v=dEwtQC_Fy-g",
+        "title": "introducing deal maker Empire. How to become a Deal Maker?",
+        "channel": "GyaanShaala Education",
+        "channel_id": "UCamRyme0xgjm-SmhOfJSt8w",
+        "channel_path": "/@GyaanShaalaEducation",
+        "duration_text": "15:11",
+        "view_text": "45 views",
+        "published_text": "4 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2022,
+        "creator_similarity": 0.0,
+        "score": 0.1456
       }
     ],
     "debug": {
@@ -3007,17 +4364,72 @@
         "video_ids": [
           "q35pUe2kwJg",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1706861,
+        "bytes": 929411,
         "initial_data": true,
         "renderer_count": 10
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 22918,
+          "items": 10
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&count=30",
+        "status": 200,
+        "bytes": 73947,
+        "video_ids": []
+      }
     }
   },
   {
@@ -3035,7 +4447,7 @@
       "title": "Investor's Guide: 5 Essential Elements in Business Equity Deals",
       "channel": "Carl Allen - Dealmaker",
       "channel_url": "https://www.youtube.com/@carlallenofficial",
-      "search_method": "page_embed",
+      "search_method": "oembed",
       "embedded_on_source_page": true,
       "title_similarity": 1.0,
       "creator_similarity": 0.5,
@@ -3049,7 +4461,7 @@
         "title": "Investor's Guide: 5 Essential Elements in Business Equity Deals",
         "channel": "Carl Allen - Dealmaker",
         "channel_url": "https://www.youtube.com/@carlallenofficial",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 1.0,
         "creator_similarity": 0.5,
@@ -3061,7 +4473,7 @@
         "title": "Dealmaker Wealth Society Review (Carl Allen) - Leveraged buyout smart?",
         "channel": "Hunter Martin",
         "channel_url": "https://www.youtube.com/@huntermartin-ko1he",
-        "search_method": "page_embed",
+        "search_method": "oembed",
         "embedded_on_source_page": true,
         "title_similarity": 0.0787,
         "creator_similarity": 0.0,
@@ -3124,17 +4536,72 @@
         "video_ids": [
           "zS3FebPaqSw",
           "1JEeHItA1FQ"
-        ]
+        ],
+        "html_has_youtube": true
       },
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 848278,
+        "bytes": 832397,
         "initial_data": true,
         "renderer_count": 4
       },
-      "bing": {},
-      "bing_video_ids": []
+      "invidious": [
+        {
+          "base": "https://inv.zoomerville.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://inv.nadeko.net",
+          "error": "403 Client Error: Forbidden for url: https://inv.nadeko.net/api/v1/search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.nerdvpn.de",
+          "error": "401 Client Error: Unauthorized for url: https://invidious.nerdvpn.de/api/v1/search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&type=video&page=1&sort_by=relevance"
+        },
+        {
+          "base": "https://invidious.f5.si",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://yt.chocolatemoo53.com",
+          "status": 200,
+          "bytes": 9157,
+          "items": 4
+        }
+      ],
+      "piped": [
+        {
+          "base": "https://pipedapi.kavin.rocks",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.kavin.rocks/search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.adminforge.de",
+          "error": "HTTPSConnectionPool(host='adminforge.desearch', port=443): Max retries exceeded with url: /?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='adminforge.desearch', port=443): Failed to resolve 'adminforge.desearch' ([Errno -2] Name or service not known)\"))"
+        },
+        {
+          "base": "https://pipedapi.reallyaweso.me",
+          "error": "502 Server Error: Bad Gateway for url: https://pipedapi.reallyaweso.me/search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.r4fo.com",
+          "error": "Expecting value: line 1 column 1 (char 0)"
+        },
+        {
+          "base": "https://pipedapi.leptons.xyz",
+          "error": "403 Client Error: Forbidden for url: https://pipedapi.leptons.xyz/search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&filter=videos"
+        },
+        {
+          "base": "https://pipedapi.darkness.services",
+          "error": "HTTPSConnectionPool(host='pipedapi.darkness.services', port=443): Max retries exceeded with url: /search?q=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&filter=videos (Caused by NameResolutionError(\"HTTPSConnection(host='pipedapi.darkness.services', port=443): Failed to resolve 'pipedapi.darkness.services' ([Errno -5] No address associated with hostname)\"))"
+        }
+      ],
+      "bing": {
+        "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&count=30",
+        "status": 200,
+        "bytes": 74392,
+        "video_ids": []
+      }
     }
   }
 ]
