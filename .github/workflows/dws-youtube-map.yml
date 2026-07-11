@@ -1,0 +1,39 @@
+name: DWS YouTube Map
+
+on:
+  push:
+    branches:
+      - dws-dashboard-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/build_youtube_map.py
+      - .github/workflows/dws-youtube-map.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: dws-dashboard-preview
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build compact map
+        run: python packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/tools/build_youtube_map.py
+      - name: Commit map
+        run: |
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/youtube-link-map.json
+          if git diff --cached --quiet; then
+            echo "No map changes"
+            exit 0
+          fi
+          git commit -m "Build compact DWS YouTube link map"
+          git push origin HEAD:dws-dashboard-preview
