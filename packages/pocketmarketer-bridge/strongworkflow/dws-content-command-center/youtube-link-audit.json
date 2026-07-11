@@ -13,7 +13,7 @@
       "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
       "channel_path": "/@carlallenofficial",
       "duration_text": "1:02:19",
-      "view_text": "103,628 views",
+      "view_text": "103,630 views",
       "published_text": "11 months ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
@@ -31,7 +31,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "1:02:19",
-        "view_text": "103,628 views",
+        "view_text": "103,630 views",
         "published_text": "11 months ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -47,7 +47,7 @@
         "channel_id": "UCqFzWxSCi39LnW1JKFR3efg",
         "channel_path": "/@SaturdayNightLive",
         "duration_text": "3:20",
-        "view_text": "6,503,884 views",
+        "view_text": "6,503,997 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -95,8 +95,8 @@
         "channel_id": "UCOntTQrEbD94Gjfc0UXC46A",
         "channel_path": "/@prestondennett577",
         "duration_text": "1:13:56",
-        "view_text": "5,022 views",
-        "published_text": "6 hours ago",
+        "view_text": "9,448 views",
+        "published_text": "13 hours ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2887,
@@ -104,20 +104,20 @@
         "score": 0.2078
       },
       {
-        "video_id": "7Lug0XA8P8o",
-        "youtube_url": "https://www.youtube.com/watch?v=7Lug0XA8P8o",
-        "title": "The Terrifying Bigfoot Murdered His Wife! Can This Mad Professor Revenge This Mountain Monster?!",
-        "channel": "Total Horror Channel",
-        "channel_id": "UC60xqiAR4BTsYwhPvSg9IWA",
-        "channel_path": "/@VibrantTVBStories",
-        "duration_text": "1:49:33",
-        "view_text": "5,666 views",
-        "published_text": "11 hours ago",
+        "video_id": "GpRvL8jIHKM",
+        "youtube_url": "https://www.youtube.com/watch?v=GpRvL8jIHKM",
+        "title": "Inside Wisconsin's Prison Economy & Political Scandals",
+        "channel": "WNOV The Voice",
+        "channel_id": "UCtjvea1PZxsClEdi_1v1ibA",
+        "channel_path": "/@wnovthevoice",
+        "duration_text": "1:32:29",
+        "view_text": "15 views",
+        "published_text": "2 days ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.2754,
+        "title_similarity": 0.268,
         "creator_similarity": 0.0,
-        "score": 0.1983
+        "score": 0.193
       },
       {
         "video_id": "zOJeGGE9Qm0",
@@ -143,7 +143,7 @@
         "channel_id": "UCb3fJ09Jw2nUX9TpSiUNBQw",
         "channel_path": "/@CarlMurawski",
         "duration_text": "9:50",
-        "view_text": "894,585 views",
+        "view_text": "894,693 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -159,7 +159,7 @@
         "channel_id": "UCOmjR-JVOshlZbUoQYOCxWg",
         "channel_path": "/@drgexplains",
         "duration_text": "33:14",
-        "view_text": "1,532,294 views",
+        "view_text": "1,532,379 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -175,7 +175,7 @@
         "channel_id": "UCth1JdU_n065AJjWomYXmWg",
         "channel_path": "/@OfficialGeorgeCarlin",
         "duration_text": "3:31",
-        "view_text": "426,731 views",
+        "view_text": "426,768 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -191,7 +191,7 @@
         "channel_id": "UCvxeYDOSv2PKcSgIckhgsbQ",
         "channel_path": "/@BoxofficeTHRILLERS",
         "duration_text": "1:31:49",
-        "view_text": "6,723 views",
+        "view_text": "7,620 views",
         "published_text": "1 day ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -207,7 +207,7 @@
         "channel_id": "UCKxCMTdW2-7s4Hi2crQgXoQ",
         "channel_path": "/@aerial0",
         "duration_text": "2:23",
-        "view_text": "11,177,531 views",
+        "view_text": "11,177,764 views",
         "published_text": "10 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -223,7 +223,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1200239,
+        "bytes": 1226469,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -247,7 +247,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 44936,
+          "bytes": 45053,
           "items": 20
         }
       ],
@@ -280,7 +280,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Real+Reason+Most+Entrepreneurs+Stay+Broke+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73126,
+        "bytes": 73502,
         "video_ids": []
       }
     }
@@ -333,7 +333,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "7:52",
-        "view_text": "16,986 views",
+        "view_text": "16,985 views",
         "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -397,7 +397,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "42:54",
-        "view_text": "42,600 views",
+        "view_text": "42,602 views",
         "published_text": "5mo ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -413,61 +413,13 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "12:02",
-        "view_text": "4,471 views",
+        "view_text": "4,472 views",
         "published_text": "3y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2759,
         "creator_similarity": 1.0,
         "score": 0.5186
-      },
-      {
-        "video_id": "pgFRhwQ997k",
-        "youtube_url": "https://www.youtube.com/watch?v=pgFRhwQ997k",
-        "title": "The Hidden Trick To Increasing Your ISA Allowance",
-        "channel": "Carl Roberts",
-        "channel_id": "UCpbC4jRR-yUTd75Du8nbvqQ",
-        "channel_path": "/@carlrobertsonmoney",
-        "duration_text": "12:58",
-        "view_text": "10,372 views",
-        "published_text": "1y ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3404,
-        "creator_similarity": 0.5,
-        "score": 0.3351
-      },
-      {
-        "video_id": "S5luU8W-X2Y",
-        "youtube_url": "https://www.youtube.com/watch?v=S5luU8W-X2Y",
-        "title": "The Forgotten UFO Wave -- Wytheville, Virginia (1987-1988)",
-        "channel": "Preston Dennett",
-        "channel_id": "UCOntTQrEbD94Gjfc0UXC46A",
-        "channel_path": "/@prestondennett577",
-        "duration_text": "1:13:56",
-        "view_text": "5,022 views",
-        "published_text": "6h ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3505,
-        "creator_similarity": 0.0,
-        "score": 0.2524
-      },
-      {
-        "video_id": "lbvetI9L_0o",
-        "youtube_url": "https://www.youtube.com/watch?v=lbvetI9L_0o",
-        "title": "Month in My Life Building a $100M Portfolio | Learning Private Equity + Capital Conversations",
-        "channel": "Brittany Bell",
-        "channel_id": "UCVIy2lIKdDWW_Lki9BdSAtw",
-        "channel_path": "/@itzbrittanymarie",
-        "duration_text": "1:03:14",
-        "view_text": "120 views",
-        "published_text": "5mo ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3459,
-        "creator_similarity": 0.0,
-        "score": 0.249
       },
       {
         "video_id": "yM-QxZows94",
@@ -486,20 +438,67 @@
         "score": 0.24
       },
       {
-        "video_id": "PMt7C3COiVM",
-        "youtube_url": "https://www.youtube.com/watch?v=PMt7C3COiVM",
-        "title": "Norm Macdonald - Kojak & Prostitutes",
-        "channel": "Bob Kendall",
-        "channel_id": "UCU96WH038IoKNVg2hWyBCjg",
-        "channel_path": "/@bobkendall3251",
-        "duration_text": "1:12",
-        "view_text": "2,837,833 views",
-        "published_text": "9y ago",
+        "video_id": "qp8eV2bGTj8",
+        "youtube_url": "https://www.youtube.com/watch?v=qp8eV2bGTj8",
+        "title": "How to use Trading Bots on BloFin 🟠 Make money with automated trading",
+        "channel": "The Moon Show",
+        "channel_id": "UCc4Rz_T9Sb1w5rqqo9pL1Og",
+        "duration_text": "707",
+        "view_text": "3377",
+        "published_text": "4 months ago",
+        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3214,
+        "creator_similarity": 0.0,
+        "score": 0.2314
+      },
+      {
+        "video_id": "NBmuvR9QYLs",
+        "youtube_url": "https://www.youtube.com/watch?v=NBmuvR9QYLs",
+        "title": "Trust The Universe - Alan Watts On Finding Zen",
+        "channel": "T&H - Inspiration & Motivation",
+        "channel_id": "UCFyAgi9phA7ErVY_bPC1Cjg",
+        "channel_path": "/@tradgedyandhope",
+        "duration_text": "10:31",
+        "view_text": "1,899,761 views",
+        "published_text": "2y ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.3117,
+        "title_similarity": 0.3146,
         "creator_similarity": 0.0,
-        "score": 0.2244
+        "score": 0.2265
+      },
+      {
+        "video_id": "N0pQt2f3COk",
+        "youtube_url": "https://www.youtube.com/watch?v=N0pQt2f3COk",
+        "title": "Smiling friends season 3 racist guy end segment ",
+        "channel": "Nethal1",
+        "channel_id": "UC0_w4xBZhWUm2SeIpHyj4nw",
+        "channel_path": "/@Nethal12",
+        "duration_text": "1:03",
+        "view_text": "675,415 views",
+        "published_text": "7mo ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3043,
+        "creator_similarity": 0.0,
+        "score": 0.2191
+      },
+      {
+        "video_id": "CbSFw7NTneQ",
+        "youtube_url": "https://www.youtube.com/watch?v=CbSFw7NTneQ",
+        "title": "Woman Faints While President Obama Gives Remarks About Healthcare Website Issues",
+        "channel": "ABC News",
+        "channel_id": "UCBi2mrWuNuyYy4gbM6fU18Q",
+        "channel_path": "/@ABCNews",
+        "duration_text": "1:32",
+        "view_text": "16,298,008 views",
+        "published_text": "12y ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.304,
+        "creator_similarity": 0.0,
+        "score": 0.2189
       }
     ],
     "debug": {
@@ -509,7 +508,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1154591,
+        "bytes": 1113317,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -533,7 +532,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 44817,
+          "bytes": 45124,
           "items": 20
         }
       ],
@@ -566,7 +565,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Safer+Way+to+Build+Wealth%3A+Buy%2C+Don%27t+Start+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 74827,
+        "bytes": 74156,
         "video_ids": []
       }
     }
@@ -585,7 +584,7 @@
       "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
       "channel_path": "/@carlallenofficial",
       "duration_text": "53:18",
-      "view_text": "25,707 views",
+      "view_text": "25,710 views",
       "published_text": "8 months ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
@@ -603,13 +602,29 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "53:18",
-        "view_text": "25,707 views",
+        "view_text": "25,710 views",
         "published_text": "8 months ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 1.0,
         "creator_similarity": 1.0,
         "score": 1.0
+      },
+      {
+        "video_id": "jTHyBQWsG64",
+        "youtube_url": "https://www.youtube.com/watch?v=jTHyBQWsG64",
+        "title": "The Beginning of My Business Acquisition Story - The First Business I Bought| CarlAllenDealmaker",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "9:38",
+        "view_text": "1,599 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4615,
+        "creator_similarity": 1.0,
+        "score": 0.6523
       },
       {
         "video_id": "rvcpiS6dXbA",
@@ -619,7 +634,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "27:52",
-        "view_text": "10,032 views",
+        "view_text": "10,034 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -651,7 +666,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "35:06",
-        "view_text": "6,306 views",
+        "view_text": "6,309 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -667,7 +682,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "17:43",
-        "view_text": "53,374 views",
+        "view_text": "53,375 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -724,22 +739,6 @@
         "score": 0.5994
       },
       {
-        "video_id": "hry_WMEXgoU",
-        "youtube_url": "https://www.youtube.com/watch?v=hry_WMEXgoU",
-        "title": "Business Traders: How to sell the business  Video 5 of 5.",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "10:41",
-        "view_text": "1,384 views",
-        "published_text": "9 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3654,
-        "creator_similarity": 1.0,
-        "score": 0.5831
-      },
-      {
         "video_id": "M_8qh17IOEs",
         "youtube_url": "https://www.youtube.com/watch?v=M_8qh17IOEs",
         "title": "Business Traders: How to rapidly scale the business Video 4 of 5.",
@@ -772,19 +771,20 @@
         "score": 0.5491
       },
       {
-        "video_id": "jTHyBQWsG64",
-        "youtube_url": "https://www.youtube.com/watch?v=jTHyBQWsG64",
-        "title": "The Beginning of My Business Acquisition Story - The First Business I Bought| CarlAllenDealmaker",
+        "video_id": "tgRs-9PKb_w",
+        "youtube_url": "https://www.youtube.com/watch?v=tgRs-9PKb_w",
+        "title": "Business Acquisition Deal Structures: Seller Financing vs. Annuity Deals",
         "channel": "Carl Allen - Dealmaker",
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "duration_text": "578",
-        "view_text": "1599",
-        "published_text": "3 years ago",
-        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "11:11",
+        "view_text": "6,437 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.4615,
+        "title_similarity": 0.25,
         "creator_similarity": 1.0,
-        "score": 0.5123
+        "score": 0.5
       }
     ],
     "debug": {
@@ -794,7 +794,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1243441,
+        "bytes": 1212490,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -818,7 +818,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45469,
+          "bytes": 45562,
           "items": 20
         }
       ],
@@ -851,7 +851,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+The+Secret+to+Buying+Businesses+at+the+Right+Price+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73535,
+        "bytes": 73395,
         "video_ids": []
       }
     }
@@ -920,7 +920,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 778551,
+        "bytes": 796664,
         "initial_data": true,
         "renderer_count": 2
       },
@@ -977,7 +977,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Mailbox+Money+From+Buying+Cash-Flowing+Businesses+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73834,
+        "bytes": 73892,
         "video_ids": []
       }
     }
@@ -996,7 +996,7 @@
       "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
       "channel_path": "/@Chrismoorespeaks",
       "duration_text": "40:58",
-      "view_text": "3,082 views",
+      "view_text": "3,127 views",
       "published_text": "3 weeks ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
@@ -1014,7 +1014,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "40:58",
-        "view_text": "3,082 views",
+        "view_text": "3,127 views",
         "published_text": "3 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1046,7 +1046,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "50:24",
-        "view_text": "73,930 views",
+        "view_text": "73,931 views",
         "published_text": "10 months ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1094,13 +1094,29 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "25:53",
-        "view_text": "1,655 views",
+        "view_text": "1,677 views",
         "published_text": "2 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3434,
         "creator_similarity": 1.0,
         "score": 0.5673
+      },
+      {
+        "video_id": "BmZeVd_vZhE",
+        "youtube_url": "https://www.youtube.com/watch?v=BmZeVd_vZhE",
+        "title": "Most Businesses Struggle to Scale Because of This",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "1:08:15",
+        "view_text": "63,227 views",
+        "published_text": "6 months ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3333,
+        "creator_similarity": 1.0,
+        "score": 0.56
       },
       {
         "video_id": "03yXY9rfqLg",
@@ -1110,7 +1126,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "1:14:11",
-        "view_text": "4,142 views",
+        "view_text": "4,180 views",
         "published_text": "4 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1133,6 +1149,22 @@
         "title_similarity": 0.3226,
         "creator_similarity": 1.0,
         "score": 0.5523
+      },
+      {
+        "video_id": "zJhPUej9URQ",
+        "youtube_url": "https://www.youtube.com/watch?v=zJhPUej9URQ",
+        "title": "Mastering Sales Conversations: Your Path to Business Success",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "3:27",
+        "view_text": "173 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3208,
+        "creator_similarity": 1.0,
+        "score": 0.5509
       },
       {
         "video_id": "t0_c9TDIkjE",
@@ -1165,38 +1197,6 @@
         "title_similarity": 0.2947,
         "creator_similarity": 1.0,
         "score": 0.5322
-      },
-      {
-        "video_id": "MRK-uw7d-ps",
-        "youtube_url": "https://www.youtube.com/watch?v=MRK-uw7d-ps",
-        "title": "Supercharge Your Business Growth: Finding Your Niche in Home Services and Real Estate",
-        "channel": "Chris Moore",
-        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
-        "channel_path": "/@Chrismoorespeaks",
-        "duration_text": "16:58",
-        "view_text": "114 views",
-        "published_text": "2 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2901,
-        "creator_similarity": 1.0,
-        "score": 0.5289
-      },
-      {
-        "video_id": "iE4TZ6-t_dE",
-        "youtube_url": "https://www.youtube.com/watch?v=iE4TZ6-t_dE",
-        "title": "The Secret to Business Growth: A Five-Step Lead Generation Process",
-        "channel": "Chris Moore",
-        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
-        "channel_path": "/@Chrismoorespeaks",
-        "duration_text": "3:44",
-        "view_text": "108 views",
-        "published_text": "2 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2857,
-        "creator_similarity": 1.0,
-        "score": 0.5257
       }
     ],
     "debug": {
@@ -1206,7 +1206,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1227942,
+        "bytes": 1206436,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -1230,7 +1230,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45535,
+          "bytes": 45554,
           "items": 20
         }
       ],
@@ -1263,7 +1263,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+I+Built+a+Complete+Marketing+Plan+Live+on+Stage+Chris+Moore&count=30",
         "status": 200,
-        "bytes": 73771,
+        "bytes": 73513,
         "video_ids": []
       }
     }
@@ -1282,7 +1282,7 @@
       "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
       "channel_path": "/@Chrismoorespeaks",
       "duration_text": "25:53",
-      "view_text": "1,653 views",
+      "view_text": "1,677 views",
       "published_text": "2 weeks ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
@@ -1300,7 +1300,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "25:53",
-        "view_text": "1,653 views",
+        "view_text": "1,677 views",
         "published_text": "2 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1339,22 +1339,6 @@
         "title_similarity": 0.359,
         "creator_similarity": 1.0,
         "score": 0.5785
-      },
-      {
-        "video_id": "hBF7pxjGy4M",
-        "youtube_url": "https://www.youtube.com/watch?v=hBF7pxjGy4M",
-        "title": "Marketing will never be the same again ￼",
-        "channel": "Chris Moore",
-        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
-        "channel_path": "/@Chrismoorespeaks",
-        "duration_text": "50:24",
-        "view_text": "73,930 views",
-        "published_text": "10 months ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3556,
-        "creator_similarity": 1.0,
-        "score": 0.576
       },
       {
         "video_id": "t0_c9TDIkjE",
@@ -1412,7 +1396,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:26",
-        "view_text": "8,110 views",
+        "view_text": "8,166 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1437,22 +1421,6 @@
         "score": 0.5
       },
       {
-        "video_id": "fsqZ-uMz-x8",
-        "youtube_url": "https://www.youtube.com/watch?v=fsqZ-uMz-x8",
-        "title": "How to Craft a Profitable Offer People Actually Want",
-        "channel": "Chris Moore",
-        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
-        "channel_path": "/@Chrismoorespeaks",
-        "duration_text": "1:09:11",
-        "view_text": "20,333 views",
-        "published_text": "6 months ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.25,
-        "creator_similarity": 1.0,
-        "score": 0.5
-      },
-      {
         "video_id": "03yXY9rfqLg",
         "youtube_url": "https://www.youtube.com/watch?v=03yXY9rfqLg",
         "title": "Build a Referral Engine That Actually Delivers Consistent Leads (No More Luck)",
@@ -1460,7 +1428,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "1:14:11",
-        "view_text": "4,140 views",
+        "view_text": "4,180 views",
         "published_text": "4 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1483,6 +1451,37 @@
         "title_similarity": 0.1837,
         "creator_similarity": 1.0,
         "score": 0.4522
+      },
+      {
+        "video_id": "t2dpH47wy-w",
+        "youtube_url": "https://www.youtube.com/watch?v=t2dpH47wy-w",
+        "title": "The Messaging Mistake That Stops Offers From Converting",
+        "channel": "Chris Moore",
+        "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
+        "channel_path": "/@Chrismoorespeaks",
+        "duration_text": "49:32",
+        "view_text": "14,618 views",
+        "published_text": "6 months ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.1495,
+        "creator_similarity": 1.0,
+        "score": 0.4277
+      },
+      {
+        "video_id": "OPp9WL4631g",
+        "youtube_url": "https://www.youtube.com/watch?v=OPp9WL4631g",
+        "title": "Justin Moore - BTPA Testimonial",
+        "channel": "Best-Tronics Pro Audio",
+        "channel_id": "UCaqpymaalzbn_fuaHmDbLoA",
+        "duration_text": "95",
+        "view_text": "400",
+        "published_text": "13 years ago",
+        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3704,
+        "creator_similarity": 0.0,
+        "score": 0.2667
       }
     ],
     "debug": {
@@ -1492,7 +1491,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1185918,
+        "bytes": 1189818,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -1516,7 +1515,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45055,
+          "bytes": 45045,
           "items": 20
         }
       ],
@@ -1549,7 +1548,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+He+Needed+More+Leads.+We+Built+the+Entire+System+Live.+Chris+Moore&count=30",
         "status": 200,
-        "bytes": 73183,
+        "bytes": 72954,
         "video_ids": []
       }
     }
@@ -1609,7 +1608,7 @@
         "channel_id": "UCEAqEl5gE3W913dhaxrQbEw",
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "5:26",
-        "view_text": "5,379 views",
+        "view_text": "5,380 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1721,7 +1720,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "42:54",
-        "view_text": "42,600 views",
+        "view_text": "42,602 views",
         "published_text": "5 months ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -1776,7 +1775,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1277597,
+        "bytes": 1286334,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -1833,7 +1832,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+How+to+Teach+People+How+to+Offer+You+Equity+in+Their+Company+Carl+Allen+and+Chris+Moore&count=30",
         "status": 200,
-        "bytes": 75744,
+        "bytes": 73072,
         "video_ids": []
       }
     }
@@ -1989,7 +1988,7 @@
         "channel_id": "UCth1JdU_n065AJjWomYXmWg",
         "channel_path": "/@OfficialGeorgeCarlin",
         "duration_text": "10:07",
-        "view_text": "1,870,435 views",
+        "view_text": "1,870,749 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2005,29 +2004,13 @@
         "channel_id": "UC1KmNKYC1l0stjctkGswl6g",
         "channel_path": "/@AfterSkool",
         "duration_text": "10:37",
-        "view_text": "7,900,389 views",
+        "view_text": "7,900,695 views",
         "published_text": "5 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3636,
         "creator_similarity": 0.0,
         "score": 0.2618
-      },
-      {
-        "video_id": "ABtXzNcEMx4",
-        "youtube_url": "https://www.youtube.com/watch?v=ABtXzNcEMx4",
-        "title": "Book Review: How I Invest My Money",
-        "channel": "Adam Grossman",
-        "channel_id": "UCHZyXEdXY15OD_krmu5dFKA",
-        "channel_path": "/@adamgrossman",
-        "duration_text": "2:04",
-        "view_text": "238 views",
-        "published_text": "5 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3478,
-        "creator_similarity": 0.0,
-        "score": 0.2504
       },
       {
         "video_id": "QQ6IvzjI22Q",
@@ -2037,13 +2020,29 @@
         "channel_id": "UCQXHTFnQYFTqN0MqmNh9EIA",
         "channel_path": "/@BBCWorldService",
         "duration_text": "47:11",
-        "view_text": "2,169 views",
+        "view_text": "3,155 views",
         "published_text": "1 day ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3387,
         "creator_similarity": 0.0,
         "score": 0.2439
+      },
+      {
+        "video_id": "Wtj2rWP_b60",
+        "youtube_url": "https://www.youtube.com/watch?v=Wtj2rWP_b60",
+        "title": "The most awkward Antiques Roadshow moment in history",
+        "channel": "Milo_911",
+        "channel_id": "UCMHYdnQy21lds1K5mfa-LpA",
+        "channel_path": "/@milo_9117",
+        "duration_text": "1:04",
+        "view_text": "3,331,899 views",
+        "published_text": "7 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3182,
+        "creator_similarity": 0.0,
+        "score": 0.2291
       }
     ],
     "debug": {
@@ -2060,7 +2059,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1110951,
+        "bytes": 1098756,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -2084,7 +2083,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45079,
+          "bytes": 45188,
           "items": 20
         }
       ],
@@ -2117,7 +2116,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Why+%243+Million+in+Profit+is+Worthless+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73067,
+        "bytes": 72773,
         "video_ids": []
       }
     }
@@ -2137,7 +2136,7 @@
       "channel_path": "/@Chrismoorespeaks",
       "duration_text": "11:44",
       "view_text": "1,216 views",
-      "published_text": "3y ago",
+      "published_text": "3 years ago",
       "search_method": "youtube_html",
       "embedded_on_source_page": false,
       "title_similarity": 1.0,
@@ -2155,7 +2154,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "11:44",
         "view_text": "1,216 views",
-        "published_text": "3y ago",
+        "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 1.0,
@@ -2171,7 +2170,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "7:17",
         "view_text": "112 views",
-        "published_text": "2y ago",
+        "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.5806,
@@ -2187,7 +2186,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "5:54",
         "view_text": "516 views",
-        "published_text": "3y ago",
+        "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.5255,
@@ -2203,7 +2202,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "15:17",
         "view_text": "236 views",
-        "published_text": "3y ago",
+        "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4909,
@@ -2219,7 +2218,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:33",
         "view_text": "302 views",
-        "published_text": "3y ago",
+        "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4364,
@@ -2235,7 +2234,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "15:28",
         "view_text": "16,693 views",
-        "published_text": "1y ago",
+        "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3704,
@@ -2251,7 +2250,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "32:31",
         "view_text": "64,354 views",
-        "published_text": "6mo ago",
+        "published_text": "6 months ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3689,
@@ -2267,7 +2266,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "2:38",
         "view_text": "21,092 views",
-        "published_text": "1y ago",
+        "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3636,
@@ -2283,7 +2282,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "9:05",
         "view_text": "72 views",
-        "published_text": "2y ago",
+        "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.336,
@@ -2299,7 +2298,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "48:29",
         "view_text": "4,300 views",
-        "published_text": "1y ago",
+        "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3333,
@@ -2315,7 +2314,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "6:05",
         "view_text": "543 views",
-        "published_text": "3y ago",
+        "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3051,
@@ -2331,7 +2330,7 @@
         "channel_path": "/@Chrismoorespeaks",
         "duration_text": "43:57",
         "view_text": "4,330 views",
-        "published_text": "1y ago",
+        "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3,
@@ -2346,7 +2345,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1286002,
+        "bytes": 1283871,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -2370,7 +2369,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45623,
+          "bytes": 45604,
           "items": 20
         }
       ],
@@ -2403,7 +2402,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Consulting+for+Equity%3A+Become+a+Strategic+Partner+in+Business+Chris+Moore&count=30",
         "status": 200,
-        "bytes": 74487,
+        "bytes": 72954,
         "video_ids": []
       }
     }
@@ -2472,22 +2471,6 @@
         "score": 0.6523
       },
       {
-        "video_id": "acDjkwg9Ccg",
-        "youtube_url": "https://www.youtube.com/watch?v=acDjkwg9Ccg",
-        "title": "Buying Real Estate Deals With My Partner Chris - Pace Morby Method",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "2:35",
-        "view_text": "846 views",
-        "published_text": "3 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.4466,
-        "creator_similarity": 1.0,
-        "score": 0.6416
-      },
-      {
         "video_id": "dzKQ3F3I2ns",
         "youtube_url": "https://www.youtube.com/watch?v=dzKQ3F3I2ns",
         "title": "Inside the World of High-Stakes Business Acquisitions",
@@ -2536,6 +2519,22 @@
         "score": 0.6224
       },
       {
+        "video_id": "bazz_ljeKu0",
+        "youtube_url": "https://www.youtube.com/watch?v=bazz_ljeKu0",
+        "title": "Find Out If You're a Good Candidate For My 10-Day Business Buying Launch | CarlAllenDealmaker",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "5:02",
+        "view_text": "512 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.4154,
+        "creator_similarity": 1.0,
+        "score": 0.6191
+      },
+      {
         "video_id": "eZFkbBG_Rrk",
         "youtube_url": "https://www.youtube.com/watch?v=eZFkbBG_Rrk",
         "title": "Investing In Real Estate In A Recession - How To Find Off-Market Deals | CarlAllenDealmaker",
@@ -2550,22 +2549,6 @@
         "title_similarity": 0.3968,
         "creator_similarity": 1.0,
         "score": 0.6057
-      },
-      {
-        "video_id": "GlM8DUlRY3A",
-        "youtube_url": "https://www.youtube.com/watch?v=GlM8DUlRY3A",
-        "title": "LIVE: Deal Review - Buy this company or not?",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "1:24:05",
-        "view_text": "3,514 views",
-        "published_text": "Streamed 6 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3797,
-        "creator_similarity": 1.0,
-        "score": 0.5934
       },
       {
         "video_id": "DGO8s-d7AAU",
@@ -2584,6 +2567,22 @@
         "score": 0.5892
       },
       {
+        "video_id": "uZFYTTRc270",
+        "youtube_url": "https://www.youtube.com/watch?v=uZFYTTRc270",
+        "title": "I'm In The Empowerment Business (Carl Allen Dealmaker Wealth Society)",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "0:43",
+        "view_text": "108 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3585,
+        "creator_similarity": 1.0,
+        "score": 0.5781
+      },
+      {
         "video_id": "guVr3GkecMY",
         "youtube_url": "https://www.youtube.com/watch?v=guVr3GkecMY",
         "title": "How To Do Business Valuations & Structure | Carl Allen Dealmaker",
@@ -2591,7 +2590,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "17:43",
-        "view_text": "53,374 views",
+        "view_text": "53,375 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2600,20 +2599,20 @@
         "score": 0.5673
       },
       {
-        "video_id": "VSLxGNYV35E",
-        "youtube_url": "https://www.youtube.com/watch?v=VSLxGNYV35E",
-        "title": "Top 5 Reasons To Choose Business Acquisition Over Other Investment Options | CarlAllenDealmaker",
+        "video_id": "kABHbfkYmks",
+        "youtube_url": "https://www.youtube.com/watch?v=kABHbfkYmks",
+        "title": "Visiting America: Exclusive Insights on Buying, Growing, and Selling Businesses | CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
-        "duration_text": "6:34",
-        "view_text": "569 views",
+        "duration_text": "8:57",
+        "view_text": "875 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.3182,
+        "title_similarity": 0.3284,
         "creator_similarity": 1.0,
-        "score": 0.5491
+        "score": 0.5564
       }
     ],
     "debug": {
@@ -2630,7 +2629,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1199109,
+        "bytes": 1173299,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -2687,7 +2686,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Real-Estate+Compared+To+Business+Buying%21+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73670,
+        "bytes": 73340,
         "video_ids": []
       }
     }
@@ -2754,7 +2753,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 754257,
+        "bytes": 750770,
         "initial_data": true,
         "renderer_count": 1
       },
@@ -2811,7 +2810,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Revealed%3A+The+Secrets+to+Transforming+Your+Business+for+a+Lucrative+Sale+Carl+Allen+and+John+Warrillow&count=30",
         "status": 200,
-        "bytes": 73792,
+        "bytes": 74311,
         "video_ids": []
       }
     }
@@ -2871,7 +2870,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "35:06",
-        "view_text": "6,306 views",
+        "view_text": "6,309 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2903,7 +2902,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "17:43",
-        "view_text": "53,374 views",
+        "view_text": "53,375 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -2919,29 +2918,13 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "7:52",
-        "view_text": "16,986 views",
+        "view_text": "16,985 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.4742,
         "creator_similarity": 1.0,
         "score": 0.6614
-      },
-      {
-        "video_id": "PyQ8Oi0JUUU",
-        "youtube_url": "https://www.youtube.com/watch?v=PyQ8Oi0JUUU",
-        "title": "The 10-step business buying system. Video 2 of 7",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "9:01",
-        "view_text": "7,415 views",
-        "published_text": "9 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.3333,
-        "creator_similarity": 1.0,
-        "score": 0.56
       },
       {
         "video_id": "uecFTs7LvDs",
@@ -2951,7 +2934,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "7:08",
-        "view_text": "1,565 views",
+        "view_text": "1,566 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3008,20 +2991,36 @@
         "score": 0.464
       },
       {
-        "video_id": "i8ch6xtwUcg",
-        "youtube_url": "https://www.youtube.com/watch?v=i8ch6xtwUcg",
-        "title": "Welcome To My Youtube Channel - Join The Investment Community! | CarlAllenDealmaker",
+        "video_id": "wX3eTJxxcEQ",
+        "youtube_url": "https://www.youtube.com/watch?v=wX3eTJxxcEQ",
+        "title": "18 Proven Steps To Negotiate Like a Pro With Carl Allen's System | CarlAllenDealmaker",
         "channel": "Carl Allen - Dealmaker",
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
-        "duration_text": "4:52",
-        "view_text": "4,403 views",
-        "published_text": "3 years ago",
+        "duration_text": "29:14",
+        "view_text": "2,847 views",
+        "published_text": "6 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.1983,
+        "title_similarity": 0.1587,
         "creator_similarity": 1.0,
-        "score": 0.4628
+        "score": 0.4343
+      },
+      {
+        "video_id": "dIlWJxo1pLA",
+        "youtube_url": "https://www.youtube.com/watch?v=dIlWJxo1pLA",
+        "title": "Business Valuations - How To Value a Company",
+        "channel": "Kaplan UK",
+        "channel_id": "UC5LJoU4Fz0-I5b8hsbDRDBw",
+        "channel_path": "/@KaplanUK-EN",
+        "duration_text": "19:23",
+        "view_text": "87,950 views",
+        "published_text": "4 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.5882,
+        "creator_similarity": 0.0,
+        "score": 0.4235
       }
     ],
     "debug": {
@@ -3038,7 +3037,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1230534,
+        "bytes": 1130179,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -3095,7 +3094,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Business+Valuation%3A+Your+Expert+Guide+-+Part+1+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73858,
+        "bytes": 73404,
         "video_ids": []
       }
     }
@@ -3155,7 +3154,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "36:48",
-        "view_text": "11,738 views",
+        "view_text": "11,739 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3228,6 +3227,22 @@
         "score": 0.6054
       },
       {
+        "video_id": "vW7kM5KGJNI",
+        "youtube_url": "https://www.youtube.com/watch?v=vW7kM5KGJNI",
+        "title": "Being a Wall Street veteran has given me two invaluable things.",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "1:01",
+        "view_text": "499 views",
+        "published_text": "2 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.3788,
+        "creator_similarity": 1.0,
+        "score": 0.5927
+      },
+      {
         "video_id": "T-Im9h4Vyyg",
         "youtube_url": "https://www.youtube.com/watch?v=T-Im9h4Vyyg",
         "title": "Buying Existing Businesses: An Alternative to Starting From Scratch",
@@ -3251,7 +3266,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "52:27",
-        "view_text": "6,636 views",
+        "view_text": "6,651 views",
         "published_text": "2 weeks ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3290,22 +3305,6 @@
         "title_similarity": 0.2754,
         "creator_similarity": 1.0,
         "score": 0.5183
-      },
-      {
-        "video_id": "OiUrCFpPst4",
-        "youtube_url": "https://www.youtube.com/watch?v=OiUrCFpPst4",
-        "title": "How to Buy a Business Without Banks, Investors, or Upfront Cash",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "42:54",
-        "view_text": "176,746 views",
-        "published_text": "1 year ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2595,
-        "creator_similarity": 1.0,
-        "score": 0.5069
       }
     ],
     "debug": {
@@ -3322,7 +3321,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1323404,
+        "bytes": 1277705,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -3346,7 +3345,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45858,
+          "bytes": 45816,
           "items": 20
         }
       ],
@@ -3379,7 +3378,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Business+Acquisition+Deal+Structures%3A+Seller+Financing+vs.+Annuity+Deals+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73985,
+        "bytes": 73688,
         "video_ids": []
       }
     }
@@ -3392,24 +3391,7 @@
     "embedded_video_ids": [],
     "selected": null,
     "selection_state": "MANUAL_REVIEW_REQUIRED",
-    "candidates": [
-      {
-        "video_id": "mSDvkvR1vBQ",
-        "youtube_url": "https://www.youtube.com/watch?v=mSDvkvR1vBQ",
-        "title": "Did you just placed another tower..?",
-        "channel": "Greenly Wood",
-        "channel_id": "UCpDy26_LjXFpSB7qxXyRgAQ",
-        "channel_path": "/@greenlywood5652",
-        "duration_text": "0:24",
-        "view_text": "2,588,166 views",
-        "published_text": "4 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.1667,
-        "creator_similarity": 0.0,
-        "score": 0.12
-      }
-    ],
+    "candidates": [],
     "debug": {
       "source_page": {
         "url": "https://www.buzzsprout.com/2306481/episodes/16623981-how-these-dealmakers-bought-their-first-and-multiple-businesses",
@@ -3421,9 +3403,9 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 751324,
+        "bytes": 718777,
         "initial_data": true,
-        "renderer_count": 1
+        "renderer_count": 0
       },
       "invidious": [
         {
@@ -3478,7 +3460,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+How+These+Dealmakers+Bought+Their+First+%28and+Multiple%29+Businesses%21+DWS+member+panel&count=30",
         "status": 200,
-        "bytes": 73026,
+        "bytes": 73734,
         "video_ids": []
       }
     }
@@ -3516,8 +3498,8 @@
         "channel_id": "UCYz7K_aXA8kDanRLeHEz37w",
         "channel_path": "/@4nimerealm",
         "duration_text": "2:42:57",
-        "view_text": "353 views",
-        "published_text": "20 hours ago",
+        "view_text": "420 views",
+        "published_text": "1 day ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.0,
@@ -3536,7 +3518,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 783820,
+        "bytes": 769754,
         "initial_data": true,
         "renderer_count": 2
       },
@@ -3560,7 +3542,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 4614,
+          "bytes": 4611,
           "items": 2
         }
       ],
@@ -3593,7 +3575,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Carlos+Reyes+on+Buying+Cash-Flowing+Businesses+%28Instead+of+Building%29+Carl+Allen+and+Carlos+Reyes&count=30",
         "status": 200,
-        "bytes": 74670,
+        "bytes": 73117,
         "video_ids": []
       }
     }
@@ -3653,7 +3635,7 @@
         "channel_id": "UCKMw3_CSA7UCtpGmrSZABzw",
         "channel_path": "/@MotiversityQuotes",
         "duration_text": "14:47",
-        "view_text": "1,732,765 views",
+        "view_text": "1,733,128 views",
         "published_text": "1 year ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3678,6 +3660,22 @@
         "score": 0.2653
       },
       {
+        "video_id": "BQHo-z-pA8E",
+        "youtube_url": "https://www.youtube.com/watch?v=BQHo-z-pA8E",
+        "title": "How to Build Self-Esteem, One Step at a Time - Alain de Botton (4K)",
+        "channel": "Chris Williamson",
+        "channel_id": "UCIaH-gZIVC432YRjNVvnyCA",
+        "channel_path": "/@ChrisWillx",
+        "duration_text": "1:52:21",
+        "view_text": "1,697,113 views",
+        "published_text": "1 year ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.354,
+        "creator_similarity": 0.0,
+        "score": 0.2549
+      },
+      {
         "video_id": "DSOjB123k98",
         "youtube_url": "https://www.youtube.com/watch?v=DSOjB123k98",
         "title": "Key Objectives in Buying and Selling a Venture-Backed Company with Rob Ishii and Jim Timmins",
@@ -3699,29 +3697,31 @@
         "title": "How to Use Your Mind to Heal Your Body With the #1 Harvard Psychologist",
         "channel": "Mel Robbins",
         "channel_id": "UCk2U-Oqn7RXf-ydPqfSxG5g",
-        "duration_text": "4881",
-        "view_text": "953403",
+        "channel_path": "/@melrobbins",
+        "duration_text": "1:21:21",
+        "view_text": "953,869 views",
         "published_text": "9 months ago",
-        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.3471,
         "creator_similarity": 0.0,
         "score": 0.2499
       },
       {
-        "video_id": "Solb9uA-tgQ",
-        "youtube_url": "https://www.youtube.com/watch?v=Solb9uA-tgQ",
-        "title": "The Power of Your Subconscious Mind (1963) by Joseph Murphy",
-        "channel": "Master Key Society",
-        "channel_id": "UCXEns75ExsEwvw6UNmOQcNQ",
-        "duration_text": "25933",
-        "view_text": "7505498",
-        "published_text": "4 years ago",
-        "search_method": "invidious:https://yt.chocolatemoo53.com",
+        "video_id": "Nfz2Arb6mX8",
+        "youtube_url": "https://www.youtube.com/watch?v=Nfz2Arb6mX8",
+        "title": "Lew Wasserman: The Man Who Built Hollywood | The Last Mogul | Documentary",
+        "channel": "Stash - Free Documentaries",
+        "channel_id": "UCA0eplMabU-4_Dftky6E5QA",
+        "channel_path": "/@stash_freedocumentaries",
+        "duration_text": "1:41:47",
+        "view_text": "373 views",
+        "published_text": "3 days ago",
+        "search_method": "youtube_html",
         "embedded_on_source_page": false,
-        "title_similarity": 0.3333,
+        "title_similarity": 0.3361,
         "creator_similarity": 0.0,
-        "score": 0.24
+        "score": 0.242
       },
       {
         "video_id": "MF7RzKFMuT4",
@@ -3731,7 +3731,7 @@
         "channel_id": "UC0TnW9acNxqeojxXDMbohcA",
         "channel_path": "/@IAmMarkManson",
         "duration_text": "9:44",
-        "view_text": "3,517,646 views",
+        "view_text": "3,517,767 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3747,7 +3747,7 @@
         "channel_id": "UCsT0YIqwnpJCM-mx7-gSA4Q",
         "channel_path": "/@TEDx",
         "duration_text": "25:21",
-        "view_text": "11,196,344 views",
+        "view_text": "11,196,647 views",
         "published_text": "9 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3763,7 +3763,7 @@
         "channel_id": "UC1KmNKYC1l0stjctkGswl6g",
         "channel_path": "/@AfterSkool",
         "duration_text": "14:17",
-        "view_text": "1,719,318 views",
+        "view_text": "1,719,418 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -3779,29 +3779,13 @@
         "channel_id": "UCFyAgi9phA7ErVY_bPC1Cjg",
         "channel_path": "/@tradgedyandhope",
         "duration_text": "10:31",
-        "view_text": "1,899,357 views",
+        "view_text": "1,899,761 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2947,
         "creator_similarity": 0.0,
         "score": 0.2122
-      },
-      {
-        "video_id": "rZgWcboi9g8",
-        "youtube_url": "https://www.youtube.com/watch?v=rZgWcboi9g8",
-        "title": "Wife Demands Divorce In Letter,Husband's Brilliant Reply Makes Her Regret Every Word|Revenge Lessons",
-        "channel": "Quotes and Life lessons Space",
-        "channel_id": "UCinGuqbTPmHgPOkBlxBhkfw",
-        "channel_path": "/@quotesandlifelessonsspace8871",
-        "duration_text": "3:59",
-        "view_text": "3,332,264 views",
-        "published_text": "6 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2914,
-        "creator_similarity": 0.0,
-        "score": 0.2098
       }
     ],
     "debug": {
@@ -3818,7 +3802,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1236017,
+        "bytes": 1224503,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -3842,7 +3826,7 @@
         {
           "base": "https://yt.chocolatemoo53.com",
           "status": 200,
-          "bytes": 45331,
+          "bytes": 45162,
           "items": 20
         }
       ],
@@ -3875,7 +3859,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+3+Power+Plays+to+Build+Rapport+With+Business+Owners+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 72891,
+        "bytes": 73403,
         "video_ids": []
       }
     }
@@ -3967,7 +3951,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "12:02",
-        "view_text": "4,471 views",
+        "view_text": "4,472 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -4056,22 +4040,6 @@
         "score": 0.5374
       },
       {
-        "video_id": "yGwrjI2lq_4",
-        "youtube_url": "https://www.youtube.com/watch?v=yGwrjI2lq_4",
-        "title": "Live Q&A: Offer Sequencing and Negotiation",
-        "channel": "Carl Allen - Dealmaker",
-        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
-        "channel_path": "/@carlallenofficial",
-        "duration_text": "1:07:46",
-        "view_text": "1,534 views",
-        "published_text": "Streamed 5 years ago",
-        "search_method": "youtube_html",
-        "embedded_on_source_page": false,
-        "title_similarity": 0.2921,
-        "creator_similarity": 1.0,
-        "score": 0.5303
-      },
-      {
         "video_id": "Hd0eu7hWs_Q",
         "youtube_url": "https://www.youtube.com/watch?v=Hd0eu7hWs_Q",
         "title": "Day 3 - 10-Days To Buying Your First Business | \"Deal Origination” |CarlAllenDealmaker",
@@ -4079,13 +4047,29 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "17:24",
-        "view_text": "11,208 views",
+        "view_text": "11,209 views",
         "published_text": "3 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
         "title_similarity": 0.2835,
         "creator_similarity": 1.0,
         "score": 0.5241
+      },
+      {
+        "video_id": "acDjkwg9Ccg",
+        "youtube_url": "https://www.youtube.com/watch?v=acDjkwg9Ccg",
+        "title": "Buying Real Estate Deals With My Partner Chris - Pace Morby Method",
+        "channel": "Carl Allen - Dealmaker",
+        "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
+        "channel_path": "/@carlallenofficial",
+        "duration_text": "2:35",
+        "view_text": "846 views",
+        "published_text": "3 years ago",
+        "search_method": "youtube_html",
+        "embedded_on_source_page": false,
+        "title_similarity": 0.2679,
+        "creator_similarity": 1.0,
+        "score": 0.5129
       }
     ],
     "debug": {
@@ -4102,7 +4086,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 1180602,
+        "bytes": 1158572,
         "initial_data": true,
         "renderer_count": 20
       },
@@ -4159,7 +4143,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Use+Theses+3+Strategies+To+Find+Off-Market+Deals+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73940,
+        "bytes": 74035,
         "video_ids": []
       }
     }
@@ -4315,7 +4299,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "27:52",
-        "view_text": "10,032 views",
+        "view_text": "10,034 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -4370,7 +4354,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 929411,
+        "bytes": 997106,
         "initial_data": true,
         "renderer_count": 10
       },
@@ -4427,7 +4411,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Why+FOCUS+is+Critical+In+A+Rollup+Carl+Allen&count=30",
         "status": 200,
-        "bytes": 73947,
+        "bytes": 75063,
         "video_ids": []
       }
     }
@@ -4487,7 +4471,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "7:08",
-        "view_text": "1,565 views",
+        "view_text": "1,566 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -4519,7 +4503,7 @@
         "channel_id": "UCCcJzIkSSZxECZNtLG7Gteg",
         "channel_path": "/@carlallenofficial",
         "duration_text": "9:51",
-        "view_text": "1,803 views",
+        "view_text": "1,805 views",
         "published_text": "2 years ago",
         "search_method": "youtube_html",
         "embedded_on_source_page": false,
@@ -4542,7 +4526,7 @@
       "youtube": {
         "url": "https://www.youtube.com/results?search_query=Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&sp=EgIQAQ%253D%253D&hl=en&gl=US",
         "status": 200,
-        "bytes": 832397,
+        "bytes": 828160,
         "initial_data": true,
         "renderer_count": 4
       },
@@ -4599,7 +4583,7 @@
       "bing": {
         "url": "https://www.bing.com/search?q=site%3Ayoutube.com%2Fwatch+Investor%27s+Guide%3A+5+Essential+Elements+in+Business+Equity+Deals+Carl+Allen+and+Chris+Moore&count=30",
         "status": 200,
-        "bytes": 74392,
+        "bytes": 74303,
         "video_ids": []
       }
     }
