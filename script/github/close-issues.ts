@@ -65,7 +65,14 @@ async function close(num: number) {
     headers,
     body: JSON.stringify({ body: msg }),
   })
-  if (!comment.ok) throw new Error(`Failed to comment #${num}: ${await responseMessage(comment)}`)
+  if (!comment.ok) {
+    const detail = await responseMessage(comment)
+    if (comment.status === 403) {
+      console.warn(`Skipping comment for #${num}: ${detail}`)
+    } else {
+      throw new Error(`Failed to comment #${num}: ${detail}`)
+    }
+  }
 
   const patch = await fetch(base, {
     method: "PATCH",
