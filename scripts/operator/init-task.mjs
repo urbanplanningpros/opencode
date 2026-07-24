@@ -25,7 +25,7 @@ const manifest = {
     .filter(Boolean),
   risk: args.risk || (writeIntent ? "medium" : "read_only"),
   write_intent: writeIntent,
-  handoff_safe: args["handoff-safe"] === "false" ? false : true,
+  handoff_safe: writeIntent ? args["handoff-safe"] === "true" : true,
   allowed_paths: String(args["allowed-paths"] || "")
     .split(",")
     .map((item) => item.trim())
