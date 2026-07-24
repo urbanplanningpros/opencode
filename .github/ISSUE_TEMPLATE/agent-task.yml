@@ -1,6 +1,6 @@
 name: Agent task intake
-about: Submit work for sanitized, reviewable agent execution
-labels: [agent-intake]
+description: Submit work for sanitized, reviewable agent execution
+title: "[Agent Task] "
 body:
   - type: markdown
     attributes:
