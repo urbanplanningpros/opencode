@@ -10,6 +10,15 @@ if (!args.task) {
 }
 
 const config = readJson(path.join(repoRoot, "config/operator-routing.json"))
+const prohibitedRoute = /(anthropic|claude|manus)/i
+for (const [provider, definition] of Object.entries(config.providers)) {
+  const routes = [definition.models.primary, ...definition.models.fallbacks, definition.models.candidate].filter(Boolean)
+  if (prohibitedRoute.test(provider) || routes.some((route) => prohibitedRoute.test(route.id))) {
+    console.error(`Prohibited provider or model route detected: ${provider}`)
+    process.exit(64)
+  }
+}
+
 const profileName = args.profile || process.env.OPERATOR_INCIDENT_PROFILE || config.defaultProfile
 const profile = config.profiles[profileName]
 if (!profile) {
@@ -49,10 +58,6 @@ const providerOrder = useProviderCanary
   : profile.order
 
 function promptForModel(modelRoute) {
-  const completionInstruction =
-    modelRoute.id === "claude-opus-5"
-      ? "Preserve current state and produce a continuation summary for another provider. Follow the listed acceptance criteria and required tests, but do not add redundant verification passes beyond them."
-      : "Preserve current state, verify all changes, and produce a continuation summary for another provider."
   return [
     "You are continuing a provider-neutral operator task.",
     `Task ID: ${manifest.task_id}`,
@@ -63,7 +68,8 @@ function promptForModel(modelRoute) {
     `Allowed paths: ${(manifest.allowed_paths || []).join(", ") || "not specified; minimize scope"}`,
     "Prohibited actions:",
     ...(manifest.prohibited_actions || []).map((item) => `- ${item}`),
-    completionInstruction,
+    `Approved model route: ${modelRoute.id}`,
+    "Preserve current state, verify all changes, and produce a continuation summary for another approved route.",
   ].join("\n")
 }
 
