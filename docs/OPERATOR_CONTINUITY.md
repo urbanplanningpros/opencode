@@ -4,11 +4,11 @@
 
 This repository now has a provider-neutral continuity layer around OpenCode, Codex, Claude Code, approved connectors, and CI/CD:
 
-- Route profiles and circuit-breaker policy: `config/operator-routing.json`
+- Provider and model route profiles with isolated circuit breakers: `config/operator-routing.json`
 - Durable task manifests and continuation state: `scripts/operator/init-task.mjs`
 - File-backed durable write queue with idempotency keys: `scripts/operator/queue-action.mjs`
 - Single-claim queue executor with reconciliation routing: `scripts/operator/process-queue.mjs`
-- Provider failover runner: `scripts/operator/run-with-failover.mjs`
+- Provider and model failover runner: `scripts/operator/run-with-failover.mjs`
 - Hostile issue-content quarantine: `.github/workflows/agent-intake.yml`
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
 - Windows Codex state backup/recovery tool: `scripts/operator/recover-codex-state.ps1`
@@ -16,6 +16,35 @@ This repository now has a provider-neutral continuity layer around OpenCode, Cod
 ## Approved provider boundary
 
 The runtime is limited to OpenAI and Anthropic routes defined in `config/operator-routing.json`. Manus is not an approved provider, bridge, connector, fallback, memory source, or deployment dependency. Do not add a Manus command, credential, endpoint, imported session, or automatic handoff path.
+
+## Approved model routing
+
+The runner now controls the model separately from the provider and exports the selected route to the approved command wrapper:
+
+```text
+OPERATOR_PROVIDER
+OPERATOR_MODEL
+OPERATOR_MODEL_LANE
+OPERATOR_MODEL_POLICY
+```
+
+Current Anthropic routing is:
+
+```text
+Primary:    claude-opus-4-8
+Candidate:  claude-opus-5 at 10% of read-only tasks
+Failure:    candidate circuit opens independently, then work returns to claude-opus-4-8
+```
+
+Claude Opus 5 remains a candidate until promotion criteria are satisfied. During the canary:
+
+- Thinking remains adaptive and on by default.
+- A wrapper must not combine disabled thinking with `xhigh` or `max` effort; the maximum permitted effort is `high`.
+- Anthropic server-side `fallbacks: "default"` remains disabled so the exact executing model stays auditable.
+- Mid-conversation tool changes remain disabled until connector authorization, prompt-cache behavior, and tool-removal handling are tested.
+- The operator prompt avoids redundant verification instructions because Opus 5 already self-verifies more aggressively than Opus 4.8.
+
+Provider wrappers must read `OPERATOR_MODEL` and `OPERATOR_MODEL_POLICY`; they must not silently replace the selected model or add beta features that the policy marks disabled.
 
 ## Configure provider commands
 
@@ -46,7 +75,7 @@ bun operator:init \
 bun operator:route --task "$HOME/.upp-operator-state/tasks/<task-id>/manifest.json" --profile continuity
 ```
 
-The runner checkpoints before execution, records every provider attempt, opens a circuit after repeated failures, and produces a continuation prompt for the next provider. Successful execution remains `awaiting_verification` until acceptance criteria are checked.
+The runner checkpoints before execution, records every provider and model attempt, opens model-specific circuits after repeated failures, and produces a continuation prompt for the next approved route. Successful execution remains `awaiting_verification` until acceptance criteria are checked.
 
 ## Queue connector and automation writes
 
@@ -96,14 +125,15 @@ pwsh ./scripts/operator/recover-codex-state.ps1 -RemovePath 'D:\path\to\secondar
 
 The tool preserves `state_5.sqlite`; do not delete that database during workspace recovery.
 
-## Recovery promotion
+## Recovery and model promotion
 
-Move a recovered provider from canary to primary only after:
+Move a recovered provider or candidate model to primary only after:
 
-1. Vendor status is resolved.
+1. Vendor status is resolved and stable.
 2. Ten consecutive read-only canaries succeed.
-3. Two controlled idempotent writes succeed.
-4. No duplicate, truncated, missing, or stale tool results appear.
-5. A rollback route remains configured.
+3. Two controlled idempotent writes succeed after the candidate is explicitly enabled for writes.
+4. No duplicate, truncated, missing, stale, or incorrectly formatted tool results appear.
+5. Cost, latency, tool-call count, and human-correction rate are recorded against the current primary.
+6. A rollback route remains configured.
 
 Promote traffic in stages: 10% → 25% → 50% → 100%.
