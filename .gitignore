@@ -6,6 +6,8 @@ node_modules
 .idea
 .vscode
 .codex
+.operator-state/
+.upp-operator-state/
 *~
 playground
 tmp
