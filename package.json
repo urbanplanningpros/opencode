@@ -16,6 +16,7 @@
     "operator:validate": "bun scripts/operator/validate-config.mjs",
     "operator:init": "bun scripts/operator/init-task.mjs",
     "operator:queue": "bun scripts/operator/queue-action.mjs",
+    "operator:process": "bun scripts/operator/process-queue.mjs",
     "operator:route": "bun scripts/operator/run-with-failover.mjs",
     "postinstall": "bun run --cwd packages/opencode fix-node-pty",
     "prepare": "husky",
