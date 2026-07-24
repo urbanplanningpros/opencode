@@ -1,0 +1,82 @@
+{
+  "$schema": "../schemas/operator-routing.schema.json",
+  "version": 1,
+  "defaultProfile": "continuity",
+  "providers": {
+    "openai": {
+      "commandEnv": "OPERATOR_OPENAI_COMMAND",
+      "enabled": true
+    },
+    "anthropic": {
+      "commandEnv": "OPERATOR_ANTHROPIC_COMMAND",
+      "enabled": true
+    },
+    "manus": {
+      "commandEnv": "OPERATOR_MANUS_COMMAND",
+      "enabled": true
+    }
+  },
+  "profiles": {
+    "normal": {
+      "order": ["openai", "anthropic", "manus"],
+      "canary": null
+    },
+    "continuity": {
+      "order": ["anthropic", "manus", "openai"],
+      "canary": {
+        "provider": "openai",
+        "percent": 10,
+        "readOnly": true
+      }
+    },
+    "openai_degraded": {
+      "order": ["anthropic", "manus", "openai"],
+      "canary": {
+        "provider": "openai",
+        "percent": 10,
+        "readOnly": true
+      }
+    },
+    "anthropic_degraded": {
+      "order": ["openai", "manus", "anthropic"],
+      "canary": {
+        "provider": "anthropic",
+        "percent": 10,
+        "readOnly": true
+      }
+    }
+  },
+  "circuitBreaker": {
+    "failureThreshold": 2,
+    "cooldownSeconds": 300,
+    "halfOpenTestRequests": 2
+  },
+  "execution": {
+    "timeoutSeconds": 900,
+    "readRetries": 3,
+    "writeRetries": 0,
+    "baseDelaySeconds": 2,
+    "jitter": true,
+    "requireIdempotencyKeyForWrites": true,
+    "persistBeforeExecution": true,
+    "verifyAfterExecution": true
+  },
+  "protectedPaths": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".cursorrules",
+    ".github/workflows/**",
+    ".git/hooks/**",
+    ".devcontainer/**",
+    ".vscode/**",
+    "package.json",
+    "bun.lock",
+    "bun.lockb",
+    "requirements*.txt",
+    "pyproject.toml",
+    "Dockerfile*",
+    "**/.env*",
+    "**/*secret*",
+    "**/*credential*"
+  ]
+}
