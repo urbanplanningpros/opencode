@@ -10,19 +10,15 @@
     "anthropic": {
       "commandEnv": "OPERATOR_ANTHROPIC_COMMAND",
       "enabled": true
-    },
-    "manus": {
-      "commandEnv": "OPERATOR_MANUS_COMMAND",
-      "enabled": true
     }
   },
   "profiles": {
     "normal": {
-      "order": ["openai", "anthropic", "manus"],
+      "order": ["openai", "anthropic"],
       "canary": null
     },
     "continuity": {
-      "order": ["anthropic", "manus", "openai"],
+      "order": ["anthropic", "openai"],
       "canary": {
         "provider": "openai",
         "percent": 10,
@@ -30,7 +26,7 @@
       }
     },
     "openai_degraded": {
-      "order": ["anthropic", "manus", "openai"],
+      "order": ["anthropic", "openai"],
       "canary": {
         "provider": "openai",
         "percent": 10,
@@ -38,7 +34,7 @@
       }
     },
     "anthropic_degraded": {
-      "order": ["openai", "manus", "anthropic"],
+      "order": ["openai", "anthropic"],
       "canary": {
         "provider": "anthropic",
         "percent": 10,
