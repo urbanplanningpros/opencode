@@ -26,6 +26,34 @@ jobs:
       - name: Validate operator routing
         run: bun scripts/operator/validate-config.mjs
 
+      - name: Check operator script syntax
+        run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
+
+      - name: Smoke test failover and durable queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          STATE="$RUNNER_TEMP/operator-state"
+          TASK=$(bun scripts/operator/init-task.mjs \
+            --state-dir "$STATE" \
+            --objective "CI continuity smoke test" \
+            --acceptance "Provider executes|State persists" \
+            --risk medium \
+            --write \
+            --handoff-safe true)
+          export OPERATOR_ANTHROPIC_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
+          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$TASK" --profile continuity
+          grep -q '"status": "awaiting_verification"' "$(dirname "$TASK")/current-state.json"
+
+          bun scripts/operator/queue-action.mjs \
+            --state-dir "$STATE" \
+            --action ci_smoke_test \
+            --payload '{"ok":true}' \
+            --idempotency-key ci-smoke-test-v1
+          export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.stdout.write(JSON.stringify({verified:true})))"]'
+          bun scripts/operator/process-queue.mjs --state-dir "$STATE"
+          find "$STATE/queue/completed" -name '*.json' -print -quit | grep -q .
+
       - name: Enforce protected-path and agent-intake policy
         if: github.event_name == 'pull_request'
         env:
