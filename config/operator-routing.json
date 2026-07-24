@@ -1,15 +1,44 @@
 {
   "$schema": "../schemas/operator-routing.schema.json",
-  "version": 1,
+  "version": 2,
   "defaultProfile": "continuity",
   "providers": {
     "openai": {
       "commandEnv": "OPERATOR_OPENAI_COMMAND",
-      "enabled": true
+      "enabled": true,
+      "models": {
+        "primary": {
+          "id": "gpt-5.6-sol",
+          "requestPolicy": {}
+        },
+        "fallbacks": [],
+        "candidate": null
+      }
     },
     "anthropic": {
       "commandEnv": "OPERATOR_ANTHROPIC_COMMAND",
-      "enabled": true
+      "enabled": true,
+      "models": {
+        "primary": {
+          "id": "claude-opus-4-8",
+          "requestPolicy": {
+            "thinking": "provider_default",
+            "serverSideFallback": "disabled"
+          }
+        },
+        "fallbacks": [],
+        "candidate": {
+          "id": "claude-opus-5",
+          "percent": 10,
+          "readOnly": true,
+          "requestPolicy": {
+            "thinking": "adaptive_default",
+            "disableThinkingMaxEffort": "high",
+            "serverSideFallback": "disabled",
+            "midConversationToolChanges": "disabled"
+          }
+        }
+      }
     }
   },
   "profiles": {
