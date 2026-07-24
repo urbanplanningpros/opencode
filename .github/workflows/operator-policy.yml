@@ -31,65 +31,35 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
-      - name: Smoke test provider and model failover
+      - name: Smoke test OpenAI primary and local failover
         shell: bash
         run: |
           set -euo pipefail
           STATE="$RUNNER_TEMP/operator-state"
-          FAKE_CLAUDE="$RUNNER_TEMP/fake-claude"
-          cat > "$FAKE_CLAUDE" <<'SH'
-          #!/usr/bin/env bash
-          set -euo pipefail
-          MODEL=""
-          while [[ $# -gt 0 ]]; do
-            if [[ "$1" == "--model" ]]; then
-              MODEL="$2"
-              shift 2
-              continue
-            fi
-            shift
-          done
-          cat >/dev/null
-          printf '%s' "$MODEL"
-          SH
-          chmod +x "$FAKE_CLAUDE"
-          export OPERATOR_CLAUDE_BINARY="$FAKE_CLAUDE"
-          export OPERATOR_ANTHROPIC_COMMAND='["node","scripts/operator/claude-wrapper.mjs"]'
+          export OPERATOR_OPENAI_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
+          export OPERATOR_LOCAL_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
 
-          WRITE_TASK=$(bun scripts/operator/init-task.mjs \
+          PRIMARY_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$STATE" \
-            --objective "CI continuity write smoke test" \
-            --acceptance "Provider executes|State persists" \
+            --objective "CI OpenAI primary smoke test" \
+            --acceptance "OpenAI executes|State persists" \
             --risk medium \
             --write \
             --handoff-safe true)
-          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$WRITE_TASK" --profile continuity
-          grep -q '"status": "awaiting_verification"' "$(dirname "$WRITE_TASK")/current-state.json"
-          grep -q '"active_model": "claude-opus-4-8"' "$(dirname "$WRITE_TASK")/current-state.json"
+          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$PRIMARY_TASK" --profile continuity
+          grep -q '"status": "awaiting_verification"' "$(dirname "$PRIMARY_TASK")/current-state.json"
+          grep -q '"active_provider": "openai"' "$(dirname "$PRIMARY_TASK")/current-state.json"
+          grep -q '"active_model": "gpt-5.6-sol"' "$(dirname "$PRIMARY_TASK")/current-state.json"
 
-          CANDIDATE_ID=$(node - <<'NODE'
-          const crypto = require('crypto')
-          for (let index = 0; ; index += 1) {
-            const id = `ci-opus5-${index}`
-            const bucket = Number.parseInt(
-              crypto.createHash('sha256').update(`${id}:anthropic:model`).digest('hex').slice(0, 8),
-              16,
-            ) % 100
-            if (bucket < 10) {
-              process.stdout.write(id)
-              break
-            }
-          }
-          NODE
-          )
-          CANARY_TASK=$(bun scripts/operator/init-task.mjs \
+          export OPERATOR_OPENAI_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(1))"]'
+          FALLBACK_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$STATE" \
-            --task-id "$CANDIDATE_ID" \
-            --objective "CI Opus 5 read-only canary" \
-            --acceptance "Candidate model executes|Policy is exported" \
+            --objective "CI local continuity smoke test" \
+            --acceptance "Failed OpenAI route hands off|Local route executes" \
             --risk read_only)
-          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$CANARY_TASK" --profile continuity
-          grep -q '"active_model": "claude-opus-5"' "$(dirname "$CANARY_TASK")/current-state.json"
+          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$FALLBACK_TASK" --profile continuity
+          grep -q '"active_provider": "local"' "$(dirname "$FALLBACK_TASK")/current-state.json"
+          grep -q '"active_model": "local-approved"' "$(dirname "$FALLBACK_TASK")/current-state.json"
 
       - name: Smoke test durable queue
         shell: bash
