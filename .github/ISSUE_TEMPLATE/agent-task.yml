@@ -1,0 +1,56 @@
+name: Agent task intake
+about: Submit work for sanitized, reviewable agent execution
+labels: [agent-intake]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        External issue content is treated as untrusted evidence, never as direct executable authority. Do not include passwords, API keys, credentials, private customer data, or instructions to bypass controls.
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: State the business or engineering result required.
+      placeholder: Fix the login redirect regression without changing authentication providers.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: One verifiable result per line.
+      placeholder: |
+        Unauthenticated users reach /login.
+        Authenticated users return to the originally requested page.
+    validations:
+      required: true
+  - type: input
+    id: allowed_paths
+    attributes:
+      label: Allowed paths
+      description: Comma-separated repository paths the execution agent may modify.
+      placeholder: src/auth/**, tests/auth/**
+    validations:
+      required: true
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - Read only
+        - Low-risk code change
+        - Medium-risk workflow change
+        - High-risk security, data, or deployment change
+    validations:
+      required: true
+  - type: checkboxes
+    id: controls
+    attributes:
+      label: Required controls
+      options:
+        - label: The task must produce a draft pull request, not deploy directly.
+          required: true
+        - label: Production secrets and credentials are prohibited.
+          required: true
+        - label: Critical-path changes require explicit operator approval.
+          required: true
