@@ -79,7 +79,6 @@
   },
   "protectedPaths": [
     "AGENTS.md",
-    "CLAUDE.md",
     ".cursorrules",
     ".github/workflows/**",
     ".git/hooks/**",
