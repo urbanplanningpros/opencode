@@ -24,6 +24,8 @@ export OPERATOR_MANUS_COMMAND='["manus","run","-"]'
 export OPERATOR_INCIDENT_PROFILE='continuity'
 export OPERATOR_STATE_DIR="$HOME/.upp-operator-state"
 export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","path/to/approved-executor.mjs"]'
+export OPERATOR_ACTION_TIMEOUT_SECONDS=300
+export OPERATOR_PROCESSING_STALE_SECONDS=900
 ```
 
 Only configure commands that are installed, authenticated, and approved in the current environment. Missing providers are skipped without losing task state.
@@ -52,7 +54,7 @@ bun operator:queue \
   --idempotency-key crm-contact-123-qualified-v1
 ```
 
-Run `bun operator:process` to claim one record atomically and pass it to the approved executor. The executor must return JSON containing `{"verified":true}` only after it confirms the target state. Failed or uncertain actions move to `reconciliation` and are never blindly retried. Reconcile by `operation_id` and `idempotency_key` before replaying.
+Run `bun operator:process` to claim one record atomically and pass it to the approved executor. The executor must return JSON containing `{"verified":true}` only after it confirms the target state. Duplicate idempotency keys return the existing record instead of creating another write. Failed, timed-out, or stale claimed actions move to `reconciliation` and are never blindly retried. Reconcile by `operation_id` and `idempotency_key` before replaying.
 
 ## Issue-to-agent workflow
 
