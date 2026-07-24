@@ -20,7 +20,8 @@ Commands are JSON arrays, not shell strings. This prevents shell expansion and k
 ```bash
 export OPERATOR_OPENAI_COMMAND='["codex","exec","-"]'
 export OPERATOR_ANTHROPIC_COMMAND='["claude","-p"]'
-export OPERATOR_MANUS_COMMAND='["manus","run","-"]'
+# Configure Manus only through an installed and approved API/CLI bridge:
+# export OPERATOR_MANUS_COMMAND='["node","/path/to/approved-manus-bridge.mjs"]'
 export OPERATOR_INCIDENT_PROFILE='continuity'
 export OPERATOR_STATE_DIR="$HOME/.upp-operator-state"
 export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","path/to/approved-executor.mjs"]'
