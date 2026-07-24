@@ -31,22 +31,53 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
-      - name: Smoke test failover and durable queue
+      - name: Smoke test provider and model failover
         shell: bash
         run: |
           set -euo pipefail
           STATE="$RUNNER_TEMP/operator-state"
-          TASK=$(bun scripts/operator/init-task.mjs \
+          export OPERATOR_ANTHROPIC_COMMAND='["node","-e","JSON.parse(process.env.OPERATOR_MODEL_POLICY);process.stdin.resume();process.stdin.on(\"end\",()=>{if(!process.env.OPERATOR_MODEL)process.exit(2);process.stdout.write(process.env.OPERATOR_MODEL)})"]'
+
+          WRITE_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$STATE" \
-            --objective "CI continuity smoke test" \
+            --objective "CI continuity write smoke test" \
             --acceptance "Provider executes|State persists" \
             --risk medium \
             --write \
             --handoff-safe true)
-          export OPERATOR_ANTHROPIC_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
-          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$TASK" --profile continuity
-          grep -q '"status": "awaiting_verification"' "$(dirname "$TASK")/current-state.json"
+          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$WRITE_TASK" --profile continuity
+          grep -q '"status": "awaiting_verification"' "$(dirname "$WRITE_TASK")/current-state.json"
+          grep -q '"active_model": "claude-opus-4-8"' "$(dirname "$WRITE_TASK")/current-state.json"
 
+          CANDIDATE_ID=$(node - <<'NODE'
+          const crypto = require('crypto')
+          for (let index = 0; ; index += 1) {
+            const id = `ci-opus5-${index}`
+            const bucket = Number.parseInt(
+              crypto.createHash('sha256').update(`${id}:anthropic:model`).digest('hex').slice(0, 8),
+              16,
+            ) % 100
+            if (bucket < 10) {
+              process.stdout.write(id)
+              break
+            }
+          }
+          NODE
+          )
+          CANARY_TASK=$(bun scripts/operator/init-task.mjs \
+            --state-dir "$STATE" \
+            --task-id "$CANDIDATE_ID" \
+            --objective "CI Opus 5 read-only canary" \
+            --acceptance "Candidate model executes|Policy is exported" \
+            --risk read_only)
+          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$CANARY_TASK" --profile continuity
+          grep -q '"active_model": "claude-opus-5"' "$(dirname "$CANARY_TASK")/current-state.json"
+
+      - name: Smoke test durable queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          STATE="$RUNNER_TEMP/operator-queue-state"
           FIRST=$(bun scripts/operator/queue-action.mjs \
             --state-dir "$STATE" \
             --action ci_smoke_test \
