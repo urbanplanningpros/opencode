@@ -9,6 +9,7 @@ This repository now has a provider-neutral continuity layer around OpenCode, Cod
 - File-backed durable write queue with idempotency keys: `scripts/operator/queue-action.mjs`
 - Single-claim queue executor with reconciliation routing: `scripts/operator/process-queue.mjs`
 - Provider and model failover runner: `scripts/operator/run-with-failover.mjs`
+- Audited Claude Code adapter: `scripts/operator/claude-wrapper.mjs`
 - Hostile issue-content quarantine: `.github/workflows/agent-intake.yml`
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
 - Windows Codex state backup/recovery tool: `scripts/operator/recover-codex-state.ps1`
@@ -19,7 +20,7 @@ The runtime is limited to OpenAI and Anthropic routes defined in `config/operato
 
 ## Approved model routing
 
-The runner now controls the model separately from the provider and exports the selected route to the approved command wrapper:
+The runner controls the model separately from the provider and exports the selected route to the approved command wrapper:
 
 ```text
 OPERATOR_PROVIDER
@@ -43,8 +44,9 @@ Claude Opus 5 remains a candidate until promotion criteria are satisfied. During
 - Anthropic server-side `fallbacks: "default"` remains disabled so the exact executing model stays auditable.
 - Mid-conversation tool changes remain disabled until connector authorization, prompt-cache behavior, and tool-removal handling are tested.
 - The operator prompt avoids redundant verification instructions because Opus 5 already self-verifies more aggressively than Opus 4.8.
+- The candidate runs in Claude Code bare mode, plan permission mode, and without session persistence.
 
-Provider wrappers must read `OPERATOR_MODEL` and `OPERATOR_MODEL_POLICY`; they must not silently replace the selected model or add beta features that the policy marks disabled.
+The Claude adapter enforces the chosen model with `--model`, rejects unapproved Opus 5 policies, blocks Manus routes, and rejects piped prompts above Claude Code's 10MB limit.
 
 ## Configure provider commands
 
@@ -52,7 +54,7 @@ Commands are JSON arrays, not shell strings. This prevents shell expansion and k
 
 ```bash
 export OPERATOR_OPENAI_COMMAND='["codex","exec","-"]'
-export OPERATOR_ANTHROPIC_COMMAND='["claude","-p"]'
+export OPERATOR_ANTHROPIC_COMMAND='["node","scripts/operator/claude-wrapper.mjs"]'
 export OPERATOR_INCIDENT_PROFILE='continuity'
 export OPERATOR_STATE_DIR="$HOME/.upp-operator-state"
 export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","path/to/approved-executor.mjs"]'
@@ -60,7 +62,7 @@ export OPERATOR_ACTION_TIMEOUT_SECONDS=300
 export OPERATOR_PROCESSING_STALE_SECONDS=900
 ```
 
-Only configure commands that are installed, authenticated, and approved in the current environment. Missing providers are skipped without losing task state.
+The Claude adapter expects the `claude` executable to be installed and authenticated. Set `OPERATOR_CLAUDE_BINARY` only when an approved installation uses a different executable path. Missing providers are skipped without losing task state.
 
 ## Start and route a task
 
