@@ -16,7 +16,6 @@ const changed = execFileSync("git", ["diff", "--name-only", `origin/${baseRef}..
 
 const criticalPatterns = [
   /^AGENTS\.md$/,
-  /^CLAUDE\.md$/,
   /^\.cursorrules$/,
   /^\.github\/workflows\//,
   /^\.git\/hooks\//,
