@@ -36,7 +36,25 @@ jobs:
         run: |
           set -euo pipefail
           STATE="$RUNNER_TEMP/operator-state"
-          export OPERATOR_ANTHROPIC_COMMAND='["node","-e","JSON.parse(process.env.OPERATOR_MODEL_POLICY);process.stdin.resume();process.stdin.on(\"end\",()=>{if(!process.env.OPERATOR_MODEL)process.exit(2);process.stdout.write(process.env.OPERATOR_MODEL)})"]'
+          FAKE_CLAUDE="$RUNNER_TEMP/fake-claude"
+          cat > "$FAKE_CLAUDE" <<'SH'
+          #!/usr/bin/env bash
+          set -euo pipefail
+          MODEL=""
+          while [[ $# -gt 0 ]]; do
+            if [[ "$1" == "--model" ]]; then
+              MODEL="$2"
+              shift 2
+              continue
+            fi
+            shift
+          done
+          cat >/dev/null
+          printf '%s' "$MODEL"
+          SH
+          chmod +x "$FAKE_CLAUDE"
+          export OPERATOR_CLAUDE_BINARY="$FAKE_CLAUDE"
+          export OPERATOR_ANTHROPIC_COMMAND='["node","scripts/operator/claude-wrapper.mjs"]'
 
           WRITE_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$STATE" \
