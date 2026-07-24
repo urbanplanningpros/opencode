@@ -2,7 +2,7 @@
 
 ## What this patch provides
 
-This repository now has a provider-neutral continuity layer around OpenCode, Codex, Claude Code, Manus, connectors, and CI/CD:
+This repository now has a provider-neutral continuity layer around OpenCode, Codex, Claude Code, approved connectors, and CI/CD:
 
 - Route profiles and circuit-breaker policy: `config/operator-routing.json`
 - Durable task manifests and continuation state: `scripts/operator/init-task.mjs`
@@ -13,6 +13,10 @@ This repository now has a provider-neutral continuity layer around OpenCode, Cod
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
 - Windows Codex state backup/recovery tool: `scripts/operator/recover-codex-state.ps1`
 
+## Approved provider boundary
+
+The runtime is limited to OpenAI and Anthropic routes defined in `config/operator-routing.json`. Manus is not an approved provider, bridge, connector, fallback, memory source, or deployment dependency. Do not add a Manus command, credential, endpoint, imported session, or automatic handoff path.
+
 ## Configure provider commands
 
 Commands are JSON arrays, not shell strings. This prevents shell expansion and keeps arguments explicit.
@@ -20,8 +24,6 @@ Commands are JSON arrays, not shell strings. This prevents shell expansion and k
 ```bash
 export OPERATOR_OPENAI_COMMAND='["codex","exec","-"]'
 export OPERATOR_ANTHROPIC_COMMAND='["claude","-p"]'
-# Configure Manus only through an installed and approved API/CLI bridge:
-# export OPERATOR_MANUS_COMMAND='["node","/path/to/approved-manus-bridge.mjs"]'
 export OPERATOR_INCIDENT_PROFILE='continuity'
 export OPERATOR_STATE_DIR="$HOME/.upp-operator-state"
 export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","path/to/approved-executor.mjs"]'
