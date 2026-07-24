@@ -12,10 +12,40 @@
       "minProperties": 1,
       "additionalProperties": {
         "type": "object",
-        "required": ["commandEnv", "enabled"],
+        "required": ["commandEnv", "enabled", "models"],
         "properties": {
           "commandEnv": { "type": "string", "minLength": 1 },
-          "enabled": { "type": "boolean" }
+          "enabled": { "type": "boolean" },
+          "models": {
+            "type": "object",
+            "required": ["primary", "fallbacks", "candidate"],
+            "properties": {
+              "primary": { "$ref": "#/$defs/modelRoute" },
+              "fallbacks": {
+                "type": "array",
+                "items": { "$ref": "#/$defs/modelRoute" }
+              },
+              "candidate": {
+                "anyOf": [
+                  { "type": "null" },
+                  {
+                    "allOf": [
+                      { "$ref": "#/$defs/modelRoute" },
+                      {
+                        "type": "object",
+                        "required": ["percent", "readOnly"],
+                        "properties": {
+                          "percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+                          "readOnly": { "type": "boolean" }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }
@@ -89,6 +119,22 @@
     "protectedPaths": {
       "type": "array",
       "items": { "type": "string" }
+    }
+  },
+  "$defs": {
+    "modelRoute": {
+      "type": "object",
+      "required": ["id", "requestPolicy"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "requestPolicy": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean", "null"]
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
