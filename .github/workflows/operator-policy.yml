@@ -13,6 +13,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout without persisted credentials
         uses: actions/checkout@v5
@@ -35,29 +36,46 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          STATE="$RUNNER_TEMP/operator-state"
+          PRIMARY_STATE="$RUNNER_TEMP/operator-primary-state"
+          FALLBACK_STATE="$RUNNER_TEMP/operator-fallback-state"
+          dump_state() {
+            echo "=== Operator smoke-test diagnostics ==="
+            find "$RUNNER_TEMP" -path '*/operator-*-state/*' -type f -maxdepth 6 -print -exec sed -n '1,220p' {} \; 2>/dev/null || true
+          }
+          trap dump_state ERR
+
           export OPERATOR_OPENAI_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
           export OPERATOR_LOCAL_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(0))"]'
 
           PRIMARY_TASK=$(bun scripts/operator/init-task.mjs \
-            --state-dir "$STATE" \
+            --state-dir "$PRIMARY_STATE" \
             --objective "CI OpenAI primary smoke test" \
             --acceptance "OpenAI executes|State persists" \
             --risk medium \
             --write \
             --handoff-safe true)
-          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$PRIMARY_TASK" --profile continuity
+          bun scripts/operator/run-with-failover.mjs --state-dir "$PRIMARY_STATE" --task "$PRIMARY_TASK" --profile continuity
           grep -q '"status": "awaiting_verification"' "$(dirname "$PRIMARY_TASK")/current-state.json"
           grep -q '"active_provider": "openai"' "$(dirname "$PRIMARY_TASK")/current-state.json"
           grep -q '"active_model": "gpt-5.6-sol"' "$(dirname "$PRIMARY_TASK")/current-state.json"
 
+          # Keep this test fast and deterministic while preserving production retry settings.
+          node <<'NODE'
+          const fs = require('fs')
+          const file = 'config/operator-routing.json'
+          const config = JSON.parse(fs.readFileSync(file, 'utf8'))
+          config.providers.openai.models.fallbacks = []
+          config.execution.readRetries = 0
+          fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`)
+          NODE
+
           export OPERATOR_OPENAI_COMMAND='["node","-e","process.stdin.resume();process.stdin.on(\"end\",()=>process.exit(1))"]'
           FALLBACK_TASK=$(bun scripts/operator/init-task.mjs \
-            --state-dir "$STATE" \
+            --state-dir "$FALLBACK_STATE" \
             --objective "CI local continuity smoke test" \
             --acceptance "Failed OpenAI route hands off|Local route executes" \
             --risk read_only)
-          bun scripts/operator/run-with-failover.mjs --state-dir "$STATE" --task "$FALLBACK_TASK" --profile continuity
+          bun scripts/operator/run-with-failover.mjs --state-dir "$FALLBACK_STATE" --task "$FALLBACK_TASK" --profile continuity
           grep -q '"active_provider": "local"' "$(dirname "$FALLBACK_TASK")/current-state.json"
           grep -q '"active_model": "local-approved"' "$(dirname "$FALLBACK_TASK")/current-state.json"
 
