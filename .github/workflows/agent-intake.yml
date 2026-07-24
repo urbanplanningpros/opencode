@@ -1,0 +1,57 @@
+name: Quarantine agent task intake
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Convert untrusted issue into non-executable manifest
+        id: sanitize
+        uses: actions/github-script@v8
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        with:
+          script: |
+            const fs = require('fs')
+            const crypto = require('crypto')
+            const text = `${process.env.ISSUE_TITLE || ''}\n${process.env.ISSUE_BODY || ''}`
+            const suspicious = [
+              /ignore (all|any|previous) instructions/i,
+              /curl\s|wget\s|invoke-webrequest/i,
+              /chmod\s|git\s+config/i,
+              /(npm|pnpm|yarn|bun|pip)\s+(install|add)/i,
+              /\.github\/workflows|AGENTS\.md|CLAUDE\.md|\.cursorrules/i,
+              /secret|credential|token|password/i,
+              /background process|fork bomb|resource exhaustion/i,
+            ]
+            const flags = suspicious.filter((pattern) => pattern.test(text)).map((pattern) => pattern.source)
+            const manifest = {
+              issue_number: Number(process.env.ISSUE_NUMBER),
+              source: 'github_issue_untrusted',
+              source_sha256: crypto.createHash('sha256').update(text).digest('hex'),
+              title: String(process.env.ISSUE_TITLE || '').slice(0, 300),
+              requested_objective: String(process.env.ISSUE_BODY || '').slice(0, 12000),
+              suspicious_flags: flags,
+              executable_authority: false,
+              required_next_step: 'A trusted operator must create a sanitized task manifest with allowed paths and acceptance criteria.',
+              created_at: new Date().toISOString(),
+            }
+            fs.mkdirSync('operator-intake', { recursive: true })
+            fs.writeFileSync(`operator-intake/issue-${manifest.issue_number}.json`, JSON.stringify(manifest, null, 2))
+
+      - name: Store quarantined intake evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: quarantined-issue-${{ github.event.issue.number }}
+          path: operator-intake/*.json
+          retention-days: 30
+          if-no-files-found: error
