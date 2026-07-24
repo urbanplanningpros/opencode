@@ -7,6 +7,7 @@ This repository now has a provider-neutral continuity layer around OpenCode, Cod
 - Route profiles and circuit-breaker policy: `config/operator-routing.json`
 - Durable task manifests and continuation state: `scripts/operator/init-task.mjs`
 - File-backed durable write queue with idempotency keys: `scripts/operator/queue-action.mjs`
+- Single-claim queue executor with reconciliation routing: `scripts/operator/process-queue.mjs`
 - Provider failover runner: `scripts/operator/run-with-failover.mjs`
 - Hostile issue-content quarantine: `.github/workflows/agent-intake.yml`
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
@@ -22,6 +23,7 @@ export OPERATOR_ANTHROPIC_COMMAND='["claude","-p"]'
 export OPERATOR_MANUS_COMMAND='["manus","run","-"]'
 export OPERATOR_INCIDENT_PROFILE='continuity'
 export OPERATOR_STATE_DIR="$HOME/.upp-operator-state"
+export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","path/to/approved-executor.mjs"]'
 ```
 
 Only configure commands that are installed, authenticated, and approved in the current environment. Missing providers are skipped without losing task state.
@@ -50,7 +52,7 @@ bun operator:queue \
   --idempotency-key crm-contact-123-qualified-v1
 ```
 
-A queue worker must claim one record atomically, execute it once, verify the target state, and move it from `pending` to `completed`. On timeout or provider loss, reconcile by `operation_id` and `idempotency_key` before replaying.
+Run `bun operator:process` to claim one record atomically and pass it to the approved executor. The executor must return JSON containing `{"verified":true}` only after it confirms the target state. Failed or uncertain actions move to `reconciliation` and are never blindly retried. Reconcile by `operation_id` and `idempotency_key` before replaying.
 
 ## Issue-to-agent workflow
 
