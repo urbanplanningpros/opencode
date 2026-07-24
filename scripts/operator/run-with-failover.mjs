@@ -48,18 +48,24 @@ const providerOrder = useProviderCanary
   ? [profile.canary.provider, ...profile.order.filter((provider) => provider !== profile.canary.provider)]
   : profile.order
 
-const prompt = [
-  "You are continuing a provider-neutral operator task.",
-  `Task ID: ${manifest.task_id}`,
-  `Operation ID: ${manifest.operation_id}`,
-  `Objective: ${manifest.objective}`,
-  "Acceptance criteria:",
-  ...manifest.acceptance_criteria.map((item) => `- ${item}`),
-  `Allowed paths: ${(manifest.allowed_paths || []).join(", ") || "not specified; minimize scope"}`,
-  "Prohibited actions:",
-  ...(manifest.prohibited_actions || []).map((item) => `- ${item}`),
-  "Preserve current state, verify all changes, and produce a continuation summary for another provider.",
-].join("\n")
+function promptForModel(modelRoute) {
+  const completionInstruction =
+    modelRoute.id === "claude-opus-5"
+      ? "Preserve current state and produce a continuation summary for another provider. Follow the listed acceptance criteria and required tests, but do not add redundant verification passes beyond them."
+      : "Preserve current state, verify all changes, and produce a continuation summary for another provider."
+  return [
+    "You are continuing a provider-neutral operator task.",
+    `Task ID: ${manifest.task_id}`,
+    `Operation ID: ${manifest.operation_id}`,
+    `Objective: ${manifest.objective}`,
+    "Acceptance criteria:",
+    ...manifest.acceptance_criteria.map((item) => `- ${item}`),
+    `Allowed paths: ${(manifest.allowed_paths || []).join(", ") || "not specified; minimize scope"}`,
+    "Prohibited actions:",
+    ...(manifest.prohibited_actions || []).map((item) => `- ${item}`),
+    completionInstruction,
+  ].join("\n")
+}
 
 function parseCommand(provider) {
   const envName = config.providers[provider].commandEnv
@@ -156,7 +162,7 @@ function execute(provider, modelRoute, command) {
         stderr,
       })
     })
-    child.stdin.end(prompt)
+    child.stdin.end(promptForModel(modelRoute))
   })
 }
 
