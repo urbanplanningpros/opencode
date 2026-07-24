@@ -1,3 +1,4 @@
+import fs from "node:fs"
 import path from "node:path"
 import { nowIso, parseArgs, randomId, sha256, stateRoot, writeJsonAtomic } from "./lib.mjs"
 
@@ -15,10 +16,29 @@ try {
   process.exit(2)
 }
 
+const root = stateRoot(args)
+const idempotencyKey = args["idempotency-key"] || randomId("idem")
+const queueStates = ["pending", "processing", "completed", "reconciliation"]
+for (const state of queueStates) {
+  const directory = path.join(root, "queue", state)
+  if (!fs.existsSync(directory)) continue
+  for (const candidate of fs.readdirSync(directory).filter((file) => file.endsWith(".json"))) {
+    const file = path.join(directory, candidate)
+    try {
+      if (JSON.parse(fs.readFileSync(file, "utf8")).idempotency_key === idempotencyKey) {
+        console.log(file)
+        process.exit(0)
+      }
+    } catch {
+      continue
+    }
+  }
+}
+
 const operationId = args["operation-id"] || randomId("action")
 const record = {
   operation_id: operationId,
-  idempotency_key: args["idempotency-key"] || randomId("idem"),
+  idempotency_key: idempotencyKey,
   action: args.action,
   payload,
   payload_hash: `sha256:${sha256(JSON.stringify(payload))}`,
@@ -30,6 +50,6 @@ const record = {
   updated_at: nowIso(),
 }
 
-const file = path.join(stateRoot(args), "queue", "pending", `${operationId}.json`)
+const file = path.join(root, "queue", "pending", `${operationId}.json`)
 writeJsonAtomic(file, record)
 console.log(file)
