@@ -28,19 +28,7 @@
               "candidate": {
                 "anyOf": [
                   { "type": "null" },
-                  {
-                    "allOf": [
-                      { "$ref": "#/$defs/modelRoute" },
-                      {
-                        "type": "object",
-                        "required": ["percent", "readOnly"],
-                        "properties": {
-                          "percent": { "type": "integer", "minimum": 0, "maximum": 100 },
-                          "readOnly": { "type": "boolean" }
-                        }
-                      }
-                    ]
-                  }
+                  { "$ref": "#/$defs/modelCandidate" }
                 ]
               }
             },
@@ -122,17 +110,29 @@
     }
   },
   "$defs": {
+    "requestPolicy": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number", "boolean", "null"]
+      }
+    },
     "modelRoute": {
       "type": "object",
       "required": ["id", "requestPolicy"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "requestPolicy": {
-          "type": "object",
-          "additionalProperties": {
-            "type": ["string", "number", "boolean", "null"]
-          }
-        }
+        "requestPolicy": { "$ref": "#/$defs/requestPolicy" }
+      },
+      "additionalProperties": false
+    },
+    "modelCandidate": {
+      "type": "object",
+      "required": ["id", "requestPolicy", "percent", "readOnly"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "requestPolicy": { "$ref": "#/$defs/requestPolicy" },
+        "percent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "readOnly": { "type": "boolean" }
       },
       "additionalProperties": false
     }
