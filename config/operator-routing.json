@@ -1,6 +1,6 @@
 {
   "$schema": "../schemas/operator-routing.schema.json",
-  "version": 2,
+  "version": 3,
   "defaultProfile": "continuity",
   "providers": {
     "openai": {
@@ -11,61 +11,52 @@
           "id": "gpt-5.6-sol",
           "requestPolicy": {}
         },
-        "fallbacks": [],
+        "fallbacks": [
+          {
+            "id": "gpt-5.6-terra",
+            "requestPolicy": {}
+          }
+        ],
         "candidate": null
       }
     },
-    "anthropic": {
-      "commandEnv": "OPERATOR_ANTHROPIC_COMMAND",
+    "local": {
+      "commandEnv": "OPERATOR_LOCAL_COMMAND",
       "enabled": true,
       "models": {
         "primary": {
-          "id": "claude-opus-4-8",
+          "id": "local-approved",
           "requestPolicy": {
-            "thinking": "provider_default",
-            "serverSideFallback": "disabled"
+            "network": "deny_by_default",
+            "secrets": "none"
           }
         },
         "fallbacks": [],
-        "candidate": {
-          "id": "claude-opus-5",
-          "percent": 10,
-          "readOnly": true,
-          "requestPolicy": {
-            "thinking": "adaptive_default",
-            "disableThinkingMaxEffort": "high",
-            "serverSideFallback": "disabled",
-            "midConversationToolChanges": "disabled"
-          }
-        }
+        "candidate": null
       }
     }
   },
   "profiles": {
     "normal": {
-      "order": ["openai", "anthropic"],
+      "order": ["openai", "local"],
       "canary": null
     },
     "continuity": {
-      "order": ["anthropic", "openai"],
-      "canary": {
-        "provider": "openai",
-        "percent": 10,
-        "readOnly": true
-      }
+      "order": ["openai", "local"],
+      "canary": null
     },
     "openai_degraded": {
-      "order": ["anthropic", "openai"],
+      "order": ["local", "openai"],
       "canary": {
         "provider": "openai",
         "percent": 10,
         "readOnly": true
       }
     },
-    "anthropic_degraded": {
-      "order": ["openai", "anthropic"],
+    "local_degraded": {
+      "order": ["openai", "local"],
       "canary": {
-        "provider": "anthropic",
+        "provider": "local",
         "percent": 10,
         "readOnly": true
       }
