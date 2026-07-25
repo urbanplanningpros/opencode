@@ -1,7 +1,7 @@
 {
   "$schema": "../schemas/operator-routing.schema.json",
   "version": 3,
-  "defaultProfile": "continuity",
+  "defaultProfile": "openai_degraded",
   "providers": {
     "openai": {
       "commandEnv": "OPERATOR_OPENAI_COMMAND",
