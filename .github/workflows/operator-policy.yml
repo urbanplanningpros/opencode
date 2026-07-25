@@ -32,19 +32,24 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
-      - name: Validate Codex Desktop preflight guard
+      - name: Validate Codex Desktop and WSL guards
         shell: pwsh
         run: |
-          $tokens = $null
-          $errors = $null
-          [System.Management.Automation.Language.Parser]::ParseFile(
+          foreach ($file in @(
             "scripts/operator/codex-desktop-guard.ps1",
-            [ref]$tokens,
-            [ref]$errors
-          ) | Out-Null
-          if ($errors.Count -gt 0) {
-            $errors | ForEach-Object { Write-Error $_.Message }
-            exit 1
+            "scripts/operator/codex-wsl-direct.ps1"
+          )) {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              $file,
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error "$file`: $($_.Message)" }
+              exit 1
+            }
           }
           $emptyCodexHome = Join-Path $env:RUNNER_TEMP "empty-codex-home"
           New-Item -ItemType Directory -Path $emptyCodexHome -Force | Out-Null
