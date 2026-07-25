@@ -9,6 +9,7 @@ This repository uses an OpenAI-first continuity layer with an optional approved 
 - File-backed durable write queue with idempotency keys: `scripts/operator/queue-action.mjs`
 - Single-claim queue executor with reconciliation routing: `scripts/operator/process-queue.mjs`
 - Provider and model failover runner: `scripts/operator/run-with-failover.mjs`
+- Local Gmail MIME attachment executor: `scripts/operator/gmail-send-local.mjs`
 - Hostile issue-content quarantine: `.github/workflows/agent-intake.yml`
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
 - Windows Codex state backup/recovery tool: `scripts/operator/recover-codex-state.ps1`
@@ -76,6 +77,45 @@ bun operator:queue \
 ```
 
 Run `bun operator:process` to claim one record atomically and pass it to the approved executor. The executor must return JSON containing `{"verified":true}` only after it confirms the target state. Duplicate idempotency keys return the existing record instead of creating another write. Failed, timed-out, or stale claimed actions move to `reconciliation` and are never blindly retried.
+
+## Gmail attachment compatibility fallback
+
+Codex Desktop for Windows may temporarily advertise an outdated flat Gmail send schema while the connector runtime expects a newer MIME message object. When this mismatch appears, attachment sends fail during argument binding before Gmail receives the message.
+
+Do not retry the legacy `attachment_files` action. Queue a local Gmail API write instead:
+
+```bash
+PAYLOAD=$(node -e 'process.stdout.write(JSON.stringify({
+  to:["recipient@example.com"],
+  subject:"Requested documents",
+  body_text:"Attached are the requested documents.",
+  attachments:[{path:process.argv[1]}]
+}))' "/approved/path/report.pdf")
+
+bun operator:queue \
+  --action gmail_send \
+  --payload "$PAYLOAD" \
+  --idempotency-key gmail-recipient-report-v1
+
+export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","scripts/operator/gmail-send-local.mjs"]'
+export OPERATOR_GMAIL_ATTACHMENT_ROOTS="/approved/path"
+export OPERATOR_GMAIL_MAX_ATTACHMENT_BYTES=20971520
+export GOOGLE_GMAIL_ACCESS_TOKEN="<narrowly-scoped-runtime-token>"
+
+bun operator:process
+```
+
+The Gmail executor:
+
+- Builds an RFC 5322 MIME message locally.
+- Reads attachments only from approved roots.
+- Rejects header injection and non-file attachments.
+- Uses a deterministic Message-ID derived from the idempotency key.
+- Searches Gmail for that Message-ID before sending, preventing duplicate replay.
+- Verifies the stored Gmail message and operation header after sending.
+- Returns `verified=true` only after that verification succeeds.
+
+The Gmail access token belongs only in the connector executor environment. Do not expose it to Codex, the local model route, build agents, task prompts, repository files, or CI logs.
 
 ## Issue-to-agent workflow
 
