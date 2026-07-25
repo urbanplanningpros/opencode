@@ -99,6 +99,32 @@ jobs:
           bun scripts/operator/process-queue.mjs --state-dir "$STATE"
           find "$STATE/queue/completed" -name '*.json' -print -quit | grep -q .
 
+      - name: Smoke test local Gmail attachment shim
+        shell: bash
+        run: |
+          set -euo pipefail
+          STATE="$RUNNER_TEMP/operator-gmail-state"
+          ATTACHMENTS="$RUNNER_TEMP/operator-gmail-attachments"
+          mkdir -p "$ATTACHMENTS"
+          printf 'continuity attachment\n' > "$ATTACHMENTS/continuity.txt"
+          PAYLOAD=$(node -e 'process.stdout.write(JSON.stringify({to:"test@example.com",subject:"Continuity test",body_text:"Dry-run only",attachments:[{path:process.argv[1]}]}))' "$ATTACHMENTS/continuity.txt")
+          bun scripts/operator/queue-action.mjs \
+            --state-dir "$STATE" \
+            --action gmail_send \
+            --payload "$PAYLOAD" \
+            --idempotency-key gmail-ci-smoke-v1
+          export OPERATOR_ACTION_EXECUTOR_COMMAND='["node","scripts/operator/gmail-send-local.mjs"]'
+          export OPERATOR_GMAIL_DRY_RUN=true
+          export OPERATOR_GMAIL_ATTACHMENT_ROOTS="$ATTACHMENTS"
+          bun scripts/operator/process-queue.mjs --state-dir "$STATE"
+          COMPLETED=$(find "$STATE/queue/completed" -name '*.json' -print -quit)
+          node -e '
+            const fs = require("fs")
+            const record = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+            const result = JSON.parse(record.executor_result.stdout)
+            if (record.status !== "completed" || result.verified !== true || result.dry_run !== true) process.exit(1)
+          ' "$COMPLETED"
+
       - name: Enforce protected-path and agent-intake policy
         if: github.event_name == 'pull_request'
         env:

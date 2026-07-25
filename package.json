@@ -18,6 +18,7 @@
     "operator:queue": "bun scripts/operator/queue-action.mjs",
     "operator:process": "bun scripts/operator/process-queue.mjs",
     "operator:route": "bun scripts/operator/run-with-failover.mjs",
+    "operator:gmail-send": "bun scripts/operator/gmail-send-local.mjs",
     "postinstall": "bun run --cwd packages/opencode fix-node-pty",
     "prepare": "husky",
     "random": "echo 'Random script'",
