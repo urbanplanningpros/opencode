@@ -24,6 +24,11 @@ if ($version) {
   $affectedBuild = $version -like "26.721.*"
 }
 
+$wslAvailable = $false
+if ($IsWindows) {
+  $wslAvailable = [bool](Get-Command wsl.exe -ErrorAction SilentlyContinue)
+}
+
 $largeSessions = @()
 if (Test-Path $CodexHome) {
   $largeSessions = @(
@@ -42,8 +47,9 @@ if (Test-Path $CodexHome) {
 }
 
 $browserBlocked = $IsWindows -and $affectedBuild
+$wslDesktopIntegrationBlocked = $IsWindows -and $affectedBuild -and $wslAvailable
 $largeThreadRisk = $largeSessions.Count -gt 0
-$desktopRestricted = $browserBlocked -or $largeThreadRisk
+$desktopRestricted = $browserBlocked -or $wslDesktopIntegrationBlocked -or $largeThreadRisk
 
 $result = [ordered]@{
   checked_at = (Get-Date).ToUniversalTime().ToString("o")
@@ -51,10 +57,12 @@ $result = [ordered]@{
   codex_desktop_version = $version
   affected_26_721_build = $affectedBuild
   browser_use_blocked = $browserBlocked
+  wsl_available = $wslAvailable
+  desktop_wsl_integration_blocked = $wslDesktopIntegrationBlocked
   large_thread_risk = $largeThreadRisk
   large_sessions = $largeSessions
   desktop_restricted = $desktopRestricted
-  approved_route = if ($desktopRestricted) { "codex-cli-or-approved-local" } else { "desktop-with-normal-controls" }
+  approved_route = if ($desktopRestricted) { "codex-cli-direct-wsl-or-approved-local" } else { "desktop-with-normal-controls" }
   required_actions = @()
 }
 
@@ -62,9 +70,14 @@ if ($browserBlocked) {
   $result.required_actions += "Do not use the Codex in-app browser on Windows build 26.721.x. Route browser work to an approved external browser workflow, Codex CLI, or the approved local route."
   $result.required_actions += "Do not rename or hide .git in an active repository as an operating workaround. Preserve Git state and change the execution surface instead."
 }
+if ($wslDesktopIntegrationBlocked) {
+  $result.required_actions += "Do not use the Codex Desktop WSL agent environment on build 26.721.x. Its runtime installer can pass Windows paths to Linux tar and plugin RPCs can remain blocked until timeout."
+  $result.required_actions += "Run scripts/operator/codex-wsl-direct.ps1 to invoke Codex directly inside WSL with an isolated Linux-native CODEX_HOME at `$HOME/.codex-direct."
+  $result.required_actions += "Do not share the Windows %USERPROFILE%\.codex databases with the direct WSL route; mixed runtime versions can create incompatible SQLite migration state."
+}
 if ($largeThreadRisk) {
   $result.required_actions += "Checkpoint the objective, acceptance criteria, changed files, and continuation prompt outside the desktop thread. Start a new thread before continuing."
-  $result.required_actions += "Use Codex CLI or the approved local route for the current task until the oversized desktop session is archived and verified recoverable."
+  $result.required_actions += "Use Codex CLI, direct WSL CLI, or the approved local route for the current task until the oversized desktop session is archived and verified recoverable."
 }
 if ($desktopRestricted) {
   $result.required_actions += "Back up the complete .codex directory before repair, reset, reinstall, or state-file edits."
