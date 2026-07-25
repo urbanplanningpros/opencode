@@ -36,6 +36,7 @@ command -v codex >/dev/null 2>&1 || {
 }
 printf 'codex=%s\n' "$(command -v codex)"
 printf 'codex_home=%s\n' "$HOME/.codex-direct"
+printf 'remote_plugin=disabled\n'
 '@
 
 & $wsl.Source @base -- sh -lc $probeScript
@@ -51,10 +52,11 @@ command -v codex >/dev/null 2>&1 || {
   echo "Codex CLI is not installed inside the selected WSL distribution." >&2
   exit 127
 }
-exec codex "$@"
+exec codex --disable remote_plugin "$@"
 '@
 
 # The script body is fixed and user arguments are passed positionally after $0.
-# This avoids shell interpolation while keeping Windows and WSL state isolated.
+# This avoids shell interpolation, isolates Windows and WSL state, and disables
+# the remote plugin catalog while the upstream cache write-amplification issue is unresolved.
 & $wsl.Source @base -- sh -lc $launchScript codex-direct @CodexArgs
 exit $LASTEXITCODE
