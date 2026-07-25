@@ -32,6 +32,25 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
+      - name: Validate Codex Desktop preflight guard
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            "scripts/operator/codex-desktop-guard.ps1",
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+          $emptyCodexHome = Join-Path $env:RUNNER_TEMP "empty-codex-home"
+          New-Item -ItemType Directory -Path $emptyCodexHome -Force | Out-Null
+          & ./scripts/operator/codex-desktop-guard.ps1 -CodexHome $emptyCodexHome -Json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
       - name: Smoke test OpenAI primary and local failover
         shell: bash
         run: |
