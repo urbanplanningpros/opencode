@@ -118,8 +118,12 @@ jobs:
           export OPERATOR_GMAIL_ATTACHMENT_ROOTS="$ATTACHMENTS"
           bun scripts/operator/process-queue.mjs --state-dir "$STATE"
           COMPLETED=$(find "$STATE/queue/completed" -name '*.json' -print -quit)
-          grep -q '"verified":true' "$COMPLETED"
-          grep -q '"dry_run":true' "$COMPLETED"
+          node -e '
+            const fs = require("fs")
+            const record = JSON.parse(fs.readFileSync(process.argv[1], "utf8"))
+            const result = JSON.parse(record.executor_result.stdout)
+            if (record.status !== "completed" || result.verified !== true || result.dry_run !== true) process.exit(1)
+          ' "$COMPLETED"
 
       - name: Enforce protected-path and agent-intake policy
         if: github.event_name == 'pull_request'
