@@ -32,6 +32,24 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
+      - name: Validate Codex plugin-cache guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          EMPTY_CODEX_HOME="$RUNNER_TEMP/empty-codex-cache-home"
+          mkdir -p "$EMPTY_CODEX_HOME"
+          bun scripts/operator/codex-cache-audit.mjs \
+            --codex-home "$EMPTY_CODEX_HOME" \
+            --duration-ms 25 \
+            --interval-ms 25 \
+            --json
+          DRY_RUN=$(OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- exec --ephemeral -)
+          node -e '
+            const result = JSON.parse(process.argv[1])
+            const index = result.args.indexOf("--disable")
+            if (result.remote_plugin !== false || index < 0 || result.args[index + 1] !== "remote_plugin") process.exit(1)
+          ' "$DRY_RUN"
+
       - name: Validate Codex Desktop and WSL guards
         shell: pwsh
         run: |
