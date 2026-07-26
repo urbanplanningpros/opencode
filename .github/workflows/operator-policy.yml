@@ -52,7 +52,7 @@ jobs:
             exit 1
           fi
 
-      - name: Validate Codex cache and Code Mode guards
+      - name: Validate Codex cache, Code Mode, and HTTP-SSE recovery guards
         shell: bash
         run: |
           set -euo pipefail
@@ -74,6 +74,7 @@ jobs:
               result.remote_plugin !== false ||
               result.code_mode !== false ||
               result.code_mode_only !== false ||
+              result.http_sse_recovery !== false ||
               !disabled.has("remote_plugin") ||
               !disabled.has("code_mode") ||
               !disabled.has("code_mode_only")
@@ -81,6 +82,27 @@ jobs:
           ' "$DRY_RUN"
           if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- --enable code_mode; then
             echo "Code Mode guard accepted a prohibited override" >&2
+            exit 1
+          fi
+
+          HTTP_RECOVERY=$(OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run --http-sse-recovery -- exec --ephemeral -)
+          node -e '
+            const result = JSON.parse(process.argv[1])
+            const configIndex = result.args.findIndex(
+              (value, index) => value === "-c" && result.args[index + 1] === "model_providers.openai.supports_websockets=false",
+            )
+            if (
+              result.http_sse_recovery !== true ||
+              result.openai_websockets !== false ||
+              configIndex === -1
+            ) process.exit(1)
+          ' "$HTTP_RECOVERY"
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs \
+            --dry-run \
+            --http-sse-recovery \
+            -- \
+            -c model_providers.openai.supports_websockets=true; then
+            echo "HTTP-SSE recovery guard accepted a WebSocket re-enable override" >&2
             exit 1
           fi
 
