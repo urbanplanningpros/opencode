@@ -1,0 +1,49 @@
+name: MCP safety guard
+
+on:
+  pull_request:
+    paths:
+      - "scripts/operator/mcp-stdio-guard.mjs"
+      - "scripts/operator/mcp-stdio-guard-selftest.mjs"
+      - "AGENTS.md"
+      - "package.json"
+      - ".github/workflows/mcp-safety.yml"
+  push:
+    branches: [dev]
+    paths:
+      - "scripts/operator/mcp-stdio-guard.mjs"
+      - "scripts/operator/mcp-stdio-guard-selftest.mjs"
+      - "AGENTS.md"
+      - "package.json"
+      - ".github/workflows/mcp-safety.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Check guard syntax
+        run: |
+          node --check scripts/operator/mcp-stdio-guard.mjs
+          node --check scripts/operator/mcp-stdio-guard-selftest.mjs
+
+      - name: Verify pagination and authority containment
+        run: bun scripts/operator/mcp-stdio-guard-selftest.mjs
