@@ -1,0 +1,93 @@
+name: Codex Desktop guard
+
+on:
+  pull_request:
+    paths:
+      - "scripts/operator/codex-desktop-guard.ps1"
+      - ".github/workflows/codex-desktop-guard.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Parse guard script
+        shell: pwsh
+        run: |
+          $tokens = $null
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile(
+            "scripts/operator/codex-desktop-guard.ps1",
+            [ref]$tokens,
+            [ref]$errors
+          ) | Out-Null
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.Message }
+            exit 1
+          }
+
+      - name: Verify Windows 26.721 Browser and remote quarantine
+        shell: pwsh
+        run: |
+          $codexHome = Join-Path $env:RUNNER_TEMP "codex-home"
+          New-Item -ItemType Directory -Path $codexHome -Force | Out-Null
+
+          $output = & ./scripts/operator/codex-desktop-guard.ps1 `
+            -CodexHome $codexHome `
+            -DesktopVersionOverride "26.721.4979.0" `
+            -SimulateWindows `
+            -SimulateWslAvailable `
+            -Json
+          $guardExit = $LASTEXITCODE
+          if ($guardExit -ne 2) {
+            Write-Error "Expected restricted Desktop guard exit 2; received $guardExit"
+            exit 1
+          }
+
+          $result = $output | ConvertFrom-Json
+          if (
+            $result.platform -ne "windows" -or
+            $result.affected_26_721_build -ne $true -or
+            $result.browser_use_blocked -ne $true -or
+            $result.mobile_remote_control_blocked -ne $true -or
+            $result.desktop_wsl_integration_blocked -ne $true -or
+            $result.desktop_restricted -ne $true -or
+            $result.approved_route -ne "codex-cli-direct-wsl-or-approved-local"
+          ) {
+            $result | ConvertTo-Json -Depth 8 | Write-Error
+            exit 1
+          }
+
+      - name: Verify unaffected build remains available
+        shell: pwsh
+        run: |
+          $codexHome = Join-Path $env:RUNNER_TEMP "codex-home-unaffected"
+          New-Item -ItemType Directory -Path $codexHome -Force | Out-Null
+          $output = & ./scripts/operator/codex-desktop-guard.ps1 `
+            -CodexHome $codexHome `
+            -DesktopVersionOverride "26.715.9868.0" `
+            -SimulateWindows `
+            -Json
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $result = $output | ConvertFrom-Json
+          if (
+            $result.browser_use_blocked -ne $false -or
+            $result.mobile_remote_control_blocked -ne $false -or
+            $result.desktop_restricted -ne $false
+          ) {
+            $result | ConvertTo-Json -Depth 8 | Write-Error
+            exit 1
+          }
