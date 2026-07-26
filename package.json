@@ -25,6 +25,7 @@
     "operator:wsl-direct": "pwsh -NoProfile -File scripts/operator/codex-wsl-direct.ps1",
     "operator:codex-cache-audit": "bun scripts/operator/codex-cache-audit.mjs",
     "operator:codex-safe": "bun scripts/operator/codex-cache-safe-launch.mjs --",
+    "operator:codex-http-recover": "bun scripts/operator/codex-cache-safe-launch.mjs --http-sse-recovery --",
     "postinstall": "bun run --cwd packages/opencode fix-node-pty",
     "prepare": "husky",
     "random": "echo 'Random script'",
