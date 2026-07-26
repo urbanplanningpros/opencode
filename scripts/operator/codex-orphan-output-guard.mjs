@@ -11,7 +11,7 @@ if (!Number.isInteger(targetPid) || targetPid <= 1) {
   console.error("Usage: bun operator:orphan-output-guard --pid <codex-or-parent-pid> [--json] [--execute-recovery]")
   process.exit(2)
 }
-if (!['linux', 'darwin'].includes(process.platform)) {
+if (!["linux", "darwin"].includes(process.platform)) {
   console.error("The orphan-output guard currently supports Linux and macOS")
   process.exit(64)
 }
@@ -98,6 +98,15 @@ function safeName(name) {
   }
 }
 
+function safeCommand(command) {
+  const raw = String(command || "")
+  const first = raw.trim().split(/\s+/)[0]?.replace(/^["']|["']$/g, "") || ""
+  return {
+    command_basename: path.basename(first),
+    command_sha256: crypto.createHash("sha256").update(raw).digest("hex"),
+  }
+}
+
 function linuxDeletedFiles(processes) {
   const files = []
   for (const process of processes) {
@@ -128,7 +137,7 @@ function linuxDeletedFiles(processes) {
         pid: process.pid,
         fd: descriptor,
         bytes: stat.size,
-        command: process.command,
+        ...safeCommand(process.command),
         ...safeName(link),
       })
     }
@@ -154,7 +163,7 @@ function macDeletedFiles(processes) {
         pid: process.pid,
         fd: current.fd || null,
         bytes: current.bytes,
-        command: process.command,
+        ...safeCommand(process.command),
         ...safeName(current.name || "<deleted-open-file>"),
       })
     }
@@ -202,15 +211,11 @@ function executeRecovery(command, snapshotFile) {
         OPERATOR_ORPHAN_OUTPUT_SNAPSHOT: snapshotFile,
         OPERATOR_ORPHAN_OUTPUT_RECOVERY_REASON: "deleted_open_file_threshold_exceeded",
       },
-      stdio: ["ignore", "pipe", "pipe"],
+      stdio: "ignore",
       shell: false,
     })
-    let stdout = ""
-    let stderr = ""
-    child.stdout.on("data", (chunk) => (stdout += chunk))
-    child.stderr.on("data", (chunk) => (stderr += chunk))
-    child.on("error", (error) => resolve({ exit_code: null, error: error.message, stdout, stderr }))
-    child.on("close", (code, signal) => resolve({ exit_code: code, signal, stdout, stderr }))
+    child.on("error", (error) => resolve({ exit_code: null, error: error.message }))
+    child.on("close", (code, signal) => resolve({ exit_code: code, signal }))
   })
 }
 
@@ -242,7 +247,8 @@ const snapshot = {
   platform: process.platform,
   target_pid: targetPid,
   process_count: processes.length,
-  disk_path: diskPath,
+  disk_path_basename: path.basename(diskPath),
+  disk_path_sha256: crypto.createHash("sha256").update(diskPath).digest("hex"),
   free_bytes: freeBytes,
   deleted_open_files: {
     count: deletedFiles.length,
