@@ -1,4 +1,4 @@
-name: Codex session storage guard
+name: Codex session storage and quota guard
 
 on:
   push:
@@ -41,14 +41,14 @@ jobs:
       - name: Validate script syntax
         run: node --check scripts/operator/codex-session-storage-guard.mjs
 
-      - name: Verify safe, threshold, and reversible config paths
+      - name: Verify storage thresholds and single-agent quota guard
         shell: bash
         run: |
           set -euo pipefail
           HOME_DIR="$RUNNER_TEMP/codex-session-guard"
           mkdir -p "$HOME_DIR/sessions/2026/07/26"
           printf 'small rollout\n' > "$HOME_DIR/sessions/2026/07/26/rollout-a.jsonl"
-          printf '[model]\nname = "approved"\n' > "$HOME_DIR/config.toml"
+          printf '[model]\nname = "approved"\n\n[agents]\nenabled = true\nmax_concurrent_threads_per_session = 8\n' > "$HOME_DIR/config.toml"
 
           SAFE=$(bun scripts/operator/codex-session-storage-guard.mjs \
             --codex-home "$HOME_DIR" \
@@ -59,7 +59,7 @@ jobs:
             --free-warn-bytes 1 \
             --free-critical-bytes 1 \
             --json)
-          node -e 'const value=JSON.parse(process.argv[1]);if(value.status!=="safe")process.exit(1)' "$SAFE"
+          node -e 'const value=JSON.parse(process.argv[1]);if(value.status!=="safe"||value.subagent_quota_guard_required!==true)process.exit(1)' "$SAFE"
 
           truncate -s 4096 "$HOME_DIR/sessions/2026/07/26/rollout-large.jsonl"
           set +e
@@ -85,9 +85,24 @@ jobs:
             --file-critical-bytes 20971520 \
             --free-warn-bytes 1 \
             --free-critical-bytes 1 \
+            --apply-subagent-quota-guard \
+            --json)
+          node -e 'const value=JSON.parse(process.argv[1]);if(value.config_change.applied!==true||value.agent_policy.quota_guard_active!==true)process.exit(1)' "$APPLIED"
+          grep -q '^\[agents\]$' "$HOME_DIR/config.toml"
+          grep -q '^enabled = false$' "$HOME_DIR/config.toml"
+          grep -q '^max_concurrent_threads_per_session = 1$' "$HOME_DIR/config.toml"
+          test "$(grep -c '^enabled =' "$HOME_DIR/config.toml")" -eq 1
+          test "$(grep -c '^max_concurrent_threads_per_session =' "$HOME_DIR/config.toml")" -eq 1
+          find "$HOME_DIR/operator-backups/subagent-quota" -name config.toml -print -quit | grep -q .
+
+          LEGACY=$(bun scripts/operator/codex-session-storage-guard.mjs \
+            --codex-home "$HOME_DIR" \
+            --total-warn-bytes 10485760 \
+            --total-critical-bytes 20971520 \
+            --file-warn-bytes 10485760 \
+            --file-critical-bytes 20971520 \
+            --free-warn-bytes 1 \
+            --free-critical-bytes 1 \
             --apply-fork-limit \
             --json)
-          node -e 'const value=JSON.parse(process.argv[1]);if(value.config_change.applied!==true)process.exit(1)' "$APPLIED"
-          grep -q '^\[agents\]$' "$HOME_DIR/config.toml"
-          grep -q '^max_concurrent_threads_per_session = 1$' "$HOME_DIR/config.toml"
-          find "$HOME_DIR/operator-backups/session-storage" -name config.toml -print -quit | grep -q .
+          node -e 'const value=JSON.parse(process.argv[1]);if(value.agent_policy.quota_guard_active!==true)process.exit(1)' "$LEGACY"
