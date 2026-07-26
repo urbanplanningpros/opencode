@@ -52,6 +52,36 @@ export OPERATOR_PROCESSING_STALE_SECONDS=900
 
 Do not configure any Anthropic, Claude, or Manus credential, command, endpoint, model alias, Copilot auto-model route, Bedrock model access, Vertex publisher model, or model-gateway fallback.
 
+## Codex Code Mode metadata guard
+
+Codex `0.146.0-alpha.10.1` bounds the direct `x-codex-turn-metadata` compatibility header by removing the unbounded Code Mode tool-name mapping from that header. Until the fix is included in a stable release and validated locally, business-critical Codex sessions must run with both Code Mode features disabled.
+
+Use the guarded launcher:
+
+```bash
+bun operator:codex-safe -- exec --ephemeral -
+```
+
+It injects:
+
+```text
+--disable remote_plugin
+--disable code_mode
+--disable code_mode_only
+```
+
+The launcher rejects command-line or config overrides that attempt to re-enable any of those features. Direct WSL execution applies the same restrictions.
+
+This guard prevents oversized HTTP or WebSocket metadata headers while preserving direct OpenAI execution, normal shell tools, local repository tools, durable task state, and the approved local continuity route.
+
+Remove the Code Mode guard only after all of the following are true:
+
+1. OpenAI publishes a stable Codex release containing the bounded-header change.
+2. The stable release passes ten read-only canaries.
+3. A stress test with a large dynamic-tool map completes without HTTP `431`, WebSocket handshake, or header-size errors.
+4. Two controlled idempotent writes complete and verify.
+5. Rollback to the currently validated Codex version remains available.
+
 ## Start and route a task
 
 ```bash
@@ -157,6 +187,6 @@ Move a recovered route to primary only after:
 3. Two controlled idempotent writes succeed after the route is explicitly enabled for writes.
 4. No duplicate, truncated, missing, stale, or incorrectly formatted tool results appear.
 5. Cost, latency, tool-call count, and human-correction rate are recorded against the current primary.
-6. A non-Claude rollback route remains configured.
+6. An approved local rollback route remains configured.
 
 Promote traffic in stages: 10% → 25% → 50% → 100%.
