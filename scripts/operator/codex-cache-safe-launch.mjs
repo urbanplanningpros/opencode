@@ -4,9 +4,15 @@ import path from "node:path"
 import { spawn } from "node:child_process"
 
 const argv = process.argv.slice(2)
-const dryRunIndex = argv.indexOf("--dry-run")
-const dryRun = dryRunIndex !== -1
-if (dryRun) argv.splice(dryRunIndex, 1)
+const takeFlag = (name) => {
+  const index = argv.indexOf(name)
+  if (index === -1) return false
+  argv.splice(index, 1)
+  return true
+}
+const dryRun = takeFlag("--dry-run")
+const forceHttpSse =
+  takeFlag("--http-sse-recovery") || /^(1|true|yes)$/i.test(process.env.OPERATOR_CODEX_FORCE_HTTP_SSE || "")
 const separator = argv.indexOf("--")
 const codexArgs = separator === -1 ? argv : argv.slice(separator + 1)
 const joined = codexArgs.join(" ")
@@ -26,6 +32,14 @@ for (const item of prohibitedFeatureOverrides) {
   }
 }
 
+if (
+  forceHttpSse &&
+  /(?:-c|--config)(?:=|\s+)model_providers\.openai\.supports_websockets\s*=\s*true/i.test(joined)
+) {
+  console.error("Refusing to re-enable OpenAI WebSockets while attestation/compaction HTTP-SSE recovery is active.")
+  process.exit(64)
+}
+
 const platform = process.env.OPERATOR_PLATFORM_OVERRIDE || process.platform
 const isMac = platform === "darwin"
 const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex")
@@ -38,7 +52,11 @@ const configText = (() => {
   }
 })()
 const profileFlag = codexArgs.some(
-  (arg, index) => arg === "-P" || arg === "--permissions-profile" || /^-P.+/.test(arg) || /^--permissions-profile=/.test(arg) ||
+  (arg, index) =>
+    arg === "-P" ||
+    arg === "--permissions-profile" ||
+    /^-P.+/.test(arg) ||
+    /^--permissions-profile=/.test(arg) ||
     ((arg === "-c" || arg === "--config") && /default_permissions\s*=/.test(codexArgs[index + 1] || "")),
 )
 const configActivatesProfile = /^\s*default_permissions\s*=/m.test(configText)
@@ -57,6 +75,7 @@ const guardedArgs = [
   "code_mode",
   "--disable",
   "code_mode_only",
+  ...(forceHttpSse ? ["-c", "model_providers.openai.supports_websockets=false"] : []),
   ...codexArgs,
 ]
 const summary = {
@@ -67,6 +86,8 @@ const summary = {
   remote_plugin: false,
   code_mode: false,
   code_mode_only: false,
+  http_sse_recovery: forceHttpSse,
+  openai_websockets: forceHttpSse ? false : "configured_default",
   macos_permissions_profile_guard: isMac,
   macos_permissions_profile_active: false,
 }
@@ -77,7 +98,9 @@ if (dryRun) {
 }
 
 console.error(
-  `Codex guards active: remote_plugin, code_mode, and code_mode_only are disabled${isMac ? "; macOS permissions profiles are blocked" : ""}. Local and installed tooling remain available.`,
+  `Codex guards active: remote_plugin, code_mode, and code_mode_only are disabled${
+    forceHttpSse ? "; OpenAI Responses transport is forced to HTTP-SSE for attestation/compaction recovery" : ""
+  }${isMac ? "; macOS permissions profiles are blocked" : ""}. Local and installed tooling remain available.`,
 )
 const child = spawn(binary, guardedArgs, {
   cwd: process.cwd(),
@@ -85,6 +108,7 @@ const child = spawn(binary, guardedArgs, {
     ...process.env,
     CODEX_CACHE_GUARD_ACTIVE: "1",
     CODEX_CODE_MODE_GUARD_ACTIVE: "1",
+    ...(forceHttpSse && { CODEX_HTTP_SSE_RECOVERY_ACTIVE: "1" }),
     ...(isMac && { CODEX_MACOS_PERMISSIONS_PROFILE_GUARD_ACTIVE: "1" }),
   },
   stdio: "inherit",
