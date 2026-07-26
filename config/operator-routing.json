@@ -1,6 +1,6 @@
 {
   "$schema": "../schemas/operator-routing.schema.json",
-  "version": 5,
+  "version": 6,
   "defaultProfile": "openai_degraded",
   "providers": {
     "openai": {
@@ -12,7 +12,10 @@
           "requestPolicy": {
             "multiAgent": "disabled",
             "multiAgentVersion": "v1",
-            "quotaContainment": "single_agent"
+            "quotaContainment": "single_agent",
+            "providerModelFallback": "disabled",
+            "crossChatRelay": "disabled",
+            "realtimeHandoff": "disabled"
           }
         },
         "fallbacks": [],
