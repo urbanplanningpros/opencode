@@ -85,32 +85,46 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-function setForkLimit() {
+function agentPolicy(config) {
+  const section = config.match(/(?:^|\n)\s*\[agents\]\s*\n([\s\S]*?)(?=\n\s*\[[^\]]+\]|$)/)?.[1] || ""
+  const enabled = section.match(/^\s*enabled\s*=\s*(true|false)\s*$/m)?.[1]
+  const maxThreads = section.match(/^\s*max_concurrent_threads_per_session\s*=\s*(\d+)\s*$/m)?.[1]
+  return {
+    enabled: enabled === undefined ? null : enabled === "true",
+    max_concurrent_threads_per_session: maxThreads === undefined ? null : Number(maxThreads),
+    quota_guard_active: enabled === "false" && maxThreads === "1",
+  }
+}
+
+function setSectionKey(lines, sectionIndex, key, value) {
+  let nextSection = lines.length
+  for (let index = sectionIndex + 1; index < lines.length; index += 1) {
+    if (/^\s*\[[^\]]+\]\s*$/.test(lines[index])) {
+      nextSection = index
+      break
+    }
+  }
+  const pattern = new RegExp(`^\\s*${key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*=`)
+  const keyIndex = lines.findIndex((line, index) => index > sectionIndex && index < nextSection && pattern.test(line))
+  if (keyIndex === -1) lines.splice(sectionIndex + 1, 0, `${key} = ${value}`)
+  else lines[keyIndex] = `${key} = ${value}`
+}
+
+function setSubagentQuotaGuard() {
   const original = fs.existsSync(configPath) ? fs.readFileSync(configPath, "utf8") : ""
   const lines = original.split(/\r?\n/)
-  const sectionIndex = lines.findIndex((line) => /^\s*\[agents\]\s*$/.test(line))
+  let sectionIndex = lines.findIndex((line) => /^\s*\[agents\]\s*$/.test(line))
   if (sectionIndex === -1) {
     if (lines.length > 0 && lines.at(-1) !== "") lines.push("")
-    lines.push("[agents]", "max_concurrent_threads_per_session = 1", "")
-  } else {
-    let nextSection = lines.length
-    for (let index = sectionIndex + 1; index < lines.length; index += 1) {
-      if (/^\s*\[[^\]]+\]\s*$/.test(lines[index])) {
-        nextSection = index
-        break
-      }
-    }
-    const keyIndex = lines.findIndex(
-      (line, index) =>
-        index > sectionIndex && index < nextSection && /^\s*max_concurrent_threads_per_session\s*=/.test(line),
-    )
-    if (keyIndex === -1) lines.splice(sectionIndex + 1, 0, "max_concurrent_threads_per_session = 1")
-    else lines[keyIndex] = "max_concurrent_threads_per_session = 1"
+    sectionIndex = lines.length
+    lines.push("[agents]", "")
   }
+  setSectionKey(lines, sectionIndex, "max_concurrent_threads_per_session", "1")
+  setSectionKey(lines, sectionIndex, "enabled", "false")
 
   const rendered = lines.join("\n").replace(/\n{3,}/g, "\n\n")
   const stamp = nowIso().replace(/[:.]/g, "-")
-  const backupDir = path.join(codexHome, "operator-backups", "session-storage", stamp)
+  const backupDir = path.join(codexHome, "operator-backups", "subagent-quota", stamp)
   fs.mkdirSync(backupDir, { recursive: true, mode: 0o700 })
   const backupPath = path.join(backupDir, "config.toml")
   fs.writeFileSync(backupPath, original, { mode: 0o600 })
@@ -118,7 +132,13 @@ function setForkLimit() {
   const temp = path.join(path.dirname(configPath), `.${path.basename(configPath)}.${process.pid}.tmp`)
   fs.writeFileSync(temp, rendered, { mode: 0o600 })
   fs.renameSync(temp, configPath)
-  return { applied: true, backup_path: backupPath, config_path: configPath }
+  return {
+    applied: true,
+    mode: "single_agent_quota_guard",
+    backup_path: backupPath,
+    config_path: configPath,
+    agent_policy: agentPolicy(rendered),
+  }
 }
 
 const first = snapshot()
@@ -147,7 +167,10 @@ if (growthBytesPerHour >= limits.growthCriticalBytesPerHour) criticalReasons.pus
 else if (growthBytesPerHour >= limits.growthWarnBytesPerHour) warningReasons.push("session_growth_rate_warning")
 
 const status = criticalReasons.length > 0 ? "critical" : warningReasons.length > 0 ? "warning" : "safe"
-const configChange = args["apply-fork-limit"] ? setForkLimit() : { applied: false }
+const applyQuotaGuard = Boolean(args["apply-subagent-quota-guard"] || args["apply-fork-limit"])
+const configChange = applyQuotaGuard ? setSubagentQuotaGuard() : { applied: false }
+const config = fs.existsSync(configPath) ? fs.readFileSync(configPath, "utf8") : ""
+const currentAgentPolicy = agentPolicy(config)
 const result = {
   status,
   codex_home: codexHome,
@@ -168,15 +191,18 @@ const result = {
   critical_reasons: criticalReasons,
   warning_reasons: warningReasons,
   safe_to_resume_existing_screenshot_heavy_thread: status === "safe",
-  safe_to_fork_full_parent_context: status === "safe" && last.largest_file_bytes < limits.fileWarnBytes,
+  safe_to_fork_full_parent_context: false,
+  subagent_quota_guard_required: !currentAgentPolicy.quota_guard_active,
+  agent_policy: currentAgentPolicy,
   config_change: configChange,
   remediation: [
     "Checkpoint objective, acceptance criteria, decisions, changed files, pending writes, and continuation prompt outside Codex session history.",
+    "Run Codex in single-agent mode; MultiAgent V2 depth is not controlled by the legacy depth setting.",
+    "Use --apply-subagent-quota-guard to disable subagent tools and cap thread fan-out after reviewing the automatic config backup.",
     "Move screenshot-heavy browser work into a fresh short-lived thread per phase instead of repeatedly resuming one image-heavy thread.",
-    "Pass subagents a bounded text brief rather than inheriting the full parent rollout.",
-    "Use --apply-fork-limit to cap subagent fan-out after reviewing the automatic config backup.",
+    "Use separately launched approved local workers for bounded parallel offline analysis rather than recursive Codex subagents.",
     "Exit every Codex writer before using the supported codex delete command; never delete an actively written rollout.",
-    "Reconcile external writes before replaying any operation after a storage or UI failure.",
+    "Reconcile external writes before replaying any operation after a storage, quota, or UI failure.",
   ],
   limits,
 }
