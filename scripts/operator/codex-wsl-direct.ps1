@@ -6,7 +6,7 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
-$quotaSafeModel = if ($env:OPERATOR_CODEX_QUOTA_SAFE_MODEL) { $env:OPERATOR_CODEX_QUOTA_SAFE_MODEL } else { "gpt-5.5" }
+$quotaSafeModel = if ($env:OPERATOR_CODEX_QUOTA_SAFE_MODEL) { $env:OPERATOR_CODEX_QUOTA_SAFE_MODEL } else { "gpt-5.6-luna" }
 
 if (-not $IsWindows) {
   Write-Error "Direct WSL continuity is available only from Windows hosts."
