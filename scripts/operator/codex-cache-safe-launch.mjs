@@ -16,11 +16,13 @@ const forceHttpSse =
 const separator = argv.indexOf("--")
 const codexArgs = separator === -1 ? argv : argv.slice(separator + 1)
 const joined = codexArgs.join(" ")
+const quotaSafeModel = process.env.OPERATOR_CODEX_QUOTA_SAFE_MODEL || "gpt-5.5"
 
 const prohibitedFeatureOverrides = [
   { feature: "remote_plugin", reason: "Codex cache write-amplification guard" },
   { feature: "code_mode", reason: "Code Mode metadata-header guard" },
   { feature: "code_mode_only", reason: "Code Mode metadata-header guard" },
+  { feature: "multi_agent_v2", reason: "Codex recursive-subagent quota guard" },
 ]
 
 for (const item of prohibitedFeatureOverrides) {
@@ -37,6 +39,34 @@ if (
   /(?:-c|--config)(?:=|\s+)model_providers\.openai\.supports_websockets\s*=\s*true/i.test(joined)
 ) {
   console.error("Refusing to re-enable OpenAI WebSockets while attestation/compaction HTTP-SSE recovery is active.")
+  process.exit(64)
+}
+
+function selectedModel(args) {
+  for (let index = 0; index < args.length; index += 1) {
+    const value = args[index]
+    if ((value === "-m" || value === "--model") && args[index + 1]) return args[index + 1]
+    if (value.startsWith("--model=")) return value.slice("--model=".length)
+    if (value.startsWith("-m=") && value.length > 3) return value.slice(3)
+    if ((value === "-c" || value === "--config") && args[index + 1]) {
+      const match = args[index + 1].match(/^model\s*=\s*["']?([^"']+)["']?$/)
+      if (match) return match[1]
+    }
+    const configMatch = value.match(/^(?:-c|--config)=model\s*=\s*["']?([^"']+)["']?$/)
+    if (configMatch) return configMatch[1]
+  }
+  return null
+}
+
+const requestedModel = selectedModel(codexArgs) || process.env.OPERATOR_MODEL || null
+if (requestedModel && requestedModel !== quotaSafeModel) {
+  console.error(
+    `Refusing Codex model '${requestedModel}' while recursive-subagent quota containment is active. Approved model: ${quotaSafeModel}.`,
+  )
+  process.exit(64)
+}
+if (/model_reasoning_effort\s*=\s*["']?ultra/i.test(joined)) {
+  console.error("Refusing Ultra reasoning while it can activate automatic task delegation.")
   process.exit(64)
 }
 
@@ -68,6 +98,7 @@ if (isMac && (profileFlag || configActivatesProfile)) {
 }
 
 const binary = process.env.OPERATOR_CODEX_BINARY || process.env.CODEX_BINARY || "codex"
+const modelArgs = requestedModel ? [] : ["-m", quotaSafeModel]
 const guardedArgs = [
   "--disable",
   "remote_plugin",
@@ -75,6 +106,13 @@ const guardedArgs = [
   "code_mode",
   "--disable",
   "code_mode_only",
+  "--disable",
+  "multi_agent_v2",
+  "-c",
+  "agents.enabled=false",
+  "-c",
+  "agents.max_concurrent_threads_per_session=1",
+  ...modelArgs,
   ...(forceHttpSse ? ["-c", "model_providers.openai.supports_websockets=false"] : []),
   ...codexArgs,
 ]
@@ -83,9 +121,14 @@ const summary = {
   args: guardedArgs,
   codex_home: codexHome,
   config_path: configPath,
+  model: requestedModel || quotaSafeModel,
+  quota_safe_model: quotaSafeModel,
   remote_plugin: false,
   code_mode: false,
   code_mode_only: false,
+  multi_agent_v2: false,
+  agents_enabled: false,
+  max_concurrent_threads_per_session: 1,
   http_sse_recovery: forceHttpSse,
   openai_websockets: forceHttpSse ? false : "configured_default",
   macos_permissions_profile_guard: isMac,
@@ -98,7 +141,7 @@ if (dryRun) {
 }
 
 console.error(
-  `Codex guards active: remote_plugin, code_mode, and code_mode_only are disabled${
+  `Codex guards active: model ${summary.model}; remote_plugin, code_mode, code_mode_only, and multi_agent_v2 are disabled; subagents are disabled and thread fan-out is capped at one${
     forceHttpSse ? "; OpenAI Responses transport is forced to HTTP-SSE for attestation/compaction recovery" : ""
   }${isMac ? "; macOS permissions profiles are blocked" : ""}. Local and installed tooling remain available.`,
 )
@@ -108,6 +151,8 @@ const child = spawn(binary, guardedArgs, {
     ...process.env,
     CODEX_CACHE_GUARD_ACTIVE: "1",
     CODEX_CODE_MODE_GUARD_ACTIVE: "1",
+    CODEX_SUBAGENT_QUOTA_GUARD_ACTIVE: "1",
+    OPERATOR_MODEL: summary.model,
     ...(forceHttpSse && { CODEX_HTTP_SSE_RECOVERY_ACTIVE: "1" }),
     ...(isMac && { CODEX_MACOS_PERMISSIONS_PROFILE_GUARD_ACTIVE: "1" }),
   },
