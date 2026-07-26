@@ -139,7 +139,8 @@ if ($ExecuteRecovery -and $reasons.Count -gt 0) {
       throw "OPERATOR_NODE_REPL_RECOVERY_COMMAND is required as a JSON string array."
     }
     $command = @($env:OPERATOR_NODE_REPL_RECOVERY_COMMAND | ConvertFrom-Json)
-    if ($command.Count -eq 0 -or $command | Where-Object { $_ -isnot [string] }) {
+    $invalidCommandParts = @($command | Where-Object { $_ -isnot [string] })
+    if ($command.Count -eq 0 -or $invalidCommandParts.Count -gt 0) {
       throw "OPERATOR_NODE_REPL_RECOVERY_COMMAND must be a non-empty JSON string array."
     }
     $oldSnapshot = $env:OPERATOR_NODE_REPL_SNAPSHOT
