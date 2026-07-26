@@ -5,6 +5,7 @@ param(
   [string]$DesktopVersionOverride,
   [switch]$SimulateWindows,
   [switch]$SimulateWslAvailable,
+  [switch]$ReportOnly,
   [switch]$Json
 )
 
@@ -69,6 +70,7 @@ $result = [ordered]@{
   large_thread_risk = $largeThreadRisk
   large_sessions = $largeSessions
   desktop_restricted = $desktopRestricted
+  report_only = [bool]$ReportOnly
   approved_route = if ($desktopRestricted) { "codex-cli-direct-wsl-or-approved-local" } else { "desktop-with-normal-controls" }
   required_actions = @()
 }
@@ -111,5 +113,5 @@ if ($Json) {
   foreach ($action in $result.required_actions) { Write-Host "  ACTION: $action" }
 }
 
-if ($desktopRestricted) { exit 2 }
+if ($desktopRestricted -and -not $ReportOnly) { exit 2 }
 exit 0
