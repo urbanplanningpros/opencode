@@ -16,7 +16,7 @@ const forceHttpSse =
 const separator = argv.indexOf("--")
 const codexArgs = separator === -1 ? argv : argv.slice(separator + 1)
 const joined = codexArgs.join(" ")
-const quotaSafeModel = process.env.OPERATOR_CODEX_QUOTA_SAFE_MODEL || "gpt-5.5"
+const quotaSafeModel = process.env.OPERATOR_CODEX_QUOTA_SAFE_MODEL || "gpt-5.6-luna"
 
 const prohibitedFeatureOverrides = [
   { feature: "remote_plugin", reason: "Codex cache write-amplification guard" },
