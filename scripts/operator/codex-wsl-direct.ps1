@@ -18,6 +18,17 @@ if (-not $wsl) {
   exit 69
 }
 
+$joinedArgs = $CodexArgs -join " "
+foreach ($feature in @("remote_plugin", "code_mode", "code_mode_only")) {
+  if (
+    $joinedArgs -match "--enable(?:=|\s+)$feature(?:\s|$)" -or
+    $joinedArgs -match "(?:-c|--config)(?:=|\s+)features\.$feature\s*=\s*true"
+  ) {
+    Write-Error "Refusing to enable $feature while the Codex continuity guards are active."
+    exit 64
+  }
+}
+
 $base = @()
 if ($Distribution) {
   $installed = @(& $wsl.Source -l -q 2>$null | ForEach-Object { $_.Trim() } | Where-Object { $_ })
@@ -37,6 +48,8 @@ command -v codex >/dev/null 2>&1 || {
 printf 'codex=%s\n' "$(command -v codex)"
 printf 'codex_home=%s\n' "$HOME/.codex-direct"
 printf 'remote_plugin=disabled\n'
+printf 'code_mode=disabled\n'
+printf 'code_mode_only=disabled\n'
 '@
 
 & $wsl.Source @base -- sh -lc $probeScript
@@ -52,11 +65,11 @@ command -v codex >/dev/null 2>&1 || {
   echo "Codex CLI is not installed inside the selected WSL distribution." >&2
   exit 127
 }
-exec codex --disable remote_plugin "$@"
+exec codex --disable remote_plugin --disable code_mode --disable code_mode_only "$@"
 '@
 
 # The script body is fixed and user arguments are passed positionally after $0.
-# This avoids shell interpolation, isolates Windows and WSL state, and disables
-# the remote plugin catalog while the upstream cache write-amplification issue is unresolved.
+# This avoids shell interpolation, isolates Windows and WSL state, disables the
+# remote plugin catalog, and blocks vulnerable Code Mode metadata paths.
 & $wsl.Source @base -- sh -lc $launchScript codex-direct @CodexArgs
 exit $LASTEXITCODE
