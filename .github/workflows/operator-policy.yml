@@ -85,14 +85,14 @@ jobs:
               result.multi_agent_v2 !== false ||
               result.agents_enabled !== false ||
               result.max_concurrent_threads_per_session !== 1 ||
-              result.model !== "gpt-5.5" ||
+              result.model !== "gpt-5.6-luna" ||
               result.http_sse_recovery !== false ||
               !disabled.has("remote_plugin") ||
               !disabled.has("code_mode") ||
               !disabled.has("code_mode_only") ||
               !disabled.has("multi_agent_v2") ||
               modelIndex === -1 ||
-              result.args[modelIndex + 1] !== "gpt-5.5" ||
+              result.args[modelIndex + 1] !== "gpt-5.6-luna" ||
               !agentsDisabled ||
               !oneThread
             ) process.exit(1)
@@ -109,6 +109,10 @@ jobs:
             echo "Quota guard accepted a V2-forcing model" >&2
             exit 1
           fi
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- -m gpt-5.5; then
+            echo "Quota guard accepted a release-dependent V2 model" >&2
+            exit 1
+          fi
           if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- -c model_reasoning_effort=ultra; then
             echo "Quota guard accepted automatic-delegation reasoning" >&2
             exit 1
@@ -123,7 +127,7 @@ jobs:
             if (
               result.http_sse_recovery !== true ||
               result.openai_websockets !== false ||
-              result.model !== "gpt-5.5" ||
+              result.model !== "gpt-5.6-luna" ||
               configIndex === -1
             ) process.exit(1)
           ' "$HTTP_RECOVERY"
@@ -178,14 +182,14 @@ jobs:
           PRIMARY_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$PRIMARY_STATE" \
             --objective "CI quota-safe OpenAI smoke test" \
-            --acceptance "GPT-5.5 executes|State persists|Subagents remain disabled" \
+            --acceptance "GPT-5.6 Luna executes|State persists|Subagents remain disabled" \
             --risk medium \
             --write \
             --handoff-safe true)
           bun scripts/operator/run-with-failover.mjs --state-dir "$PRIMARY_STATE" --task "$PRIMARY_TASK" --profile continuity
           grep -q '"status": "awaiting_verification"' "$(dirname "$PRIMARY_TASK")/current-state.json"
           grep -q '"active_provider": "openai"' "$(dirname "$PRIMARY_TASK")/current-state.json"
-          grep -q '"active_model": "gpt-5.5"' "$(dirname "$PRIMARY_TASK")/current-state.json"
+          grep -q '"active_model": "gpt-5.6-luna"' "$(dirname "$PRIMARY_TASK")/current-state.json"
 
           node <<'NODE'
           const fs = require('fs')
