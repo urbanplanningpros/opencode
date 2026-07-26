@@ -10,6 +10,7 @@ This repository uses an OpenAI-first continuity layer with an optional approved 
 - Single-claim queue executor with reconciliation routing: `scripts/operator/process-queue.mjs`
 - Provider and model failover runner: `scripts/operator/run-with-failover.mjs`
 - Local Gmail MIME attachment executor: `scripts/operator/gmail-send-local.mjs`
+- Codex app-server and MCP resource guard: `scripts/operator/codex-appserver-resource-guard.mjs`
 - Hostile issue-content quarantine: `.github/workflows/agent-intake.yml`
 - Protected-path and agent-PR gate: `.github/workflows/operator-policy.yml`
 - Windows Codex state backup/recovery tool: `scripts/operator/recover-codex-state.ps1`
@@ -96,6 +97,59 @@ bun operator:route --task "$HOME/.upp-operator-state/tasks/<task-id>/manifest.js
 ```
 
 The runner checkpoints before execution, records every provider and model attempt, opens model-specific circuits after repeated failures, and produces a continuation prompt for the next approved route. Successful execution remains `awaiting_verification` until acceptance criteria are checked.
+
+## Codex app-server and MCP resource guard
+
+Codex `0.145.0` has a reproducible teardown failure where a stalled child-agent abort path can keep `close_agent` waiting indefinitely and prevent later MCP cleanup. Long-running app-server processes can accumulate MCP subprocesses, pipes, pidfds, and file descriptors until they approach the host limit.
+
+Audit an active Linux app-server process:
+
+```bash
+bun operator:appserver-guard --pid "$CODEX_APP_SERVER_PID" --json
+```
+
+Default recovery thresholds are:
+
+```text
+75% of the app-server soft open-file limit
+400 pipe descriptors
+128 pidfds
+128 descendant processes
+64 MCP-related descendants
+8 GiB app-server RSS
+16 GiB aggregate descendant RSS
+```
+
+Every audit writes a snapshot under `$OPERATOR_STATE_DIR/appserver-guard`. A healthy audit exits `0`; a threshold breach exits `2` and leaves operations preserved for recovery.
+
+For active remediation, configure an approved local recovery command as a JSON argument array:
+
+```bash
+export OPERATOR_APP_SERVER_RECOVERY_COMMAND='["node","/path/to/drain-and-recycle-appserver.mjs"]'
+bun operator:appserver-guard \
+  --pid "$CODEX_APP_SERVER_PID" \
+  --execute-recovery \
+  --json
+```
+
+The recovery command receives:
+
+```text
+CODEX_APP_SERVER_PID
+OPERATOR_APP_SERVER_SNAPSHOT
+OPERATOR_APP_SERVER_RECOVERY_REASON=resource_threshold_exceeded
+```
+
+The recovery command must:
+
+1. Stop new subagent and MCP admission to the affected process.
+2. Checkpoint active task manifests and continuation state.
+3. Route new work to a fresh approved OpenAI or local app-server.
+4. Drain or terminate the old process tree within a bounded interval.
+5. Verify that old MCP subprocesses, pipes, and pidfds are gone.
+6. Reconcile all uncertain writes before releasing queued work.
+
+Do not use a recovery command that silently returns success while the old app-server process tree remains alive.
 
 ## Queue connector and automation writes
 

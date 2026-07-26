@@ -20,6 +20,7 @@
     "operator:route": "bun scripts/operator/run-with-failover.mjs",
     "operator:gmail-send": "bun scripts/operator/gmail-send-local.mjs",
     "operator:atomic-edit": "bun scripts/operator/atomic-file-edit.mjs",
+    "operator:appserver-guard": "bun scripts/operator/codex-appserver-resource-guard.mjs",
     "operator:desktop-guard": "pwsh -NoProfile -File scripts/operator/codex-desktop-guard.ps1",
     "operator:wsl-direct": "pwsh -NoProfile -File scripts/operator/codex-wsl-direct.ps1",
     "operator:codex-cache-audit": "bun scripts/operator/codex-cache-audit.mjs",
