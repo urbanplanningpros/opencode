@@ -8,21 +8,38 @@ const separator = argv.indexOf("--")
 const codexArgs = separator === -1 ? argv : argv.slice(separator + 1)
 const joined = codexArgs.join(" ")
 
-if (
-  /--enable(?:=|\s+)remote_plugin(?:\s|$)/i.test(joined) ||
-  /(?:-c|--config)(?:=|\s+)features\.remote_plugin\s*=\s*true/i.test(joined)
-) {
-  console.error("Refusing to re-enable remote_plugin while the Codex cache write-amplification guard is active.")
-  process.exit(64)
+const prohibitedFeatureOverrides = [
+  { feature: "remote_plugin", reason: "Codex cache write-amplification guard" },
+  { feature: "code_mode", reason: "Code Mode metadata-header guard" },
+  { feature: "code_mode_only", reason: "Code Mode metadata-header guard" },
+]
+
+for (const item of prohibitedFeatureOverrides) {
+  const enableFlag = new RegExp(`--enable(?:=|\\s+)${item.feature}(?:\\s|$)`, "i")
+  const configFlag = new RegExp(`(?:-c|--config)(?:=|\\s+)features\\.${item.feature}\\s*=\\s*true`, "i")
+  if (enableFlag.test(joined) || configFlag.test(joined)) {
+    console.error(`Refusing to enable ${item.feature} while the ${item.reason} is active.`)
+    process.exit(64)
+  }
 }
 
 const binary = process.env.OPERATOR_CODEX_BINARY || process.env.CODEX_BINARY || "codex"
-const guardedArgs = ["--disable", "remote_plugin", ...codexArgs]
+const guardedArgs = [
+  "--disable",
+  "remote_plugin",
+  "--disable",
+  "code_mode",
+  "--disable",
+  "code_mode_only",
+  ...codexArgs,
+]
 const summary = {
   binary,
   args: guardedArgs,
   codex_home: process.env.CODEX_HOME || null,
   remote_plugin: false,
+  code_mode: false,
+  code_mode_only: false,
 }
 
 if (dryRun) {
@@ -30,12 +47,15 @@ if (dryRun) {
   process.exit(0)
 }
 
-console.error("Codex cache guard active: remote_plugin is disabled for this process. Local and installed tooling remain available.")
+console.error(
+  "Codex guards active: remote_plugin, code_mode, and code_mode_only are disabled for this process. Local and installed tooling remain available.",
+)
 const child = spawn(binary, guardedArgs, {
   cwd: process.cwd(),
   env: {
     ...process.env,
     CODEX_CACHE_GUARD_ACTIVE: "1",
+    CODEX_CODE_MODE_GUARD_ACTIVE: "1",
   },
   stdio: "inherit",
   shell: false,
