@@ -1,0 +1,95 @@
+name: Codex process leak containment
+
+on:
+  pull_request:
+    paths:
+      - "scripts/operator/codex-orphan-output-guard.mjs"
+      - "scripts/operator/codex-node-repl-guard.ps1"
+      - "package.json"
+      - ".github/workflows/operator-process-leak-guard.yml"
+      - "docs/CODEX_PROCESS_LEAK_CONTAINMENT.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout without persisted credentials
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+
+      - name: Validate script syntax
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check scripts/operator/codex-orphan-output-guard.mjs
+          pwsh -NoProfile -Command '
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              "scripts/operator/codex-node-repl-guard.ps1",
+              [ref]$tokens,
+              [ref]$errors
+            ) | Out-Null
+            if ($errors.Count -gt 0) {
+              $errors | ForEach-Object { Write-Error $_.Message }
+              exit 1
+            }
+          '
+
+      - name: Detect a bounded deleted-open-file fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          STATE="$RUNNER_TEMP/orphan-output-state"
+          FIXTURE="$RUNNER_TEMP/deleted-open-output.log"
+          PID_FILE="$RUNNER_TEMP/deleted-open-output.pid"
+          node -e '
+            const fs = require("fs")
+            const file = process.argv[1]
+            const fd = fs.openSync(file, "w+")
+            fs.unlinkSync(file)
+            fs.writeSync(fd, Buffer.alloc(2 * 1024 * 1024, 65))
+            fs.fsyncSync(fd)
+            console.log(process.pid)
+            setInterval(() => {}, 1000)
+          ' "$FIXTURE" > "$PID_FILE" &
+          FIXTURE_JOB=$!
+          trap 'kill "$FIXTURE_JOB" 2>/dev/null || true; wait "$FIXTURE_JOB" 2>/dev/null || true' EXIT
+          for _ in $(seq 1 50); do
+            test -s "$PID_FILE" && break
+            sleep 0.1
+          done
+          TARGET_PID=$(cat "$PID_FILE")
+          set +e
+          RESULT=$(bun scripts/operator/codex-orphan-output-guard.mjs \
+            --pid "$TARGET_PID" \
+            --state-dir "$STATE" \
+            --deleted-threshold-bytes 1048576 \
+            --single-deleted-threshold-bytes 1048576 \
+            --free-threshold-bytes 0 \
+            --json)
+          STATUS=$?
+          set -e
+          test "$STATUS" -eq 2
+          node -e '
+            const result = JSON.parse(process.argv[1])
+            if (result.status !== "recovery_required") process.exit(1)
+            if (result.deleted_open_files.count < 1) process.exit(1)
+            if (result.deleted_open_files.total_bytes < 1048576) process.exit(1)
+            if (!result.snapshot_file) process.exit(1)
+          ' "$RESULT"
