@@ -127,13 +127,14 @@ clientInput.on("line", (line) => {
     const cursor = message.params?.cursor
     if (cursor === undefined || cursor === null || cursor === "") resourceSequence = { pages: 0, resources: 0 }
     resourceSequence.pages += 1
-    if (resourceSequence.pages > maxPages) {
+    const page = resourceSequence.pages
+    if (page > maxPages) {
       send(process.stdout, errorResponse(message.id, -32061, "MCP resource pagination page limit exceeded", {
         max_pages: maxPages,
       }))
       return
     }
-    pending.set(String(message.id), { method: "resources/list" })
+    pending.set(String(message.id), { method: "resources/list", page })
   }
 
   if (message.method === "tools/call" && message.id !== undefined) {
@@ -181,7 +182,7 @@ upstreamOutput.on("line", (line) => {
       }))
       return
     }
-    if (message.result.nextCursor && resourceSequence.pages >= maxPages) {
+    if (message.result.nextCursor && record.page >= maxPages) {
       send(process.stdout, errorResponse(message.id, -32061, "MCP resource pagination did not terminate within the approved limit", {
         max_pages: maxPages,
       }))
