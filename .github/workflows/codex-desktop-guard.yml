@@ -39,7 +39,7 @@ jobs:
             exit 1
           }
 
-      - name: Verify Windows 26.721 Browser and remote quarantine
+      - name: Verify Windows 26.721 package, browser, remote, and WSL quarantine
         shell: pwsh
         run: |
           $codexHome = Join-Path $env:RUNNER_TEMP "codex-home"
@@ -48,8 +48,10 @@ jobs:
           $output = & ./scripts/operator/codex-desktop-guard.ps1 `
             -CodexHome $codexHome `
             -DesktopVersionOverride "26.721.4979.0" `
+            -PackageStatusOverride "Modified, NeedsRemediation" `
             -SimulateWindows `
             -SimulateWslAvailable `
+            -SimulateCodeIntegrityEvent `
             -ReportOnly `
             -Json
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
@@ -58,6 +60,11 @@ jobs:
           if (
             $result.platform -ne "windows" -or
             $result.affected_26_721_build -ne $true -or
+            $result.affected_code_integrity_build -ne $true -or
+            $result.code_integrity_event_3033_detected -ne $true -or
+            $result.code_integrity_event_count -lt 1 -or
+            $result.package_needs_remediation -ne $true -or
+            $result.desktop_package_launch_blocked -ne $true -or
             $result.browser_use_blocked -ne $true -or
             $result.mobile_remote_control_blocked -ne $true -or
             $result.desktop_wsl_integration_blocked -ne $true -or
@@ -77,11 +84,16 @@ jobs:
           $output = & ./scripts/operator/codex-desktop-guard.ps1 `
             -CodexHome $codexHome `
             -DesktopVersionOverride "26.715.9868.0" `
+            -PackageStatusOverride "Ok" `
             -SimulateWindows `
             -Json
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $result = $output | ConvertFrom-Json
           if (
+            $result.affected_code_integrity_build -ne $false -or
+            $result.code_integrity_event_3033_detected -ne $false -or
+            $result.package_needs_remediation -ne $false -or
+            $result.desktop_package_launch_blocked -ne $false -or
             $result.browser_use_blocked -ne $false -or
             $result.mobile_remote_control_blocked -ne $false -or
             $result.desktop_restricted -ne $false
