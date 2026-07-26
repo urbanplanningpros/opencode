@@ -1,6 +1,6 @@
 {
   "$schema": "../schemas/operator-routing.schema.json",
-  "version": 3,
+  "version": 5,
   "defaultProfile": "openai_degraded",
   "providers": {
     "openai": {
@@ -8,15 +8,14 @@
       "enabled": true,
       "models": {
         "primary": {
-          "id": "gpt-5.6-sol",
-          "requestPolicy": {}
-        },
-        "fallbacks": [
-          {
-            "id": "gpt-5.6-terra",
-            "requestPolicy": {}
+          "id": "gpt-5.6-luna",
+          "requestPolicy": {
+            "multiAgent": "disabled",
+            "multiAgentVersion": "v1",
+            "quotaContainment": "single_agent"
           }
-        ],
+        },
+        "fallbacks": [],
         "candidate": null
       }
     },

@@ -52,7 +52,7 @@ jobs:
             exit 1
           fi
 
-      - name: Validate Codex cache, Code Mode, and HTTP-SSE recovery guards
+      - name: Validate Codex cache, Code Mode, quota, and HTTP-SSE recovery guards
         shell: bash
         run: |
           set -euo pipefail
@@ -70,18 +70,51 @@ jobs:
             for (let index = 0; index < result.args.length - 1; index += 1) {
               if (result.args[index] === "--disable") disabled.add(result.args[index + 1])
             }
+            const modelIndex = result.args.findIndex((value) => value === "-m")
+            const agentsDisabled = result.args.some(
+              (value, index) => value === "-c" && result.args[index + 1] === "agents.enabled=false",
+            )
+            const oneThread = result.args.some(
+              (value, index) =>
+                value === "-c" && result.args[index + 1] === "agents.max_concurrent_threads_per_session=1",
+            )
             if (
               result.remote_plugin !== false ||
               result.code_mode !== false ||
               result.code_mode_only !== false ||
+              result.multi_agent_v2 !== false ||
+              result.agents_enabled !== false ||
+              result.max_concurrent_threads_per_session !== 1 ||
+              result.model !== "gpt-5.6-luna" ||
               result.http_sse_recovery !== false ||
               !disabled.has("remote_plugin") ||
               !disabled.has("code_mode") ||
-              !disabled.has("code_mode_only")
+              !disabled.has("code_mode_only") ||
+              !disabled.has("multi_agent_v2") ||
+              modelIndex === -1 ||
+              result.args[modelIndex + 1] !== "gpt-5.6-luna" ||
+              !agentsDisabled ||
+              !oneThread
             ) process.exit(1)
           ' "$DRY_RUN"
           if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- --enable code_mode; then
             echo "Code Mode guard accepted a prohibited override" >&2
+            exit 1
+          fi
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- --enable multi_agent_v2; then
+            echo "MultiAgent V2 guard accepted a prohibited override" >&2
+            exit 1
+          fi
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- -m gpt-5.6-sol; then
+            echo "Quota guard accepted a V2-forcing model" >&2
+            exit 1
+          fi
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- -m gpt-5.5; then
+            echo "Quota guard accepted a release-dependent V2 model" >&2
+            exit 1
+          fi
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- -c model_reasoning_effort=ultra; then
+            echo "Quota guard accepted automatic-delegation reasoning" >&2
             exit 1
           fi
 
@@ -94,6 +127,7 @@ jobs:
             if (
               result.http_sse_recovery !== true ||
               result.openai_websockets !== false ||
+              result.model !== "gpt-5.6-luna" ||
               configIndex === -1
             ) process.exit(1)
           ' "$HTTP_RECOVERY"
@@ -130,7 +164,7 @@ jobs:
           & ./scripts/operator/codex-desktop-guard.ps1 -CodexHome $emptyCodexHome -Json
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Smoke test OpenAI primary and local failover
+      - name: Smoke test quota-safe OpenAI route and local failover
         shell: bash
         run: |
           set -euo pipefail
@@ -147,22 +181,20 @@ jobs:
 
           PRIMARY_TASK=$(bun scripts/operator/init-task.mjs \
             --state-dir "$PRIMARY_STATE" \
-            --objective "CI OpenAI primary smoke test" \
-            --acceptance "OpenAI executes|State persists" \
+            --objective "CI quota-safe OpenAI smoke test" \
+            --acceptance "GPT-5.6 Luna executes|State persists|Subagents remain disabled" \
             --risk medium \
             --write \
             --handoff-safe true)
           bun scripts/operator/run-with-failover.mjs --state-dir "$PRIMARY_STATE" --task "$PRIMARY_TASK" --profile continuity
           grep -q '"status": "awaiting_verification"' "$(dirname "$PRIMARY_TASK")/current-state.json"
           grep -q '"active_provider": "openai"' "$(dirname "$PRIMARY_TASK")/current-state.json"
-          grep -q '"active_model": "gpt-5.6-sol"' "$(dirname "$PRIMARY_TASK")/current-state.json"
+          grep -q '"active_model": "gpt-5.6-luna"' "$(dirname "$PRIMARY_TASK")/current-state.json"
 
-          # Keep this test fast and deterministic while preserving production retry settings.
           node <<'NODE'
           const fs = require('fs')
           const file = 'config/operator-routing.json'
           const config = JSON.parse(fs.readFileSync(file, 'utf8'))
-          config.providers.openai.models.fallbacks = []
           config.execution.readRetries = 0
           fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`)
           NODE
