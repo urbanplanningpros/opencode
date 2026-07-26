@@ -32,7 +32,7 @@ jobs:
       - name: Check operator script syntax
         run: find scripts/operator -name '*.mjs' -print0 | xargs -0 -n1 node --check
 
-      - name: Validate Codex plugin-cache guard
+      - name: Validate Codex cache and Code Mode guards
         shell: bash
         run: |
           set -euo pipefail
@@ -46,9 +46,23 @@ jobs:
           DRY_RUN=$(OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- exec --ephemeral -)
           node -e '
             const result = JSON.parse(process.argv[1])
-            const index = result.args.indexOf("--disable")
-            if (result.remote_plugin !== false || index < 0 || result.args[index + 1] !== "remote_plugin") process.exit(1)
+            const disabled = new Set()
+            for (let index = 0; index < result.args.length - 1; index += 1) {
+              if (result.args[index] === "--disable") disabled.add(result.args[index + 1])
+            }
+            if (
+              result.remote_plugin !== false ||
+              result.code_mode !== false ||
+              result.code_mode_only !== false ||
+              !disabled.has("remote_plugin") ||
+              !disabled.has("code_mode") ||
+              !disabled.has("code_mode_only")
+            ) process.exit(1)
           ' "$DRY_RUN"
+          if OPERATOR_CODEX_BINARY=codex bun scripts/operator/codex-cache-safe-launch.mjs --dry-run -- --enable code_mode; then
+            echo "Code Mode guard accepted a prohibited override" >&2
+            exit 1
+          fi
 
       - name: Validate Codex Desktop and WSL guards
         shell: pwsh
