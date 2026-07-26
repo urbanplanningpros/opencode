@@ -7,7 +7,9 @@ Codex can silently amplify operating cost and local storage through two related 
 1. Screenshot-heavy sessions can re-persist inline images during compaction and copy the inflated parent rollout into subagent forks.
 2. MultiAgent V2 can recursively create subagents even though the legacy `agent_max_depth` setting does not govern that path. A reported Codex CLI 0.145.0 session created a deep subagent tree and exhausted a weekly usage allowance overnight.
 
-The guard audits storage metadata without reading or printing prompt, screenshot, or transcript contents. It can also apply a reversible single-agent configuration that prevents recursive subagent execution while leaving ordinary Codex work operational.
+OpenAI's current Codex model catalog marks GPT-5.6 Sol and GPT-5.6 Terra as `multi_agent_version: "v2"`. That model metadata can select V2 independently of the legacy depth control. During containment, the approved direct-OpenAI canary model is GPT-5.5, which is listed without a multi-agent selector. The approved local route remains first in the default degraded profile.
+
+The guard audits storage metadata without reading or printing prompt, screenshot, or transcript contents. It can also apply a reversible single-agent configuration that prevents recursive subagent execution while leaving ordinary Codex and local work operational.
 
 ## Audit
 
@@ -72,42 +74,68 @@ enabled = false
 max_concurrent_threads_per_session = 1
 ```
 
-`enabled = false` is required. A concurrency cap alone is insufficient because serially created MultiAgent V2 children can still recurse and consume quota.
+`enabled = false` is required. A concurrency cap alone is insufficient because serially created MultiAgent V2 children can still recurse and consume quota. The guarded launchers additionally disable `multi_agent_v2` and force GPT-5.5 so model metadata cannot restore the V2 route.
 
 Review the backup and resulting configuration before restarting Codex.
+
+## Approved launch routes
+
+Native CLI:
+
+```bash
+bun operator:codex-safe -- exec --ephemeral -
+```
+
+Direct WSL:
+
+```powershell
+pwsh ./scripts/operator/codex-wsl-direct.ps1 -Distribution Ubuntu
+```
+
+Both launchers enforce:
+
+```text
+model: gpt-5.5
+multi_agent_v2: disabled
+agents.enabled: false
+max_concurrent_threads_per_session: 1
+```
+
+They reject GPT-5.6 Sol, GPT-5.6 Terra, Ultra reasoning, or attempts to re-enable MultiAgent V2 while containment is active.
 
 ## Operating protocol
 
 Until OpenAI ships a stable fix and validates quota accounting:
 
-1. Run Codex in single-agent mode.
-2. Do not invoke `spawn_agent`, recursive delegation, inherited full-context forks, or unattended subagent trees.
-3. For parallel offline analysis, launch separately authorized local workers with bounded text manifests and independent state directories.
-4. Keep connector, deployment, CRM, email, database, and customer-facing writes in the durable idempotent queue.
-5. Reconcile external state before replaying anything after a quota, storage, UI, or compaction failure.
-6. Checkpoint objective, acceptance criteria, decisions, changed files, pending writes, operation IDs, and continuation instructions outside Codex history.
-7. Move screenshot-heavy work into fresh short-lived threads rather than repeatedly resuming one image-heavy session.
-8. Exit every Codex writer before cleanup and use the supported `codex delete <session-id>` path rather than deleting an active rollout.
+1. Keep the default `openai_degraded` profile: approved local first, with only eligible read-only OpenAI canaries.
+2. Run direct OpenAI Codex canaries on GPT-5.5 in single-agent mode.
+3. Do not invoke `spawn_agent`, recursive delegation, inherited full-context forks, unattended subagent trees, GPT-5.6 Sol, GPT-5.6 Terra, or Ultra reasoning.
+4. For parallel offline analysis, launch separately authorized local workers with bounded text manifests and independent state directories.
+5. Keep connector, deployment, CRM, email, database, and customer-facing writes in the durable idempotent queue.
+6. Reconcile external state before replaying anything after a quota, storage, UI, or compaction failure.
+7. Checkpoint objective, acceptance criteria, decisions, changed files, pending writes, operation IDs, and continuation instructions outside Codex history.
+8. Move screenshot-heavy work into fresh short-lived threads rather than repeatedly resuming one image-heavy session.
+9. Exit every Codex writer before cleanup and use the supported `codex delete <session-id>` path rather than deleting an active rollout.
 
 A quota or storage threshold is not a reason to stop the broader operation. Continue through:
 
 ```text
 Provider-neutral checkpoint
-→ single-agent OpenAI route
-→ separately authorized local workers for bounded offline tasks
+→ approved local route for bounded offline work
+→ quota-safe GPT-5.5 read-only canaries when needed
 → durable idempotent queue for external writes
 → verify and reconcile target state
 ```
 
 ## Promotion criteria
 
-Do not re-enable Codex subagents until all of the following are true:
+Do not restore GPT-5.6 V2 models or re-enable Codex subagents until all of the following are true:
 
 1. OpenAI publishes a stable release containing a confirmed MultiAgent V2 nesting and quota-accounting fix.
 2. A controlled canary proves no recursive children are created beyond the requested topology.
 3. Usage metering matches the sum of actual canary requests without replayed ancestor token events.
 4. The canary stays within a defined daily and weekly usage budget.
 5. Screenshot-heavy and compacted sessions do not duplicate full parent histories into child rollouts.
-6. Rollback to `agents.enabled = false` is tested.
+6. Rollback to GPT-5.5, `agents.enabled = false`, and the approved local-first profile is tested.
 
 Do not route through Anthropic, Claude, Manus, model gateways, GitHub Copilot auto-selection, Bedrock, or Vertex.
