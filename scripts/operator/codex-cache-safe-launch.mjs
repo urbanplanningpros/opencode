@@ -97,6 +97,62 @@ if (isMac && (profileFlag || configActivatesProfile)) {
   process.exit(64)
 }
 
+const sqliteLockGuardDisabled = /^(1|true|yes)$/i.test(process.env.OPERATOR_CODEX_SKIP_SQLITE_LOCK_GUARD || "")
+const logDbPath = path.join(codexHome, "logs_2.sqlite")
+let sqliteLockStatus = fs.existsSync(logDbPath) ? "unchecked" : "not_present"
+
+async function verifyLogDatabaseWriteAvailability() {
+  if (sqliteLockGuardDisabled || !fs.existsSync(logDbPath)) {
+    sqliteLockStatus = sqliteLockGuardDisabled ? "disabled_by_operator" : "not_present"
+    return
+  }
+
+  let Database
+  try {
+    ;({ Database } = await import("bun:sqlite"))
+  } catch (error) {
+    console.error(`Unable to load bun:sqlite for the Codex telemetry-lock preflight: ${error.message}`)
+    process.exit(69)
+  }
+
+  const attempts = Number.parseInt(process.env.OPERATOR_CODEX_SQLITE_LOCK_ATTEMPTS || "3", 10)
+  const boundedAttempts = Number.isFinite(attempts) ? Math.min(Math.max(attempts, 1), 10) : 3
+  let lastError = null
+
+  for (let attempt = 1; attempt <= boundedAttempts; attempt += 1) {
+    let database
+    try {
+      database = new Database(logDbPath)
+      database.exec("PRAGMA busy_timeout = 1000; BEGIN IMMEDIATE; ROLLBACK;")
+      sqliteLockStatus = "available"
+      return
+    } catch (error) {
+      lastError = error
+      const message = String(error?.message || error)
+      const locked = /database is locked|SQLITE_BUSY/i.test(message)
+      if (!locked) {
+        console.error(`Codex telemetry database preflight failed for ${logDbPath}: ${message}`)
+        process.exit(69)
+      }
+      if (attempt < boundedAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, Math.min(250 * 2 ** (attempt - 1), 2000)))
+      }
+    } finally {
+      try {
+        database?.close()
+      } catch {}
+    }
+  }
+
+  sqliteLockStatus = "blocked"
+  console.error(
+    `Refusing to start Codex because ${logDbPath} remained write-locked after ${boundedAttempts} bounded attempts. Do not delete SQLite files. Find the stale or suspended holder (macOS/Linux: lsof '${logDbPath}'; Windows: inspect Codex/Desktop/IDE processes), checkpoint active work, terminate only the confirmed stale holder, then rerun the guarded launcher. Continue unrelated work through a separate approved CODEX_HOME or the authorized local route. Last error: ${String(lastError?.message || lastError)}`,
+  )
+  process.exit(75)
+}
+
+if (!dryRun) await verifyLogDatabaseWriteAvailability()
+
 const binary = process.env.OPERATOR_CODEX_BINARY || process.env.CODEX_BINARY || "codex"
 const modelArgs = requestedModel ? [] : ["-m", quotaSafeModel]
 const guardedArgs = [
@@ -133,6 +189,9 @@ const summary = {
   openai_websockets: forceHttpSse ? false : "configured_default",
   macos_permissions_profile_guard: isMac,
   macos_permissions_profile_active: false,
+  sqlite_lock_guard: !sqliteLockGuardDisabled,
+  sqlite_lock_status: sqliteLockStatus,
+  sqlite_log_database: logDbPath,
 }
 
 if (dryRun) {
@@ -141,7 +200,7 @@ if (dryRun) {
 }
 
 console.error(
-  `Codex guards active: model ${summary.model}; remote_plugin, code_mode, code_mode_only, and multi_agent_v2 are disabled; subagents are disabled and thread fan-out is capped at one${
+  `Codex guards active: model ${summary.model}; remote_plugin, code_mode, code_mode_only, and multi_agent_v2 are disabled; subagents are disabled and thread fan-out is capped at one; telemetry database write availability is verified${
     forceHttpSse ? "; OpenAI Responses transport is forced to HTTP-SSE for attestation/compaction recovery" : ""
   }${isMac ? "; macOS permissions profiles are blocked" : ""}. Local and installed tooling remain available.`,
 )
@@ -152,6 +211,7 @@ const child = spawn(binary, guardedArgs, {
     CODEX_CACHE_GUARD_ACTIVE: "1",
     CODEX_CODE_MODE_GUARD_ACTIVE: "1",
     CODEX_SUBAGENT_QUOTA_GUARD_ACTIVE: "1",
+    CODEX_SQLITE_LOCK_GUARD_ACTIVE: sqliteLockGuardDisabled ? "0" : "1",
     OPERATOR_MODEL: summary.model,
     ...(forceHttpSse && { CODEX_HTTP_SSE_RECOVERY_ACTIVE: "1" }),
     ...(isMac && { CODEX_MACOS_PERMISSIONS_PROFILE_GUARD_ACTIVE: "1" }),
@@ -164,6 +224,7 @@ child.on("error", (error) => {
   console.error(`Unable to start guarded Codex CLI: ${error.message}`)
   process.exit(69)
 })
+
 child.on("close", (code, signal) => {
   if (signal) {
     console.error(`Guarded Codex CLI terminated by ${signal}`)
