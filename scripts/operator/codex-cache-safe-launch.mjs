@@ -23,6 +23,11 @@ const prohibitedFeatureOverrides = [
   { feature: "code_mode", reason: "Code Mode metadata-header guard" },
   { feature: "code_mode_only", reason: "Code Mode metadata-header guard" },
   { feature: "multi_agent_v2", reason: "Codex recursive-subagent quota guard" },
+  { feature: "token_budget", reason: "model-owned token-budget and compaction-policy guard" },
+  {
+    feature: "external_agent_memory_import",
+    reason: "excluded-provider session and memory intake guard",
+  },
 ]
 
 for (const item of prohibitedFeatureOverrides) {
@@ -108,6 +113,10 @@ const guardedArgs = [
   "code_mode_only",
   "--disable",
   "multi_agent_v2",
+  "--disable",
+  "token_budget",
+  "--disable",
+  "external_agent_memory_import",
   "-c",
   "agents.enabled=false",
   "-c",
@@ -127,6 +136,8 @@ const summary = {
   code_mode: false,
   code_mode_only: false,
   multi_agent_v2: false,
+  token_budget: false,
+  external_agent_memory_import: false,
   agents_enabled: false,
   max_concurrent_threads_per_session: 1,
   http_sse_recovery: forceHttpSse,
@@ -141,7 +152,7 @@ if (dryRun) {
 }
 
 console.error(
-  `Codex guards active: model ${summary.model}; remote_plugin, code_mode, code_mode_only, and multi_agent_v2 are disabled; subagents are disabled and thread fan-out is capped at one${
+  `Codex guards active: model ${summary.model}; remote_plugin, code_mode, code_mode_only, multi_agent_v2, token_budget, and external_agent_memory_import are disabled; subagents are disabled and thread fan-out is capped at one${
     forceHttpSse ? "; OpenAI Responses transport is forced to HTTP-SSE for attestation/compaction recovery" : ""
   }${isMac ? "; macOS permissions profiles are blocked" : ""}. Local and installed tooling remain available.`,
 )
@@ -152,6 +163,8 @@ const child = spawn(binary, guardedArgs, {
     CODEX_CACHE_GUARD_ACTIVE: "1",
     CODEX_CODE_MODE_GUARD_ACTIVE: "1",
     CODEX_SUBAGENT_QUOTA_GUARD_ACTIVE: "1",
+    CODEX_TOKEN_BUDGET_GUARD_ACTIVE: "1",
+    CODEX_EXTERNAL_AGENT_IMPORT_GUARD_ACTIVE: "1",
     OPERATOR_MODEL: summary.model,
     ...(forceHttpSse && { CODEX_HTTP_SSE_RECOVERY_ACTIVE: "1" }),
     ...(isMac && { CODEX_MACOS_PERMISSIONS_PROFILE_GUARD_ACTIVE: "1" }),
@@ -164,6 +177,7 @@ child.on("error", (error) => {
   console.error(`Unable to start guarded Codex CLI: ${error.message}`)
   process.exit(69)
 })
+
 child.on("close", (code, signal) => {
   if (signal) {
     console.error(`Guarded Codex CLI terminated by ${signal}`)
