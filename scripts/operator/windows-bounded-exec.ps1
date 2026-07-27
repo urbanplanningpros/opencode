@@ -22,6 +22,14 @@ if (-not $IsWindows) {
   exit 64
 }
 
+if ($ArgumentList.Count -gt 0 -and $ArgumentList[0] -eq "--") {
+  if ($ArgumentList.Count -eq 1) {
+    $ArgumentList = @()
+  } else {
+    $ArgumentList = $ArgumentList[1..($ArgumentList.Count - 1)]
+  }
+}
+
 $command = Get-Command $FilePath -ErrorAction SilentlyContinue
 if (-not $command) {
   [Console]::Error.WriteLine("Command not found: $FilePath")
