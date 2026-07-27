@@ -10,17 +10,23 @@ const schemaPaths = [
 
 const config = readJson(configPath)
 const failures = []
+const approvedProviders = new Set(["openai", "local"])
+const prohibitedRoutePattern = /(anthropic|claude|manus|openrouter|bedrock|vertex|copilot|gateway)/i
 
 if (!Number.isInteger(config.version) || config.version < 1) failures.push("version must be a positive integer")
 if (!config.providers || Object.keys(config.providers).length === 0) failures.push("at least one provider is required")
 if (!config.profiles?.[config.defaultProfile]) failures.push(`default profile '${config.defaultProfile}' is missing`)
 
 for (const [provider, definition] of Object.entries(config.providers || {})) {
+  if (!approvedProviders.has(provider)) {
+    failures.push(`provider '${provider}' is not approved; only direct OpenAI and the explicitly authorized local route are allowed`)
+  }
   if (!definition.commandEnv || typeof definition.commandEnv !== "string") {
     failures.push(`provider '${provider}' is missing commandEnv`)
   }
-  if (/manus/i.test(provider) || /manus/i.test(definition.commandEnv || "")) {
-    failures.push(`provider '${provider}' violates the Manus exclusion policy`)
+  const providerRouteText = JSON.stringify({ provider, definition })
+  if (prohibitedRoutePattern.test(providerRouteText)) {
+    failures.push(`provider '${provider}' contains an excluded provider, model gateway, or automatic model-selection route`)
   }
   if (!definition.models?.primary?.id) failures.push(`provider '${provider}' is missing a primary model`)
   if (!Array.isArray(definition.models?.fallbacks)) failures.push(`provider '${provider}' fallbacks must be an array`)
@@ -33,7 +39,9 @@ for (const [provider, definition] of Object.entries(config.providers || {})) {
   const modelIds = new Set()
   for (const route of routes) {
     if (!route.id || typeof route.id !== "string") failures.push(`provider '${provider}' has a model without an id`)
-    if (/manus/i.test(route.id || "")) failures.push(`provider '${provider}' model '${route.id}' violates the Manus exclusion policy`)
+    if (prohibitedRoutePattern.test(route.id || "")) {
+      failures.push(`provider '${provider}' model '${route.id}' contains an excluded provider or automatic gateway route`)
+    }
     if (modelIds.has(route.id)) failures.push(`provider '${provider}' repeats model '${route.id}'`)
     modelIds.add(route.id)
     if (!route.requestPolicy || typeof route.requestPolicy !== "object" || Array.isArray(route.requestPolicy)) {
@@ -50,25 +58,6 @@ for (const [provider, definition] of Object.entries(config.providers || {})) {
       failures.push(`provider '${provider}' candidate readOnly must be boolean`)
     }
   }
-
-  const opus5 = routes.find((route) => route.id === "claude-opus-5")
-  if (opus5) {
-    if (candidate?.id !== "claude-opus-5" || candidate.readOnly !== true) {
-      failures.push("claude-opus-5 must remain a read-only candidate until promotion criteria are met")
-    }
-    if (opus5.requestPolicy.thinking !== "adaptive_default") {
-      failures.push("claude-opus-5 must use adaptive_default thinking")
-    }
-    if (opus5.requestPolicy.disableThinkingMaxEffort !== "high") {
-      failures.push("claude-opus-5 must cap disabled-thinking requests at high effort")
-    }
-    if (opus5.requestPolicy.serverSideFallback !== "disabled") {
-      failures.push("claude-opus-5 server-side fallback must remain disabled for auditable routing")
-    }
-    if (opus5.requestPolicy.midConversationToolChanges !== "disabled") {
-      failures.push("claude-opus-5 mid-conversation tool changes must remain disabled during canary")
-    }
-  }
 }
 
 for (const [profile, definition] of Object.entries(config.profiles || {})) {
@@ -78,9 +67,13 @@ for (const [profile, definition] of Object.entries(config.profiles || {})) {
   }
   for (const provider of definition.order) {
     if (!config.providers[provider]) failures.push(`profile '${profile}' references unknown provider '${provider}'`)
+    if (!approvedProviders.has(provider)) failures.push(`profile '${profile}' references unapproved provider '${provider}'`)
   }
   if (definition.canary && !config.providers[definition.canary.provider]) {
     failures.push(`profile '${profile}' canary references unknown provider '${definition.canary.provider}'`)
+  }
+  if (definition.canary && !approvedProviders.has(definition.canary.provider)) {
+    failures.push(`profile '${profile}' canary references unapproved provider '${definition.canary.provider}'`)
   }
 }
 
