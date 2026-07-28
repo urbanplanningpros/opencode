@@ -13,7 +13,7 @@
     "dev:storybook": "bun --cwd packages/storybook storybook",
     "lint": "oxlint",
     "typecheck": "bun turbo typecheck",
-    "operator:validate": "bun scripts/operator/validate-config.mjs && bun scripts/operator/mcp-discovery-audit-selftest.mjs && bun scripts/operator/codex-config-integrity-guard-selftest.mjs && bun scripts/operator/codex-post-compact-rehydrate-selftest.mjs && bun scripts/operator/codex-skill-catalog-budget-guard-selftest.mjs",
+    "operator:validate": "bun scripts/operator/validate-config.mjs && bun scripts/operator/mcp-discovery-audit-selftest.mjs && bun scripts/operator/codex-config-integrity-guard-selftest.mjs && bun scripts/operator/codex-post-compact-rehydrate-selftest.mjs",
     "operator:init": "bun scripts/operator/init-task.mjs",
     "operator:rehydrate": "bun scripts/operator/codex-post-compact-rehydrate.mjs",
     "operator:queue": "bun scripts/operator/queue-action.mjs",
@@ -36,8 +36,7 @@
     "prepare": "husky",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
-    "test": "echo 'do not run tests from root' && exit 1",
-    "operator:skill-budget-guard": "bun scripts/operator/codex-skill-catalog-budget-guard.mjs"
+    "test": "echo 'do not run tests from root' && exit 1"
   },
   "workspaces": {
     "packages": [
