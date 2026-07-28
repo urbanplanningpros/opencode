@@ -47,6 +47,7 @@ const server = http.createServer((request, response) => {
       assert.equal(body.stream, false)
       assert.equal(body.store, false)
       assert.deepEqual(body.tools, [])
+      assert.equal(body.max_output_tokens, 8192)
       response.writeHead(200, { "content-type": "application/json" })
       response.end(
         JSON.stringify({
