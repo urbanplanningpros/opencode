@@ -20,6 +20,14 @@ function parseArgs(argv) {
   }
 }
 
+function boundedInteger(raw, fallback, minimum, maximum, name) {
+  const value = raw === undefined || raw === "" ? fallback : Number(raw)
+  if (!Number.isInteger(value) || value < minimum || value > maximum) {
+    fail(`${name} must be an integer from ${minimum} to ${maximum}.`)
+  }
+  return value
+}
+
 function parseAllowedModels(raw) {
   let parsed
   try {
@@ -60,29 +68,36 @@ function authHeaders() {
 async function fetchBoundedJson(url, init, timeoutMs) {
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
-  let response
   try {
-    response = await fetch(url, { ...init, signal: controller.signal, redirect: "error" })
+    let response
+    try {
+      response = await fetch(url, { ...init, signal: controller.signal, redirect: "error" })
+    } catch (error) {
+      const detail = error?.name === "AbortError" ? "request timed out" : error?.message || String(error)
+      throw new Error(`LM Studio request failed: ${detail}`)
+    }
+
+    const declared = Number(response.headers.get("content-length") || 0)
+    if (declared > MAX_JSON_BYTES) throw new Error("LM Studio response exceeds the configured size limit.")
+    const bytes = new Uint8Array(await response.arrayBuffer())
+    if (bytes.byteLength > MAX_JSON_BYTES) throw new Error("LM Studio response exceeds the configured size limit.")
+    const text = new TextDecoder().decode(bytes)
+    let body
+    try {
+      body = text ? JSON.parse(text) : null
+    } catch {
+      throw new Error(`LM Studio returned invalid JSON with HTTP ${response.status}.`)
+    }
+    if (!response.ok) throw new Error(`LM Studio returned HTTP ${response.status}.`)
+    return body
   } catch (error) {
-    const detail = error?.name === "AbortError" ? "request timed out" : error?.message || String(error)
-    throw new Error(`LM Studio request failed: ${detail}`)
+    if (controller.signal.aborted && error?.message !== "LM Studio request failed: request timed out") {
+      throw new Error("LM Studio request failed: request timed out")
+    }
+    throw error
   } finally {
     clearTimeout(timer)
   }
-
-  const declared = Number(response.headers.get("content-length") || 0)
-  if (declared > MAX_JSON_BYTES) throw new Error("LM Studio response exceeds the configured size limit.")
-  const bytes = new Uint8Array(await response.arrayBuffer())
-  if (bytes.byteLength > MAX_JSON_BYTES) throw new Error("LM Studio response exceeds the configured size limit.")
-  const text = new TextDecoder().decode(bytes)
-  let body
-  try {
-    body = text ? JSON.parse(text) : null
-  } catch {
-    throw new Error(`LM Studio returned invalid JSON with HTTP ${response.status}.`)
-  }
-  if (!response.ok) throw new Error(`LM Studio returned HTTP ${response.status}.`)
-  return body
 }
 
 async function readPrompt() {
@@ -143,6 +158,13 @@ async function execute(base, model, prompt) {
     stream: false,
     store: false,
     tools: [],
+    max_output_tokens: boundedInteger(
+      process.env.OPERATOR_LMSTUDIO_MAX_OUTPUT_TOKENS,
+      8192,
+      1,
+      32768,
+      "OPERATOR_LMSTUDIO_MAX_OUTPUT_TOKENS",
+    ),
   }
   const response = await fetchBoundedJson(
     responseUrl,
@@ -151,7 +173,7 @@ async function execute(base, model, prompt) {
       headers: { ...authHeaders(), "content-type": "application/json" },
       body: JSON.stringify(body),
     },
-    Number(process.env.OPERATOR_LMSTUDIO_TIMEOUT_MS || 120000),
+    boundedInteger(process.env.OPERATOR_LMSTUDIO_TIMEOUT_MS, 120000, 1000, 600000, "OPERATOR_LMSTUDIO_TIMEOUT_MS"),
   )
   const text = extractOutputText(response)
   if (!text) throw new Error("LM Studio completed without a text response.")
