@@ -10,6 +10,8 @@ const script = path.join(import.meta.dirname, "codex-appserver-turn-completion-g
 const base = {
   schema_version: 1,
   turn_id: "turn-test",
+  parent_turn_id: "turn-root",
+  expected_parent_turn_id: "turn-root",
   turn_completed_seen: false,
   final_assistant_output_seen: true,
   artifact_required: true,
@@ -43,13 +45,31 @@ const protocol = run("protocol", { ...base, turn_completed_seen: true })
 assert.equal(protocol.status, 0, protocol.stderr)
 assert.equal(protocol.json.status, "protocol_complete")
 assert.equal(protocol.json.synthetic_local_completion, false)
+assert.equal(protocol.json.parent_turn_id, "turn-root")
 
 const local = run("local", base)
 assert.equal(local.status, 0, local.stderr)
 assert.equal(local.json.status, "verified_completion_without_terminal_event")
 assert.equal(local.json.synthetic_local_completion, true)
 assert.equal(local.json.automatic_retry_allowed, false)
+assert.equal(local.json.checks.parent_turn_lineage_matched, true)
 assert.ok(fs.existsSync(local.json.evidence_file))
+
+const legacyWithoutLineage = structuredClone(base)
+delete legacyWithoutLineage.parent_turn_id
+delete legacyWithoutLineage.expected_parent_turn_id
+const legacyResult = run("legacy-without-lineage", legacyWithoutLineage)
+assert.equal(legacyResult.status, 0, legacyResult.stderr)
+assert.equal(legacyResult.json.status, "verified_completion_without_terminal_event")
+
+const lineageMismatch = run("lineage-mismatch", {
+  ...base,
+  parent_turn_id: "turn-other",
+})
+assert.equal(lineageMismatch.status, 75, lineageMismatch.stderr)
+assert.equal(lineageMismatch.json.status, "turn_lineage_mismatch")
+assert.equal(lineageMismatch.json.checks.parent_turn_lineage_matched, false)
+assert.equal(lineageMismatch.json.automatic_retry_allowed, false)
 
 const verifiedWrite = run("verified-write", {
   ...base,
