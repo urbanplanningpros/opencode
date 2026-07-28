@@ -25,12 +25,15 @@ const base = {
   schema_version: 1,
   write_authority_requested: true,
   remote_plugin_catalog_enabled: true,
+  account_plan: 'pro',
   plugins: [
     {
       plugin_id: 'build-ios-apps@openai-curated',
       installed: true,
       enabled: true,
       required_for_task: true,
+      disabledReason: null,
+      eligiblePlanTypes: ['pro', 'business'],
       expected: { skills: 9, mcp_servers: 0, apps: 0, hooks: 0 },
       effective: { skills: 9, mcp_servers: 0, apps: 0, hooks: 0 },
     },
@@ -46,7 +49,7 @@ const suppressed = structuredClone(base);
 suppressed.plugins[0].effective.skills = 0;
 const blocked = run('suppressed', suppressed);
 assert.equal(blocked.status, 75);
-assert.equal(blocked.json.status, 'effective_capability_mismatch');
+assert.equal(blocked.json.status, 'plugin_eligibility_or_capability_mismatch');
 assert.equal(blocked.json.findings[0].silent_suppression, true);
 assert.equal(blocked.json.write_authority_permitted, false);
 
@@ -55,6 +58,33 @@ disabled.plugins[0].enabled = false;
 const disabledResult = run('disabled', disabled);
 assert.equal(disabledResult.status, 75);
 assert.equal(disabledResult.json.findings[0].inventory_mismatch, true);
+
+const catalogDisabled = structuredClone(base);
+catalogDisabled.plugins[0].disabledReason = 'admin_disabled';
+const catalogDisabledResult = run('catalog-disabled', catalogDisabled);
+assert.equal(catalogDisabledResult.status, 75);
+assert.equal(catalogDisabledResult.json.findings[0].eligibility_disabled, true);
+assert.equal(catalogDisabledResult.json.findings[0].disabled_reason, 'admin_disabled');
+
+const unknownDisabled = structuredClone(base);
+unknownDisabled.plugins[0].disabledReason = 'unknown';
+const unknownDisabledResult = run('unknown-disabled', unknownDisabled);
+assert.equal(unknownDisabledResult.status, 75);
+assert.equal(unknownDisabledResult.json.findings[0].eligibility_disabled, true);
+
+const planIneligible = structuredClone(base);
+planIneligible.account_plan = 'free';
+const planIneligibleResult = run('plan-ineligible', planIneligible);
+assert.equal(planIneligibleResult.status, 75);
+assert.equal(planIneligibleResult.json.findings[0].plan_eligibility_mismatch, true);
+
+const legacyMetadata = structuredClone(base);
+delete legacyMetadata.account_plan;
+delete legacyMetadata.plugins[0].disabledReason;
+delete legacyMetadata.plugins[0].eligiblePlanTypes;
+const legacyMetadataResult = run('legacy-metadata', legacyMetadata);
+assert.equal(legacyMetadataResult.status, 0);
+assert.equal(legacyMetadataResult.json.status, 'verified');
 
 const prohibited = structuredClone(base);
 prohibited.plugins[0].plugin_id = 'claude-bridge@openai-curated';
