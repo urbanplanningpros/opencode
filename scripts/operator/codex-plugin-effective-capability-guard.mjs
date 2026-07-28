@@ -53,6 +53,39 @@ function assertBoolean(value, label) {
   if (typeof value !== 'boolean') throw new Error(`${label} must be boolean`);
 }
 
+function assertNullableString(value, label) {
+  if (value == null) return null;
+  if (typeof value !== 'string' || value.trim() === '') {
+    throw new Error(`${label} must be null or a non-empty string`);
+  }
+  return value.trim();
+}
+
+function assertNullableStringArray(value, label) {
+  if (value == null) return null;
+  if (!Array.isArray(value)) throw new Error(`${label} must be null or an array`);
+  const normalized = value.map((entry, index) => {
+    if (typeof entry !== 'string' || entry.trim() === '') {
+      throw new Error(`${label}[${index}] must be a non-empty string`);
+    }
+    return entry.trim();
+  });
+  return [...new Set(normalized)];
+}
+
+function readAlias(object, snakeName, camelName, label) {
+  const snakePresent = Object.hasOwn(object, snakeName);
+  const camelPresent = Object.hasOwn(object, camelName);
+  if (snakePresent && camelPresent) {
+    const snake = JSON.stringify(object[snakeName]);
+    const camel = JSON.stringify(object[camelName]);
+    if (snake !== camel) throw new Error(`${label} aliases disagree`);
+  }
+  if (snakePresent) return object[snakeName];
+  if (camelPresent) return object[camelName];
+  return null;
+}
+
 function assertCountObject(value, label) {
   if (!value || typeof value !== 'object' || Array.isArray(value)) {
     throw new Error(`${label} must be an object`);
@@ -99,6 +132,7 @@ function main() {
     fail(`could not read evidence: ${error.message}`, 2, options.json);
   }
 
+  let accountPlan;
   try {
     if (!evidence || typeof evidence !== 'object' || Array.isArray(evidence)) {
       throw new Error('evidence must be an object');
@@ -106,6 +140,7 @@ function main() {
     if (evidence.schema_version !== 1) throw new Error('schema_version must equal 1');
     assertBoolean(evidence.write_authority_requested, 'write_authority_requested');
     assertBoolean(evidence.remote_plugin_catalog_enabled, 'remote_plugin_catalog_enabled');
+    accountPlan = assertNullableString(evidence.account_plan ?? null, 'account_plan');
     if (!Array.isArray(evidence.plugins) || evidence.plugins.length === 0) {
       throw new Error('plugins must be a non-empty array');
     }
@@ -144,6 +179,19 @@ function main() {
       assertBoolean(plugin.required_for_task, `${pluginId}.required_for_task`);
       const expected = assertCountObject(plugin.expected, `${pluginId}.expected`);
       const effective = assertCountObject(plugin.effective, `${pluginId}.effective`);
+      const disabledReason = assertNullableString(
+        readAlias(plugin, 'disabled_reason', 'disabledReason', `${pluginId}.disabledReason`),
+        `${pluginId}.disabledReason`,
+      );
+      const eligiblePlanTypes = assertNullableStringArray(
+        readAlias(
+          plugin,
+          'eligible_plan_types',
+          'eligiblePlanTypes',
+          `${pluginId}.eligiblePlanTypes`,
+        ),
+        `${pluginId}.eligiblePlanTypes`,
+      );
 
       const missing = {};
       let missingTotal = 0;
@@ -154,6 +202,12 @@ function main() {
       }
 
       const inventoryMismatch = plugin.required_for_task && (!plugin.installed || !plugin.enabled);
+      const eligibilityDisabled = plugin.required_for_task && disabledReason !== null;
+      const planEligibilityMismatch =
+        plugin.required_for_task &&
+        accountPlan !== null &&
+        eligiblePlanTypes !== null &&
+        !eligiblePlanTypes.includes(accountPlan);
       const capabilityDrift = plugin.required_for_task && missingTotal > 0;
       const silentSuppression =
         evidence.remote_plugin_catalog_enabled &&
@@ -162,16 +216,27 @@ function main() {
         Object.values(expected).reduce((sum, count) => sum + count, 0) > 0 &&
         Object.values(effective).reduce((sum, count) => sum + count, 0) === 0;
 
-      if (inventoryMismatch || capabilityDrift || silentSuppression) {
+      if (
+        inventoryMismatch ||
+        eligibilityDisabled ||
+        planEligibilityMismatch ||
+        capabilityDrift ||
+        silentSuppression
+      ) {
         findings.push({
           plugin_id: pluginId,
           required_for_task: plugin.required_for_task,
           installed: plugin.installed,
           enabled: plugin.enabled,
+          account_plan: accountPlan,
+          disabled_reason: disabledReason,
+          eligible_plan_types: eligiblePlanTypes,
           expected,
           effective,
           missing,
           inventory_mismatch: inventoryMismatch,
+          eligibility_disabled: eligibilityDisabled,
+          plan_eligibility_mismatch: planEligibilityMismatch,
           capability_drift: capabilityDrift,
           silent_suppression: silentSuppression,
           suppression_reason: plugin.suppression_reason ?? null,
@@ -184,15 +249,18 @@ function main() {
 
   const blocked = findings.some((finding) => finding.required_for_task);
   const result = {
-    status: blocked ? 'effective_capability_mismatch' : 'verified',
+    status: blocked ? 'plugin_eligibility_or_capability_mismatch' : 'verified',
     remote_plugin_catalog_enabled: evidence.remote_plugin_catalog_enabled,
+    account_plan: accountPlan,
     write_authority_requested: evidence.write_authority_requested,
     write_authority_permitted: !blocked,
     task_execution_permitted: !blocked,
     findings,
     remediation: blocked
       ? [
+          'Use v2 PluginSummary disabledReason and eligiblePlanTypes as admission evidence when present.',
           'Do not rely on plugin inventory installed/enabled flags as capability evidence.',
+          'Do not retry installation when disabledReason is non-null; resolve the reported admin, policy, or plan eligibility condition.',
           'Capture a fresh effective skills/MCP/apps/hooks catalog from the active runtime.',
           'For required OpenAI-curated skills only, add exact reviewed local skill roots explicitly, then recapture the effective catalog.',
           'Do not infer MCP, app, or hook authority from skill-root recovery.',
