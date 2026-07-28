@@ -34,12 +34,21 @@ function seconds(name) {
   return value
 }
 
+function optionalString(name) {
+  const value = snapshot[name]
+  if (value == null) return null
+  if (typeof value !== "string" || value.trim() === "") throw new Error(`${name} must be null or a non-empty string`)
+  return value.trim()
+}
+
 let state
 try {
   if (snapshot.schema_version !== 1) throw new Error("schema_version must equal 1")
   if (typeof snapshot.turn_id !== "string" || snapshot.turn_id.trim() === "") throw new Error("turn_id is required")
 
   state = {
+    parent_turn_id: optionalString("parent_turn_id"),
+    expected_parent_turn_id: optionalString("expected_parent_turn_id"),
     turn_completed_seen: boolean("turn_completed_seen"),
     final_assistant_output_seen: boolean("final_assistant_output_seen"),
     artifact_required: boolean("artifact_required"),
@@ -77,11 +86,14 @@ const obligations =
 const toolResultsMatched = state.tool_requests_total === state.tool_results_accepted
 const artifactSatisfied = !state.artifact_required || state.artifact_verified
 const writeSatisfied = !state.external_write_attempted || state.destination_verified
+const lineageMatched =
+  state.expected_parent_turn_id === null || state.parent_turn_id === state.expected_parent_turn_id
 const semanticallySettled =
   state.final_assistant_output_seen &&
   toolResultsMatched &&
   obligations === 0 &&
   artifactSatisfied &&
+  lineageMatched &&
   state.seconds_since_last_event >= minimumQuietSeconds
 
 let status
@@ -89,7 +101,12 @@ let safeToContinue
 let syntheticCompletion
 let requiresReconciliation
 
-if (state.turn_completed_seen) {
+if (!lineageMatched) {
+  status = "turn_lineage_mismatch"
+  safeToContinue = false
+  syntheticCompletion = false
+  requiresReconciliation = state.external_write_attempted && !state.destination_verified
+} else if (state.turn_completed_seen) {
   status = "protocol_complete"
   safeToContinue = true
   syntheticCompletion = false
@@ -115,6 +132,8 @@ const report = {
   schema_version: 1,
   observed_at: nowIso(),
   turn_id: snapshot.turn_id,
+  parent_turn_id: state.parent_turn_id,
+  expected_parent_turn_id: state.expected_parent_turn_id,
   status,
   safe_to_continue: safeToContinue,
   synthetic_local_completion: syntheticCompletion,
@@ -122,6 +141,7 @@ const report = {
   automatic_retry_allowed: false,
   minimum_quiet_seconds: minimumQuietSeconds,
   checks: {
+    parent_turn_lineage_matched: lineageMatched,
     final_assistant_output_seen: state.final_assistant_output_seen,
     tool_results_matched: toolResultsMatched,
     outstanding_obligations: obligations,
@@ -131,11 +151,13 @@ const report = {
   },
   snapshot_sha256: sha256(JSON.stringify(snapshot)),
   remediation:
-    status === "write_reconciliation_required"
-      ? "Read the destination using the original operation identifier before any replay."
-      : status === "terminal_state_not_proven"
-        ? "Keep the turn bounded and collect another snapshot; do not create a replacement turn or retry external work."
-        : null,
+    status === "turn_lineage_mismatch"
+      ? "Quarantine the nested result, preserve both turn identifiers, and do not use it to authorize completion or an external write. Reconcile any attempted write before replay."
+      : status === "write_reconciliation_required"
+        ? "Read the destination using the original operation identifier before any replay."
+        : status === "terminal_state_not_proven"
+          ? "Keep the turn bounded and collect another snapshot; do not create a replacement turn or retry external work."
+          : null,
 }
 
 const directory = path.resolve(args["evidence-dir"] || path.join(stateRoot(args), "appserver-turn-completion"))
