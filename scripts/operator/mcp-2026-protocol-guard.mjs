@@ -126,17 +126,49 @@ function validatePlan(plan) {
   }
   const discoveredTools = uniqueStrings(discovery?.tools ?? [], "discovery.tools", failures)
   const discoveredSkills = uniqueStrings(discovery?.skills ?? [], "discovery.skills", failures)
+  const rejectedTools = uniqueStrings(discovery?.rejected_tools ?? [], "discovery.rejected_tools", failures)
+  const requiredTools = uniqueStrings(discovery?.required_tools ?? [], "discovery.required_tools", failures)
+  const discoveredToolSet = new Set(discoveredTools)
+  const rejectedToolSet = new Set(rejectedTools)
+
   for (const tool of discoveredTools) {
     if (!toolSet.has(tool)) failures.push(`discovered tool '${tool}' is not exactly allowlisted`)
+    if (rejectedToolSet.has(tool)) failures.push(`tool '${tool}' cannot be both discovered and rejected`)
   }
   for (const skill of discoveredSkills) {
     if (!skillSet.has(skill)) failures.push(`discovered skill '${skill}' is not exactly allowlisted`)
+  }
+  for (const tool of requiredTools) {
+    if (!toolSet.has(tool)) failures.push(`required tool '${tool}' is not exactly allowlisted`)
+    if (!discoveredToolSet.has(tool)) failures.push(`required tool '${tool}' is missing from the valid discovered catalog`)
+    if (rejectedToolSet.has(tool)) failures.push(`required tool '${tool}' failed legacy prevalidation`)
   }
   if (discovery?.load_requested === true && protocol !== "2026-07-28") {
     failures.push("server/load is only valid for the MCP 2026-07-28 canary path")
   }
   if (discovery?.load_requested === true && discoveredTools.length === 0 && discoveredSkills.length === 0) {
     failures.push("server/load requires a bounded discovered tool or skill set")
+  }
+
+  const pluginPolicy = plan.plugin_policy
+  let recommendedPlugins = []
+  let requiredPlugins = []
+  let installedPlugins = []
+  if (pluginPolicy !== undefined) {
+    if (!pluginPolicy || typeof pluginPolicy !== "object" || Array.isArray(pluginPolicy)) {
+      failures.push("plugin_policy must be an object when present")
+    } else {
+      if (pluginPolicy.tool_plugin_required_action !== "deny") {
+        failures.push("plugin_policy.tool_plugin_required_action must be 'deny' to block tool-driven plugin installation")
+      }
+      recommendedPlugins = uniqueStrings(pluginPolicy.recommended_plugins ?? [], "plugin_policy.recommended_plugins", failures)
+      requiredPlugins = uniqueStrings(pluginPolicy.required_plugins ?? [], "plugin_policy.required_plugins", failures)
+      installedPlugins = uniqueStrings(pluginPolicy.installed_plugins ?? [], "plugin_policy.installed_plugins", failures)
+      const installedSet = new Set(installedPlugins)
+      for (const plugin of requiredPlugins) {
+        if (!installedSet.has(plugin)) failures.push(`required plugin '${plugin}' is not installed and verified`)
+      }
+    }
   }
 
   const task = plan.task
@@ -147,6 +179,8 @@ function validatePlan(plan) {
     if (typeof task.operation_id !== "string" || task.operation_id.trim() === "") failures.push("task.operation_id is required")
     if (typeof task.idempotency_key !== "string" || task.idempotency_key.trim() === "") failures.push("task.idempotency_key is required")
     if (typeof task.tool !== "string" || !toolSet.has(task.tool)) failures.push("task.tool must be exactly allowlisted")
+    if (rejectedToolSet.has(task.tool)) failures.push("task.tool failed legacy prevalidation")
+    if (!discoveredToolSet.has(task.tool)) failures.push("task.tool is missing from the valid discovered catalog")
     requireSha(task.arguments_sha256, "task.arguments_sha256", failures)
 
     if (task.mode === "write") {
@@ -157,6 +191,8 @@ function validatePlan(plan) {
         if (typeof verification.tool !== "string" || !toolSet.has(verification.tool)) {
           failures.push("task.verification.tool must be exactly allowlisted")
         }
+        if (rejectedToolSet.has(verification.tool)) failures.push("task.verification.tool failed legacy prevalidation")
+        if (!discoveredToolSet.has(verification.tool)) failures.push("task.verification.tool is missing from the valid discovered catalog")
         if (verification.tool === task.tool) failures.push("task.verification.tool must differ from the write tool")
         requireSha(verification.expected_sha256, "task.verification.expected_sha256", failures)
       }
@@ -181,7 +217,14 @@ function validatePlan(plan) {
       discovery_supported: discoverySupported,
       tasks_supported: tasksSupported,
       discovered_tool_count: discoveredTools.length,
+      rejected_tool_count: rejectedTools.length,
+      required_tool_count: requiredTools.length,
+      catalog_degraded: rejectedTools.length > 0,
       discovered_skill_count: discoveredSkills.length,
+      recommended_plugin_count: recommendedPlugins.length,
+      required_plugin_count: requiredPlugins.length,
+      installed_plugin_count: installedPlugins.length,
+      tool_plugin_required_action: pluginPolicy?.tool_plugin_required_action ?? null,
       task_enabled: task?.enabled === true,
       task_mode: task?.enabled === true ? task.mode : null,
       operation_id: task?.enabled === true ? task.operation_id : null,
@@ -211,6 +254,8 @@ const report = {
     route: "explicitly authorized local stdio only",
     dynamic_discovery_authority: false,
     automatic_task_replay: false,
+    legacy_tool_prevalidation: "salvage valid entries; quarantine invalid entries",
+    tool_driven_plugin_install: false,
   },
 }
 
