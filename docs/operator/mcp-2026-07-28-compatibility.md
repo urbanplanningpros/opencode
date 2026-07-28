@@ -134,6 +134,32 @@ Preserve the original operation ID and idempotency key
 
 Cancellation is scoped to the exact task ID. A cancellation request without a confirmed terminal state leaves the task uncertain; it does not authorize replay.
 
+## Elicitation cancellation and late responses
+
+A cancelled MCP elicitation must be removed from the pending-response router immediately when its waiting future is dropped. Keep the cleanup scoped to the exact request ID so unrelated pending elicitations remain routable.
+
+Client-side compatibility rule until the upstream fix is present in a validated stable release:
+
+```text
+Create a unique elicitation request ID
+→ register one pending handler
+→ on completion, resolve once and remove the handler
+→ on cancellation or timeout, remove the handler before returning control
+→ record the request ID as terminal
+→ ignore and audit any late response for that terminal ID
+→ never reuse the request ID
+```
+
+Do not map a late response from a cancelled request onto another prompt, approval, task, or connector action. Cancellation is not proof that a write did not occur; reconcile any external side effect independently.
+
+Required canary:
+
+1. Start two simultaneous elicitations with different request IDs.
+2. Cancel the first and verify its handler is no longer resolvable.
+3. Deliver a late response for the cancelled ID and verify it is ignored and audited.
+4. Complete the second and verify it still resolves normally.
+5. Confirm the pending-handler map returns to its original size.
+
 ## Write requirements
 
 A write task requires:
@@ -177,8 +203,9 @@ Production adoption requires a stable Codex release and all of the following:
 5. `server/load` cannot expand authority beyond the exact allowlists.
 6. A read-only task survives reconnect and returns one terminal result.
 7. Cancellation targets one task and produces a confirmed terminal state.
-8. A disconnected write remains uncertain and is not automatically replayed.
-9. Two idempotent write canaries complete with independent destination verification.
-10. Excluded-provider, gateway, automatic-selection, and imported-session identifiers are rejected in server metadata, discovery results, task payloads, and configuration.
+8. Cancelling one of two pending elicitations removes only its handler; a late response cannot resolve it or affect the surviving request.
+9. A disconnected write remains uncertain and is not automatically replayed.
+10. Two idempotent write canaries complete with independent destination verification.
+11. Excluded-provider, gateway, automatic-selection, and imported-session identifiers are rejected in server metadata, discovery results, task payloads, and configuration.
 
 Until every item passes, keep business-critical connector and automation work on the validated 2025 route or the existing approved local continuity path.
