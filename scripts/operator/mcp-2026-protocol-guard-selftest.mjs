@@ -22,7 +22,19 @@ function basePlan() {
     },
     capabilities: { discovery: false, tasks: false },
     allowlists: { tools: ["read_state", "write_state", "verify_state"], skills: [] },
-    discovery: { load_requested: false, tools: ["read_state"], skills: [] },
+    discovery: {
+      load_requested: false,
+      tools: ["read_state", "write_state", "verify_state"],
+      skills: [],
+      rejected_tools: [],
+      required_tools: ["read_state"],
+    },
+    plugin_policy: {
+      tool_plugin_required_action: "deny",
+      recommended_plugins: [],
+      required_plugins: [],
+      installed_plugins: [],
+    },
     task: { enabled: false },
   }
 }
@@ -39,6 +51,36 @@ const legacy = run(basePlan())
 assert.equal(legacy.status, 0, legacy.stderr)
 assert.equal(JSON.parse(legacy.stdout).allowed, true)
 
+const mixedLegacyCatalog = basePlan()
+mixedLegacyCatalog.discovery.rejected_tools = ["malformed_legacy_tool"]
+const mixedLegacyResult = run(mixedLegacyCatalog)
+assert.equal(mixedLegacyResult.status, 0, mixedLegacyResult.stderr)
+assert.equal(JSON.parse(mixedLegacyResult.stdout).normalized.catalog_degraded, true)
+
+const rejectedRequiredTool = basePlan()
+rejectedRequiredTool.discovery.rejected_tools = ["read_state"]
+rejectedRequiredTool.discovery.tools = ["write_state", "verify_state"]
+const rejectedRequiredResult = run(rejectedRequiredTool)
+assert.equal(rejectedRequiredResult.status, 64)
+assert.match(rejectedRequiredResult.stdout, /required tool 'read_state'/)
+
+const recommendationOnly = basePlan()
+recommendationOnly.plugin_policy.recommended_plugins = ["review-only-plugin"]
+const recommendationOnlyResult = run(recommendationOnly)
+assert.equal(recommendationOnlyResult.status, 0, recommendationOnlyResult.stderr)
+
+const requiredPluginMissing = basePlan()
+requiredPluginMissing.plugin_policy.required_plugins = ["approved-required-plugin"]
+const requiredPluginMissingResult = run(requiredPluginMissing)
+assert.equal(requiredPluginMissingResult.status, 64)
+assert.match(requiredPluginMissingResult.stdout, /not installed and verified/)
+
+const toolInstallAllowed = basePlan()
+toolInstallAllowed.plugin_policy.tool_plugin_required_action = "allow"
+const toolInstallAllowedResult = run(toolInstallAllowed)
+assert.equal(toolInstallAllowedResult.status, 64)
+assert.match(toolInstallAllowedResult.stdout, /must be 'deny'/)
+
 const production2026 = basePlan()
 production2026.protocol_version = "2026-07-28"
 production2026.capabilities.discovery = true
@@ -50,7 +92,13 @@ const canaryRead = basePlan()
 canaryRead.protocol_version = "2026-07-28"
 canaryRead.environment = "canary"
 canaryRead.capabilities = { discovery: true, tasks: true }
-canaryRead.discovery = { load_requested: true, tools: ["read_state"], skills: [] }
+canaryRead.discovery = {
+  load_requested: true,
+  tools: ["read_state", "write_state", "verify_state"],
+  skills: [],
+  rejected_tools: [],
+  required_tools: ["read_state"],
+}
 canaryRead.task = {
   enabled: true,
   mode: "read",
