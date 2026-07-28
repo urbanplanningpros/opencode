@@ -22,18 +22,13 @@ function basePlan() {
     },
     capabilities: { discovery: false, tasks: false },
     allowlists: { tools: ["read_state", "write_state", "verify_state"], skills: [] },
-    discovery: {
-      load_requested: false,
-      tools: ["read_state", "write_state", "verify_state"],
-      skills: [],
-      rejected_tools: [],
-      required_tools: ["read_state"],
-    },
-    plugin_policy: {
-      tool_plugin_required_action: "deny",
-      recommended_plugins: [],
-      required_plugins: [],
-      installed_plugins: [],
+    discovery: { load_requested: false, tools: ["read_state", "write_state", "verify_state"], skills: [] },
+    plugin_features: {
+      apps_enabled: true,
+      plugins_enabled: true,
+      recommended_plugins: false,
+      tool_suggest: false,
+      request_plugin_install_exposed: false,
     },
     task: { enabled: false },
   }
@@ -51,35 +46,23 @@ const legacy = run(basePlan())
 assert.equal(legacy.status, 0, legacy.stderr)
 assert.equal(JSON.parse(legacy.stdout).allowed, true)
 
-const mixedLegacyCatalog = basePlan()
-mixedLegacyCatalog.discovery.rejected_tools = ["malformed_legacy_tool"]
-const mixedLegacyResult = run(mixedLegacyCatalog)
-assert.equal(mixedLegacyResult.status, 0, mixedLegacyResult.stderr)
-assert.equal(JSON.parse(mixedLegacyResult.stdout).normalized.catalog_degraded, true)
-
-const rejectedRequiredTool = basePlan()
-rejectedRequiredTool.discovery.rejected_tools = ["read_state"]
-rejectedRequiredTool.discovery.tools = ["write_state", "verify_state"]
-const rejectedRequiredResult = run(rejectedRequiredTool)
-assert.equal(rejectedRequiredResult.status, 64)
-assert.match(rejectedRequiredResult.stdout, /required tool 'read_state'/)
-
 const recommendationOnly = basePlan()
-recommendationOnly.plugin_policy.recommended_plugins = ["review-only-plugin"]
+recommendationOnly.plugin_features.recommended_plugins = true
 const recommendationOnlyResult = run(recommendationOnly)
 assert.equal(recommendationOnlyResult.status, 0, recommendationOnlyResult.stderr)
+assert.equal(JSON.parse(recommendationOnlyResult.stdout).normalized.request_plugin_install_exposed, false)
 
-const requiredPluginMissing = basePlan()
-requiredPluginMissing.plugin_policy.required_plugins = ["approved-required-plugin"]
-const requiredPluginMissingResult = run(requiredPluginMissing)
-assert.equal(requiredPluginMissingResult.status, 64)
-assert.match(requiredPluginMissingResult.stdout, /not installed and verified/)
+const toolSuggest = basePlan()
+toolSuggest.plugin_features.tool_suggest = true
+const toolSuggestResult = run(toolSuggest)
+assert.equal(toolSuggestResult.status, 64)
+assert.match(toolSuggestResult.stdout, /tool_suggest must remain disabled/)
 
-const toolInstallAllowed = basePlan()
-toolInstallAllowed.plugin_policy.tool_plugin_required_action = "allow"
-const toolInstallAllowedResult = run(toolInstallAllowed)
-assert.equal(toolInstallAllowedResult.status, 64)
-assert.match(toolInstallAllowedResult.stdout, /must be 'deny'/)
+const installTool = basePlan()
+installTool.plugin_features.request_plugin_install_exposed = true
+const installToolResult = run(installTool)
+assert.equal(installToolResult.status, 64)
+assert.match(installToolResult.stdout, /request_plugin_install/)
 
 const production2026 = basePlan()
 production2026.protocol_version = "2026-07-28"
@@ -92,13 +75,7 @@ const canaryRead = basePlan()
 canaryRead.protocol_version = "2026-07-28"
 canaryRead.environment = "canary"
 canaryRead.capabilities = { discovery: true, tasks: true }
-canaryRead.discovery = {
-  load_requested: true,
-  tools: ["read_state", "write_state", "verify_state"],
-  skills: [],
-  rejected_tools: [],
-  required_tools: ["read_state"],
-}
+canaryRead.discovery = { load_requested: true, tools: ["read_state", "write_state", "verify_state"], skills: [] }
 canaryRead.task = {
   enabled: true,
   mode: "read",
@@ -110,6 +87,50 @@ canaryRead.task = {
 const canaryReadResult = run(canaryRead)
 assert.equal(canaryReadResult.status, 0, canaryReadResult.stderr)
 assert.equal(JSON.parse(canaryReadResult.stdout).normalized.task_enabled, true)
+
+const validFallback = structuredClone(canaryRead)
+validFallback.discovery = {
+  load_requested: false,
+  tools: ["read_state", "write_state", "verify_state"],
+  skills: [],
+  legacy_fallback: {
+    requested: true,
+    same_server_identity: true,
+    http_status: 400,
+    response_id: null,
+    error_code: -32000,
+    message: "Bad Request: Unsupported protocol version (supported versions: 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05)",
+    content_type: "text/plain",
+    negotiated_protocol_version: "2025-11-25",
+  },
+}
+validFallback.task = { enabled: false }
+const validFallbackResult = run(validFallback)
+assert.equal(validFallbackResult.status, 0, validFallbackResult.stderr)
+assert.equal(JSON.parse(validFallbackResult.stdout).normalized.effective_protocol_version, "2025-11-25")
+
+const missingSessionFallback = structuredClone(validFallback)
+missingSessionFallback.discovery.legacy_fallback.message = "Bad Request: No valid session ID provided"
+const missingSessionResult = run(missingSessionFallback)
+assert.equal(missingSessionResult.status, 0, missingSessionResult.stderr)
+
+const unknownVersionFallback = structuredClone(validFallback)
+unknownVersionFallback.discovery.legacy_fallback.message = "Bad Request: Unsupported protocol version (supported versions: 2025-11-25, 2099-01-01)"
+const unknownVersionResult = run(unknownVersionFallback)
+assert.equal(unknownVersionResult.status, 64)
+assert.match(unknownVersionResult.stdout, /exclusively supported legacy-version list/)
+
+const correlatedFallback = structuredClone(validFallback)
+correlatedFallback.discovery.legacy_fallback.response_id = 7
+const correlatedFallbackResult = run(correlatedFallback)
+assert.equal(correlatedFallbackResult.status, 64)
+assert.match(correlatedFallbackResult.stdout, /null JSON-RPC response ID/)
+
+const fallbackTask = structuredClone(validFallback)
+fallbackTask.task = structuredClone(canaryRead.task)
+const fallbackTaskResult = run(fallbackTask)
+assert.equal(fallbackTaskResult.status, 64)
+assert.match(fallbackTaskResult.stdout, /unavailable after legacy initialization fallback/)
 
 const unallowlisted = structuredClone(canaryRead)
 unallowlisted.discovery.tools.push("surprise_write")
