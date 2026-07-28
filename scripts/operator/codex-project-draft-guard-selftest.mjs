@@ -2,8 +2,9 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
+import { fileURLToPath } from "node:url"
 
-const script = new URL("./codex-project-draft-guard.mjs", import.meta.url).pathname
+const script = fileURLToPath(new URL("./codex-project-draft-guard.mjs", import.meta.url))
 const root = fs.mkdtempSync(path.join(os.tmpdir(), "codex-project-draft-"))
 const projectA = path.join(root, "project-a")
 const projectB = path.join(root, "project-b")
