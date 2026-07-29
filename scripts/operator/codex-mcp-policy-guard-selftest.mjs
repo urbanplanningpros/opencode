@@ -50,6 +50,32 @@ const oversized = structuredClone(bounded)
 oversized.mcp_catalog_pagination.item_count = 1_025
 run("oversized", oversized, 64, "blocked")
 
+const unknownAuthSafe = {
+  ...base,
+  mcp_authentication: {
+    status: "unknown",
+    discovery_error_class: "rate_limited",
+    retry_count: 1,
+    same_server_and_endpoint_preserved: true,
+    anonymous_fallback_selected: false,
+    upstream_fix_in_pinned_stable: false,
+  },
+}
+const unknownAuthReport = run("unknown-auth-safe", unknownAuthSafe, 0, "compatible")
+assert.ok(unknownAuthReport.warnings.includes("upstream_mcp_unknown_auth_fix_not_in_pinned_stable"))
+
+const unknownAuthAnonymous = structuredClone(unknownAuthSafe)
+unknownAuthAnonymous.mcp_authentication.anonymous_fallback_selected = true
+run("unknown-auth-anonymous", unknownAuthAnonymous, 64, "blocked")
+
+const transientMisclassified = structuredClone(unknownAuthSafe)
+transientMisclassified.mcp_authentication.status = "unsupported"
+run("transient-auth-misclassified", transientMisclassified, 64, "blocked")
+
+const authRetryLoop = structuredClone(unknownAuthSafe)
+authRetryLoop.mcp_authentication.retry_count = 2
+run("auth-retry-loop", authRetryLoop, 64, "blocked")
+
 const failedSafe = {
   ...base,
   network_policy_amendment: {
@@ -74,6 +100,54 @@ const failedUnrecorded = structuredClone(failedSafe)
 failedUnrecorded.network_policy_amendment.pending_request_outcome = ""
 failedUnrecorded.network_policy_amendment.owning_call_outcome = ""
 run("failed-unrecorded", failedUnrecorded, 75, "remediation_required")
+
+const githubFallbackSafe = {
+  ...base,
+  github_connector_write: {
+    requested: true,
+    model: "gpt-5.6-sol",
+    connector_authenticated: true,
+    repository_write_access_verified: true,
+    capability_claim: "unavailable",
+    capability_canary_passed: false,
+    mutation_state: "not_dispatched",
+    operation_id: "op-123",
+    idempotency_key: "idem-123",
+    continuation_route: "direct-openai-pinned-gpt-5.5",
+    write_receipt_verified: false,
+  },
+}
+const githubFallbackReport = run("github-fallback-safe", githubFallbackSafe, 75, "remediation_required")
+assert.ok(githubFallbackReport.warnings.includes("gpt_5_6_github_connector_capability_regression_possible"))
+assert.ok(githubFallbackReport.remediation.includes("withhold_gpt_5_6_github_write_authority"))
+
+const githubUnsafeReplay = structuredClone(githubFallbackSafe)
+githubUnsafeReplay.github_connector_write.mutation_state = "unknown"
+run("github-unsafe-replay", githubUnsafeReplay, 64, "blocked")
+
+const githubNoFallback = structuredClone(githubFallbackSafe)
+githubNoFallback.github_connector_write.continuation_route = ""
+run("github-no-fallback", githubNoFallback, 75, "remediation_required")
+
+const githubWriteReceipt = {
+  ...base,
+  github_connector_write: {
+    requested: true,
+    model: "gpt-5.5",
+    connector_authenticated: true,
+    repository_write_access_verified: true,
+    capability_claim: "available",
+    capability_canary_passed: true,
+    mutation_state: "completed",
+    operation_id: "op-456",
+    idempotency_key: "idem-456",
+    continuation_route: "direct-openai-pinned-gpt-5.5",
+    write_receipt_verified: true,
+    branch_name: "codex/fix-example",
+    final_head_sha: "de9e97f83856e07b147154da4e52135ec604e840",
+  },
+}
+run("github-write-receipt", githubWriteReceipt, 0, "compatible")
 
 const prohibited = {
   routing: { provider: "openai", route: "automatic model gateway", automatic_selector: true },
