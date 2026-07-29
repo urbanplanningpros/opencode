@@ -26,6 +26,14 @@ const base = {
   saved_configuration_read_back: true,
   runtime_worktree_observed: true,
   uncertain_writes_reconciled: true,
+  worktree_environment: {
+    delegated_or_programmatic_creation: true,
+    selected_environment_bound: true,
+    setup_script_required: true,
+    setup_script_completed: true,
+    expected_artifacts_verified: true,
+    environment_manager_ready: true,
+  },
   scheduled_execution: {
     background_driver_verified: true,
     first_tool_started: true,
@@ -42,7 +50,7 @@ const base = {
     request_id: "approval-123",
     operation_id: "operation-123",
     payload_sha256: "a".repeat(64),
-    expires_at: "2026-07-29T13:00:00Z",
+    expires_at: "2026-07-29T23:00:00Z",
   },
   remote_connection: {
     used: true,
@@ -56,6 +64,28 @@ const base = {
     controller_projection_resynced: true,
     resume_attempted: false,
   },
+  app_server: {
+    used: false,
+    unexpected_exit: false,
+    destroyed_stdin_observed: false,
+    extension_host_restarted: false,
+    canonical_turn_state_reconciled: false,
+    external_command_state_reconciled: false,
+    automatic_replay_attempted: false,
+    replacement_session_created: false,
+  },
+  context_handoff: {
+    used: false,
+    large_context: false,
+    direct_work_migration_attempted: false,
+    manual_checkpoint_route_used: false,
+    source_checkpoint_exported: false,
+    source_thread_preserved: false,
+    target_thread_created: false,
+    target_thread_indexed: false,
+    renderer_healthy: false,
+    automatic_replay_attempted: false,
+  },
 }
 
 run("safe", base, 0, "background_automation_continuity_verified")
@@ -64,6 +94,20 @@ run(
   { ...base, execution_environment: "local", runtime_worktree_observed: false },
   75,
   "repository_writing_automation_not_isolated",
+)
+run(
+  "delegated-worktree-environment-uninitialized",
+  {
+    ...base,
+    worktree_environment: {
+      ...base.worktree_environment,
+      setup_script_completed: false,
+      expected_artifacts_verified: false,
+      environment_manager_ready: false,
+    },
+  },
+  75,
+  "delegated_worktree_environment_uninitialized",
 )
 run(
   "local-stall",
@@ -184,6 +228,131 @@ run(
   },
   64,
   "completed_remote_task_resume_forbidden",
+)
+run(
+  "app-server-sigill-unreconciled",
+  {
+    ...base,
+    app_server: {
+      ...base.app_server,
+      used: true,
+      unexpected_exit: true,
+      unexpected_exit_signal: "SIGILL",
+      destroyed_stdin_observed: true,
+      continuation_route: "approved_linux",
+    },
+  },
+  75,
+  "app_server_failure_state_unreconciled",
+)
+run(
+  "app-server-sigill-approved-linux-recovery",
+  {
+    ...base,
+    app_server: {
+      ...base.app_server,
+      used: true,
+      unexpected_exit: true,
+      unexpected_exit_signal: "SIGILL",
+      destroyed_stdin_observed: true,
+      canonical_turn_state_reconciled: true,
+      external_command_state_reconciled: true,
+      continuation_route: "approved_linux",
+    },
+  },
+  0,
+  "background_automation_continuity_verified",
+)
+run(
+  "app-server-failure-auto-replay",
+  {
+    ...base,
+    app_server: {
+      ...base.app_server,
+      used: true,
+      unexpected_exit: true,
+      unexpected_exit_signal: "SIGILL",
+      destroyed_stdin_observed: true,
+      canonical_turn_state_reconciled: true,
+      external_command_state_reconciled: true,
+      automatic_replay_attempted: true,
+      continuation_route: "approved_linux",
+    },
+  },
+  64,
+  "app_server_failure_replay_forbidden",
+)
+run(
+  "large-context-direct-work-handoff",
+  {
+    ...base,
+    context_handoff: {
+      ...base.context_handoff,
+      used: true,
+      large_context: true,
+      direct_work_migration_attempted: true,
+    },
+  },
+  75,
+  "large_context_direct_work_handoff_untrusted",
+)
+run(
+  "large-context-checkpoint-incomplete",
+  {
+    ...base,
+    context_handoff: {
+      ...base.context_handoff,
+      used: true,
+      large_context: true,
+      manual_checkpoint_route_used: true,
+      source_checkpoint_exported: true,
+      source_thread_preserved: true,
+      target_thread_created: true,
+      target_thread_indexed: false,
+      renderer_healthy: true,
+    },
+  },
+  75,
+  "large_context_checkpoint_handoff_unverified",
+)
+run(
+  "large-context-checkpoint-safe",
+  {
+    ...base,
+    context_handoff: {
+      ...base.context_handoff,
+      used: true,
+      large_context: true,
+      manual_checkpoint_route_used: true,
+      source_checkpoint_exported: true,
+      source_thread_preserved: true,
+      target_thread_created: true,
+      target_thread_indexed: true,
+      renderer_healthy: true,
+    },
+  },
+  0,
+  "background_automation_continuity_verified",
+)
+run(
+  "large-context-handoff-auto-replay",
+  {
+    ...base,
+    context_handoff: {
+      ...base.context_handoff,
+      used: true,
+      large_context: true,
+      manual_checkpoint_route_used: true,
+      source_checkpoint_exported: true,
+      source_thread_preserved: true,
+      target_thread_created: true,
+      target_thread_indexed: true,
+      renderer_healthy: true,
+      automatic_replay_attempted: true,
+    },
+  },
+  64,
+  "context_handoff_replay_forbidden",
 )
 run(
   "prohibited-route",
