@@ -1,12 +1,15 @@
 # Codex background automation continuity
 
-This protocol covers five Codex Desktop compatibility boundaries observed on July 29, 2026:
+This protocol covers eight Codex compatibility boundaries observed on July 29, 2026:
 
 - new repository-backed cron automations may be created as Local because the macOS creation flow no longer exposes the Worktree selector;
+- delegated or programmatic Worktree creation may skip the project’s selected local environment and setup script;
 - a Local scheduled run may create its thread and emit initial reasoning but remain unable to invoke its first tool until a user opens the thread and resumes it;
 - blocking MCP elicitation approvals may not produce the actionable notification used for command approvals on Windows;
 - a Remote SSH endpoint may recover after sleep/wake while Codex Desktop remains disconnected until manually reconnected;
-- a Remote Control sequence gap may leave the controller spinning after the canonical host turn has already completed.
+- a Remote Control sequence gap may leave the controller spinning after the canonical host turn has already completed;
+- the app-server bundled with the stable VS Code extension may exit with `SIGILL` during long Linux/WSL2 sessions and fail to restart;
+- a large-context Chat-to-Work continuation may wedge the macOS renderer and fail to create a durable target thread.
 
 The goal is to isolate only the affected execution path while keeping guarded direct OpenAI and explicitly authorized local workflows operating.
 
@@ -43,6 +46,30 @@ When no supported Worktree creation path is available, route the job through the
 
 Heartbeat automations and non-writing tasks do not require a new worktree merely because they are scheduled.
 
+## Delegated Worktree environment initialization
+
+A delegated or programmatically created Worktree is not ready merely because the directory and branch exist. Before any build, test, deployment, or repository write, require:
+
+```text
+selected_environment_bound = true
+environment_manager_ready = true
+setup_script_completed = true              # when a setup script is required
+expected_artifacts_verified = true          # when a setup script is required
+```
+
+Use this sequence:
+
+```text
+create isolated worktree from pinned SHA
+→ bind the project’s reviewed local environment explicitly
+→ run the environment setup script inside that worktree
+→ verify expected generated files and environment receipts
+→ run one read-only environment-manager canary
+→ grant build or write authority
+```
+
+Do not repair the Worktree by running an arbitrary shell bootstrap copied from another checkout. The setup command, environment ID, generated-artifact hashes, and worktree path must be recorded in the operation ledger.
+
 ## Local scheduled background execution
 
 A Local scheduled cron run is not trusted as unattended merely because its thread exists or the UI says it is running. Admission requires:
@@ -58,11 +85,11 @@ If the scheduled thread stalls before its first tool call:
 
 ```text
 preserve the existing task and turn IDs
-inspect pending approvals
-reconcile every possible external write
-attach to the exact existing thread
-resume once only when same_thread_resume_only = true
-otherwise reroute through the authorized local scheduler
+→ inspect pending approvals
+→ reconcile every possible external write
+→ attach to the exact existing thread
+→ resume once only when same_thread_resume_only = true
+→ otherwise reroute through the authorized local scheduler
 ```
 
 Never create a replacement task or replay a tool call simply because the scheduled thread appears active but has no progress owner.
@@ -91,10 +118,10 @@ When an SSH endpoint becomes reachable after sleep or transport loss:
 
 ```text
 reconnect once
-verify the same task ID
-verify repository SHA and diff hash
-verify pending approval and write ledger
-resume only after state matches
+→ verify the same task ID
+→ verify repository SHA and diff hash
+→ verify pending approval and write ledger
+→ resume only after state matches
 ```
 
 When a Remote Control log reports a sequence gap, the controller spinner and task-detail projection are no longer authoritative. Reconcile against the canonical host state:
@@ -116,6 +143,63 @@ canonical host = unknown
 
 A host-completed task must never receive another `thread/resume` merely to clear a stale spinner.
 
+## VS Code app-server native exit
+
+Treat `SIGILL`, destroyed app-server stdin, or an unexpected native app-server exit as a state-reconciliation boundary.
+
+```text
+preserve the task and turn IDs
+→ preserve repository SHA and diff hash
+→ read durable command logs and destination state
+→ classify the last command as completed, not dispatched, or unknown
+→ restart the extension host or move execution to the approved local/Linux route
+→ continue only the exact unfinished action
+```
+
+A failure is not recovered until:
+
+```text
+canonical_turn_state_reconciled = true
+external_command_state_reconciled = true
+continuation_route = same_thread | approved_local | approved_linux
+```
+
+Do not create a replacement session or automatically replay a command after the extension reports destroyed stdin. A command may have completed before the app-server exited.
+
+Restore long-session authority to the affected extension build only after repeated WebSocket rollover, stream-reset, and multi-hour canaries prove that the app-server remains alive or restarts with the same task state.
+
+## Large-context Chat-to-Work handoff
+
+Until the large-context renderer failure is corrected, do not use direct `Continue in work mode` as the authoritative migration path for a mature thread.
+
+Use a compact state checkpoint instead:
+
+```text
+source conversation ID and title
+immutable completion criteria
+current phase and exact next action
+repository and commit SHA
+current diff SHA-256
+completed-step ledger
+pending approvals
+operation IDs and idempotency keys
+uncertain-write state
+required file and connector references
+```
+
+Then:
+
+```text
+preserve the source thread unchanged
+→ create a fresh Work thread on the approved OpenAI route
+→ paste or attach only the compact checkpoint
+→ verify the target thread appears in Recents
+→ verify renderer health and repository state
+→ continue the exact next unfinished action
+```
+
+Do not replay the failed direct migration. Do not import an external provider session or use a model gateway as a handoff bridge.
+
 ## Evidence example
 
 ```json
@@ -129,6 +213,14 @@ A host-completed task must never receive another `thread/resume` merely to clear
   "saved_configuration_read_back": true,
   "runtime_worktree_observed": true,
   "uncertain_writes_reconciled": true,
+  "worktree_environment": {
+    "delegated_or_programmatic_creation": true,
+    "selected_environment_bound": true,
+    "setup_script_required": true,
+    "setup_script_completed": true,
+    "expected_artifacts_verified": true,
+    "environment_manager_ready": true
+  },
   "scheduled_execution": {
     "background_driver_verified": true,
     "first_tool_started": true,
@@ -145,7 +237,7 @@ A host-completed task must never receive another `thread/resume` merely to clear
     "request_id": "approval-123",
     "operation_id": "operation-123",
     "payload_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    "expires_at": "2026-07-29T13:00:00Z"
+    "expires_at": "2026-07-29T23:00:00Z"
   },
   "remote_connection": {
     "used": true,
@@ -158,6 +250,28 @@ A host-completed task must never receive another `thread/resume` merely to clear
     "canonical_state_reconciled": true,
     "controller_projection_resynced": true,
     "resume_attempted": false
+  },
+  "app_server": {
+    "used": false,
+    "unexpected_exit": false,
+    "destroyed_stdin_observed": false,
+    "extension_host_restarted": false,
+    "canonical_turn_state_reconciled": false,
+    "external_command_state_reconciled": false,
+    "automatic_replay_attempted": false,
+    "replacement_session_created": false
+  },
+  "context_handoff": {
+    "used": false,
+    "large_context": false,
+    "direct_work_migration_attempted": false,
+    "manual_checkpoint_route_used": false,
+    "source_checkpoint_exported": false,
+    "source_thread_preserved": false,
+    "target_thread_created": false,
+    "target_thread_indexed": false,
+    "renderer_healthy": false,
+    "automatic_replay_attempted": false
   }
 }
 ```
