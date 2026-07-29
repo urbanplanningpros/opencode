@@ -74,6 +74,7 @@ let criteriaHash
 let checkpointId
 let repositorySha
 let diffHash
+let completedStepsHash
 let phase
 let nextAction
 let completedSteps
@@ -84,12 +85,14 @@ let repeatedBuilds
 let reopenedResolved
 let duplicateSubagentAssignments
 let completedStepRegressions
+let repetitionLimit
 try {
   taskId = nonEmptyString(evidence.task_id, "task_id")
   criteriaHash = nonEmptyString(evidence.completion_criteria_sha256, "completion_criteria_sha256")
   checkpointId = nonEmptyString(evidence.checkpoint_id, "checkpoint_id")
   repositorySha = nonEmptyString(evidence.repository_sha, "repository_sha")
   diffHash = nonEmptyString(evidence.diff_sha256, "diff_sha256")
+  completedStepsHash = nonEmptyString(evidence.completed_steps_sha256, "completed_steps_sha256")
   phase = nonEmptyString(evidence.phase, "phase")
   nextAction = nonEmptyString(evidence.next_action, "next_action")
   completedSteps = stringArray(evidence.completed_steps, "completed_steps")
@@ -100,6 +103,7 @@ try {
   reopenedResolved = integer(evidence.reopened_resolved_count)
   duplicateSubagentAssignments = integer(evidence.duplicate_subagent_assignment_count)
   completedStepRegressions = integer(evidence.completed_step_regression_count)
+  repetitionLimit = integer(args["repetition-limit"], 2)
 } catch (error) {
   console.error(JSON.stringify({ admitted: false, reason: "malformed_checkpoint", detail: error.message }, null, 2))
   process.exit(2)
@@ -115,9 +119,8 @@ const freshTurn = evidence.fresh_guarded_turn === true
 const continuationStatePersisted = evidence.continuation_state_persisted === true
 const immutableCriteriaPreserved = evidence.restored_completion_criteria_sha256 === criteriaHash
 const nextActionPreserved = evidence.restored_next_action === nextAction
-const completedStepsPreserved = evidence.restored_completed_steps_sha256 === evidence.completed_steps_sha256
+const completedStepsPreserved = evidence.restored_completed_steps_sha256 === completedStepsHash
 
-const repetitionLimit = integer(args["repetition-limit"], 2)
 const repeatedWork =
   repeatedCommands > repetitionLimit ||
   repeatedBuilds > repetitionLimit ||
@@ -164,6 +167,7 @@ const report = {
   checkpoint_id: checkpointId,
   repository_sha: repositorySha,
   diff_sha256: diffHash,
+  completed_steps_sha256: completedStepsHash,
   phase,
   next_action: nextAction,
   completed_steps: completedSteps.length,
