@@ -1,10 +1,12 @@
 # Codex background automation continuity
 
-This protocol covers three Codex Desktop compatibility boundaries observed on July 29, 2026:
+This protocol covers five Codex Desktop compatibility boundaries observed on July 29, 2026:
 
 - new repository-backed cron automations may be created as Local because the macOS creation flow no longer exposes the Worktree selector;
+- a Local scheduled run may create its thread and emit initial reasoning but remain unable to invoke its first tool until a user opens the thread and resumes it;
 - blocking MCP elicitation approvals may not produce the actionable notification used for command approvals on Windows;
-- a Remote SSH endpoint may recover after sleep/wake while Codex Desktop remains disconnected until manually reconnected.
+- a Remote SSH endpoint may recover after sleep/wake while Codex Desktop remains disconnected until manually reconnected;
+- a Remote Control sequence gap may leave the controller spinning after the canonical host turn has already completed.
 
 The goal is to isolate only the affected execution path while keeping guarded direct OpenAI and explicitly authorized local workflows operating.
 
@@ -21,7 +23,7 @@ Exit codes:
 ```text
 0   continuity evidence verified
 75  bounded compatibility recovery or reroute required
-64  approval-integrity or prohibited-routing failure
+64  approval, replay, or prohibited-routing integrity failure
 2   malformed invocation or evidence
 ```
 
@@ -41,6 +43,32 @@ When no supported Worktree creation path is available, route the job through the
 
 Heartbeat automations and non-writing tasks do not require a new worktree merely because they are scheduled.
 
+## Local scheduled background execution
+
+A Local scheduled cron run is not trusted as unattended merely because its thread exists or the UI says it is running. Admission requires:
+
+```text
+background_driver_verified = true
+first_tool_started = true
+progress_heartbeat_observed = true
+manual_resume_required = false
+```
+
+If the scheduled thread stalls before its first tool call:
+
+```text
+preserve the existing task and turn IDs
+inspect pending approvals
+reconcile every possible external write
+attach to the exact existing thread
+resume once only when same_thread_resume_only = true
+otherwise reroute through the authorized local scheduler
+```
+
+Never create a replacement task or replay a tool call simply because the scheduled thread appears active but has no progress owner.
+
+Native Local unattended authority should return only after a corrected stable build completes three consecutive scheduled canaries with the app left untouched, a verified background driver, tool execution, progress heartbeats, and terminal completion.
+
 ## Blocking MCP approvals
 
 A blocking approval is not admitted unless its exact request is visible and bound to:
@@ -57,9 +85,9 @@ An actionable desktop notification is preferred. When the product does not provi
 
 Do not interpret progress text, a green task tag, or a generic attention badge as approval authority.
 
-## Remote reconnection
+## Remote reconnection and sequence gaps
 
-When the SSH endpoint becomes reachable after sleep or transport loss:
+When an SSH endpoint becomes reachable after sleep or transport loss:
 
 ```text
 reconnect once
@@ -69,7 +97,24 @@ verify pending approval and write ledger
 resume only after state matches
 ```
 
-Do not recreate the task or replay an uncertain write merely because the Desktop connection still appears disconnected.
+When a Remote Control log reports a sequence gap, the controller spinner and task-detail projection are no longer authoritative. Reconcile against the canonical host state:
+
+```text
+canonical host = completed
+→ do not resume or retry
+→ mark the controller projection stale
+→ resync or reconnect the view
+
+canonical host = active
+→ continue the existing task only
+→ do not create a replacement task
+
+canonical host = unknown
+→ preserve state and reconcile durable destinations
+→ withhold replay until task and write state are known
+```
+
+A host-completed task must never receive another `thread/resume` merely to clear a stale spinner.
 
 ## Evidence example
 
@@ -84,6 +129,13 @@ Do not recreate the task or replay an uncertain write merely because the Desktop
   "saved_configuration_read_back": true,
   "runtime_worktree_observed": true,
   "uncertain_writes_reconciled": true,
+  "scheduled_execution": {
+    "background_driver_verified": true,
+    "first_tool_started": true,
+    "progress_heartbeat_observed": true,
+    "manual_resume_required": false,
+    "same_thread_resume_only": true
+  },
   "pending_approval": {
     "blocking": true,
     "event_type": "mcp_resolve_elicitation",
@@ -100,7 +152,12 @@ Do not recreate the task or replay an uncertain write merely because the Desktop
     "endpoint_reachable": true,
     "app_reconnected": true,
     "task_identity_verified": true,
-    "state_verified": true
+    "state_verified": true,
+    "sequence_gap_detected": false,
+    "canonical_host_state": "active",
+    "canonical_state_reconciled": true,
+    "controller_projection_resynced": true,
+    "resume_attempted": false
   }
 }
 ```
