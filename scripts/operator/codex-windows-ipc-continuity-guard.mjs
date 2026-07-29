@@ -36,6 +36,13 @@ function bool(value, name, fallback = false) {
   return value
 }
 
+function finiteNumber(value, name, fallback = 0) {
+  if (value === undefined || value === null || value === "") return fallback
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed) || parsed < 0) throw new Error(`${name} must be a non-negative finite number`)
+  return parsed
+}
+
 const args = parseArgs(process.argv.slice(2))
 if (!args.input) {
   console.error(JSON.stringify({ admitted: false, reason: "missing_input" }, null, 2))
@@ -62,6 +69,7 @@ let platform
 let desktopBuild
 let canonicalTaskState
 let rerouteTarget
+let wmiSnapshotRatePerSecond
 try {
   taskId = text(evidence.task_id, "task_id")
   operationId = text(evidence.operation_id, "operation_id")
@@ -69,13 +77,15 @@ try {
   desktopBuild = text(evidence.desktop_build, "desktop_build", true)
   canonicalTaskState = text(evidence.canonical_task_state, "canonical_task_state", true).toLowerCase()
   rerouteTarget = text(evidence.reroute_target, "reroute_target", true).toLowerCase()
+  wmiSnapshotRatePerSecond = finiteNumber(evidence.wmi_snapshot_rate_per_second, "wmi_snapshot_rate_per_second")
 } catch (error) {
   console.error(JSON.stringify({ admitted: false, reason: "malformed_evidence", detail: error.message }, null, 2))
   process.exit(2)
 }
 
 const windows = platform.includes("windows")
-const affectedBuild = desktopBuild === "26.721.4979.0"
+const affectedIpcBuild = desktopBuild === "26.721.4979.0"
+const affectedWmiBuild = desktopBuild === "26.721.11231.0"
 const browserIntegrationEnabled = bool(evidence.browser_integration_enabled, "browser_integration_enabled")
 const longRunningOrConcurrent =
   bool(evidence.long_running_task, "long_running_task") || Number(evidence.concurrent_task_count || 0) > 1
@@ -88,9 +98,24 @@ const interruptedTurnReconciled = bool(evidence.interrupted_turn_reconciled, "in
 const childProcessesInventoried = bool(evidence.child_processes_inventoried, "child_processes_inventoried")
 const automaticReplayAttempted = bool(evidence.automatic_replay_attempted, "automatic_replay_attempted")
 const browserRouteDisabled = bool(evidence.browser_route_disabled, "browser_route_disabled")
+const systemWideInputLagObserved = bool(evidence.system_wide_input_lag_observed, "system_wide_input_lag_observed")
+const powershellWmiSnapshotChildrenObserved = bool(
+  evidence.powershell_wmi_snapshot_children_observed,
+  "powershell_wmi_snapshot_children_observed",
+)
+const wmiActivityErrorObserved = bool(evidence.wmi_activity_error_observed, "wmi_activity_error_observed")
+const desktopExecutionIsolated = bool(evidence.desktop_execution_isolated, "desktop_execution_isolated")
+const unsafeWmiSuppressionApplied = bool(evidence.unsafe_wmi_suppression_applied, "unsafe_wmi_suppression_applied")
 
 const ipcFailure = windows && (epipeObserved || writeEofUncaught || appServerDisconnected)
-const unsafeAffectedPreflight = windows && affectedBuild && browserIntegrationEnabled && longRunningOrConcurrent
+const unsafeAffectedPreflight = windows && affectedIpcBuild && browserIntegrationEnabled && longRunningOrConcurrent
+const wmiSnapshotPressure =
+  windows &&
+  affectedWmiBuild &&
+  (systemWideInputLagObserved ||
+    powershellWmiSnapshotChildrenObserved ||
+    wmiActivityErrorObserved ||
+    wmiSnapshotRatePerSecond >= 1)
 const canonicalStateValid = new Set(["active", "completed", "failed", "unknown"]).has(canonicalTaskState)
 const approvedReroute = new Set(["approved_linux_vps", "authorized_local_linux", "none"]).has(rerouteTarget || "none")
 
@@ -101,6 +126,10 @@ let exitCode = 0
 if (!approvedReroute) {
   admitted = false
   reason = "unapproved_reroute_target"
+  exitCode = 64
+} else if (unsafeWmiSuppressionApplied) {
+  admitted = false
+  reason = "unsafe_wmi_snapshot_suppression_forbidden"
   exitCode = 64
 } else if (automaticReplayAttempted) {
   admitted = false
@@ -126,6 +155,12 @@ if (!approvedReroute) {
   admitted = false
   reason = "affected_windows_browser_ipc_route_not_isolated"
   exitCode = 75
+} else if (wmiSnapshotPressure && !desktopExecutionIsolated) {
+  admitted = false
+  reason = "windows_wmi_snapshot_pressure_not_isolated"
+  exitCode = 75
+} else if (wmiSnapshotPressure && desktopExecutionIsolated) {
+  reason = "windows_wmi_snapshot_pressure_contained"
 } else if (browserClientClosed && !epipeObserved && !writeEofUncaught && !appServerDisconnected) {
   reason = "browser_client_closed_cleanly"
 }
@@ -137,7 +172,8 @@ const report = {
   operation_id: operationId,
   platform,
   desktop_build: desktopBuild || null,
-  affected_build: affectedBuild,
+  affected_ipc_build: affectedIpcBuild,
+  affected_wmi_build: affectedWmiBuild,
   ipc_failure: ipcFailure,
   browser_integration_enabled: browserIntegrationEnabled,
   browser_route_disabled: browserRouteDisabled,
@@ -145,12 +181,18 @@ const report = {
   uncertain_writes_reconciled: uncertainWritesReconciled,
   interrupted_turn_reconciled: interruptedTurnReconciled,
   child_processes_inventoried: childProcessesInventoried,
+  wmi_snapshot_pressure: wmiSnapshotPressure,
+  wmi_snapshot_rate_per_second: wmiSnapshotRatePerSecond,
+  system_wide_input_lag_observed: systemWideInputLagObserved,
+  powershell_wmi_snapshot_children_observed: powershellWmiSnapshotChildrenObserved,
+  wmi_activity_error_observed: wmiActivityErrorObserved,
+  desktop_execution_isolated: desktopExecutionIsolated,
   reroute_target: rerouteTarget || "none",
   protocol: admitted
-    ? "Continue through guarded direct OpenAI and the approved execution route. Keep the task ID, operation ID, idempotency ledger, repository state, canonical task state, and child-process inventory authoritative."
-    : "Stop only the affected Windows Desktop or browser-control turn. Preserve task and repository state, reconcile uncertain writes, read canonical task state, inventory surviving child processes, disable the affected Browser/Chrome route, and continue through the approved Linux VPS or explicitly authorized local Linux route without replaying completed work.",
+    ? "Continue through guarded direct OpenAI and the approved execution route. Keep the task ID, operation ID, idempotency ledger, repository state, canonical task state, child-process inventory, and Windows WMI pressure evidence authoritative."
+    : "Stop only the affected Windows Desktop or browser-control turn. Preserve task and repository state, reconcile uncertain writes, read canonical task state, inventory surviving child processes, avoid suppressing WMI snapshots with empty results, isolate Desktop local execution, and continue through the approved Linux VPS or explicitly authorized local Linux route without replaying completed work.",
   resume_condition:
-    "Restore Windows Browser/Chrome IPC authority only after a corrected stable build passes repeated client-close and concurrent-task canaries with no uncaught EPIPE/EOF, no app-server loss, no orphan child workloads, and correct same-task recovery.",
+    "Restore affected Windows Desktop production authority only after a corrected stable build passes repeated IPC, idle, and active-task canaries with no uncaught EPIPE/EOF, no app-server loss, no recurring PowerShell WMI full-process snapshots, no system-wide input lag, no retry amplification, correct same-task recovery, and no duplicate external writes.",
 }
 
 const output = JSON.stringify(report, null, 2)
