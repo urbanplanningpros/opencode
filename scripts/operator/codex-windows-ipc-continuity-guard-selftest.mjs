@@ -34,6 +34,12 @@ const base = {
   interrupted_turn_reconciled: true,
   child_processes_inventoried: true,
   automatic_replay_attempted: false,
+  system_wide_input_lag_observed: false,
+  powershell_wmi_snapshot_children_observed: false,
+  wmi_snapshot_rate_per_second: 0,
+  wmi_activity_error_observed: false,
+  desktop_execution_isolated: false,
+  unsafe_wmi_suppression_applied: false,
   reroute_target: "approved_linux_vps",
 }
 
@@ -92,6 +98,42 @@ run(
   },
   64,
   "automatic_replay_forbidden_after_ipc_failure",
+)
+run(
+  "wmi-pressure",
+  {
+    ...base,
+    desktop_build: "26.721.11231.0",
+    system_wide_input_lag_observed: true,
+    powershell_wmi_snapshot_children_observed: true,
+    wmi_snapshot_rate_per_second: 1.2,
+    desktop_execution_isolated: false,
+  },
+  75,
+  "windows_wmi_snapshot_pressure_not_isolated",
+)
+run(
+  "wmi-contained",
+  {
+    ...base,
+    desktop_build: "26.721.11231.0",
+    system_wide_input_lag_observed: true,
+    powershell_wmi_snapshot_children_observed: true,
+    wmi_snapshot_rate_per_second: 1.2,
+    desktop_execution_isolated: true,
+  },
+  0,
+  "windows_wmi_snapshot_pressure_contained",
+)
+run(
+  "unsafe-wmi-suppression",
+  {
+    ...base,
+    desktop_build: "26.721.11231.0",
+    unsafe_wmi_suppression_applied: true,
+  },
+  64,
+  "unsafe_wmi_snapshot_suppression_forbidden",
 )
 run(
   "prohibited-route",
