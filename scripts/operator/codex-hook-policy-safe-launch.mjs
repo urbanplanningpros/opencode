@@ -9,9 +9,14 @@ if (!process.versions.bun) {
 }
 
 const argv = process.argv.slice(2)
-const dryRunIndex = argv.indexOf("--dry-run")
-const dryRun = dryRunIndex !== -1
-if (dryRun) argv.splice(dryRunIndex, 1)
+const takeFlag = (name) => {
+  const index = argv.indexOf(name)
+  if (index === -1) return false
+  argv.splice(index, 1)
+  return true
+}
+const dryRun = takeFlag("--dry-run")
+const forceHttpSse = takeFlag("--http-sse-recovery")
 
 const separator = argv.indexOf("--")
 const codexArgs = separator === -1 ? argv : argv.slice(separator + 1)
@@ -68,6 +73,7 @@ if (!fs.existsSync(delegatedLauncher)) {
 const delegatedArgs = [
   delegatedLauncher,
   ...(dryRun ? ["--dry-run"] : []),
+  ...(forceHttpSse ? ["--http-sse-recovery"] : []),
   "--",
   "--disable",
   "hooks",
