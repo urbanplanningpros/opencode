@@ -1,0 +1,24 @@
+{
+  "host_platform": "linux",
+  "terminals": [
+    {
+      "item_id": "posix-local",
+      "cwd": "/srv/upp/repo",
+      "purpose": "local_filesystem_authority",
+      "local_authority_verified": true,
+      "expected_normalized_uri": "file:///srv/upp/repo"
+    },
+    {
+      "item_id": "windows-remote",
+      "cwd": "\\\\?\\D:\\reports\\report.pdf",
+      "purpose": "display_only",
+      "expected_normalized_uri": "file:///D:/reports/report.pdf"
+    },
+    {
+      "item_id": "unc-remote",
+      "cwd": "\\\\.\\UNC\\server\\share\\reports\\report.pdf",
+      "purpose": "display_only",
+      "expected_normalized_uri": "file://server/share/reports/report.pdf"
+    }
+  ]
+}
