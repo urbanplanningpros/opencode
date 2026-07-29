@@ -3,8 +3,9 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { spawnSync } from "node:child_process"
+import { fileURLToPath } from "node:url"
 
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "../..")
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const workspaceGuard = path.join(root, "scripts/operator/codex-windows-workspace-filesystem-guard.mjs")
 const stateGuard = path.join(root, "scripts/operator/codex-state-recovery-guard.mjs")
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), "codex-workspace-state-guard-"))
