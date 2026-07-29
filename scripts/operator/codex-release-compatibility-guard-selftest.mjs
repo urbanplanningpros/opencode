@@ -69,6 +69,104 @@ try {
     throw new Error("anonymous: unsafe fallback was not blocked")
   }
 
+  const stagedUpload = structuredClone(base)
+  stagedUpload.mcp.file_upload = {
+    host_environment_id: "windows-control",
+    selected_turn_environment_id: "linux-vps",
+    path_resolution_environment_id: "linux-vps",
+    resolved_in_selected_environment: true,
+    file_exists_in_selected_environment: true,
+    staged_in_selected_environment: true,
+    environment_native_fix_present: false,
+    host_native_rewrite_used: false,
+    approved_file_sha256: hash,
+    observed_file_sha256: hash,
+    previous_attempt_status: "not_started",
+  }
+  const stagedResult = run("staged-cross-environment-upload", stagedUpload, 0, "compatible")
+  if (!stagedResult.warnings.includes("mcp_environment_native_upload_fix_not_in_pinned_stable")) {
+    throw new Error("staged-cross-environment-upload: missing stable-fix warning")
+  }
+
+  const wrongEnvironmentUpload = structuredClone(stagedUpload)
+  wrongEnvironmentUpload.mcp.file_upload.path_resolution_environment_id = "windows-control"
+  wrongEnvironmentUpload.mcp.file_upload.host_native_rewrite_used = true
+  const wrongEnvironmentResult = run("wrong-environment-upload", wrongEnvironmentUpload, 64, "blocked")
+  if (!wrongEnvironmentResult.blocked.includes("mcp_upload_resolved_against_wrong_environment")) {
+    throw new Error("wrong-environment-upload: incorrect path environment was not blocked")
+  }
+
+  const uncertainUpload = structuredClone(stagedUpload)
+  uncertainUpload.mcp.file_upload.previous_attempt_status = "failed_after_dispatch"
+  uncertainUpload.mcp.file_upload.durable_side_effect_reconciled = false
+  const uncertainUploadResult = run("uncertain-upload", uncertainUpload, 64, "blocked")
+  if (!uncertainUploadResult.blocked.includes("mcp_upload_uncertain_side_effect_not_reconciled")) {
+    throw new Error("uncertain-upload: unreconciled upload was not blocked")
+  }
+
+  const artifactAffected = structuredClone(base)
+  artifactAffected.artifact_runtime = {
+    platform: "darwin",
+    launcher: "desktop-cua-node",
+    selected_executor: "desktop-cua-node",
+    hardened_runtime: true,
+    native_addon_signed: false,
+    library_validation_disabled: false,
+    manifest_package_version: "2.8.31",
+    installed_package_version: "2.8.33",
+  }
+  const artifactAffectedResult = run("artifact-affected", artifactAffected, 75, "remediation_required")
+  if (!artifactAffectedResult.remediation.includes("reroute_artifact_execution_to_primary_runtime_node_or_approved_local")) {
+    throw new Error("artifact-affected: missing primary-runtime reroute")
+  }
+
+  const artifactRerouted = structuredClone(artifactAffected)
+  artifactRerouted.artifact_runtime.selected_executor = "primary-runtime-node"
+  artifactRerouted.artifact_runtime.import_canary_passed = true
+  run("artifact-rerouted", artifactRerouted, 0, "compatible")
+
+  const artifactUnsafe = structuredClone(artifactRerouted)
+  artifactUnsafe.artifact_runtime.local_resign_requested = true
+  const artifactUnsafeResult = run("artifact-local-resign", artifactUnsafe, 64, "blocked")
+  if (!artifactUnsafeResult.blocked.includes("artifact_native_module_resign_requested")) {
+    throw new Error("artifact-local-resign: unsafe signature modification was not blocked")
+  }
+
+  const tuiPreflight = structuredClone(base)
+  tuiPreflight.tui_continuity = {
+    platform: "darwin",
+    codex_version: "0.146.0",
+    shared_app_server: true,
+    unattended_long_task: true,
+    session_id: "session-123",
+    checkpoint_sha256: hash,
+    supervisor_checkpointing_enabled: false,
+  }
+  const tuiPreflightResult = run("tui-preflight", tuiPreflight, 75, "remediation_required")
+  if (!tuiPreflightResult.remediation.includes("enable_same_session_tui_supervisor_checkpointing")) {
+    throw new Error("tui-preflight: missing supervisor remediation")
+  }
+
+  const tuiRecovery = structuredClone(tuiPreflight)
+  tuiRecovery.tui_continuity.supervisor_checkpointing_enabled = true
+  tuiRecovery.tui_continuity.unexpected_exit_observed = true
+  tuiRecovery.tui_continuity.canonical_state = "interrupted"
+  tuiRecovery.tui_continuity.uncertain_writes_reconciled = true
+  tuiRecovery.tui_continuity.same_session_resume_requested = true
+  tuiRecovery.tui_continuity.resume_attempt_count = 0
+  const tuiRecoveryResult = run("tui-same-session-recovery", tuiRecovery, 75, "remediation_required")
+  if (!tuiRecoveryResult.remediation.includes("resume_same_session_once_with_codex_resume")) {
+    throw new Error("tui-same-session-recovery: missing bounded same-session recovery")
+  }
+
+  const tuiReplay = structuredClone(tuiRecovery)
+  tuiReplay.tui_continuity.canonical_state = "completed"
+  tuiReplay.tui_continuity.replay_requested = true
+  const tuiReplayResult = run("tui-completed-replay", tuiReplay, 64, "blocked")
+  if (!tuiReplayResult.blocked.includes("tui_completed_session_resume_or_replay_rejected")) {
+    throw new Error("tui-completed-replay: completed task replay was not blocked")
+  }
+
   const prohibited = structuredClone(base)
   prohibited.routing = { provider: "anthropic", route: "gateway", automatic_selector: true }
   run("prohibited", prohibited, 64, "blocked")
