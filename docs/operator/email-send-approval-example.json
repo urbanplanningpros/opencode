@@ -1,0 +1,14 @@
+{
+  "action": "gmail_send",
+  "operation_id": "customer-email-2026-07-29-001",
+  "idempotency_key": "customer-email-2026-07-29-001-v1",
+  "payload": {
+    "to": [
+      "recipient@example.com"
+    ],
+    "subject": "Reviewed message",
+    "body_text": "This message remains a draft until its exact payload is approved.",
+    "attachments": [],
+    "approval_receipt": "/var/lib/upp-operator/email-approvals/customer-email-2026-07-29-001-<hash>.json"
+  }
+}
