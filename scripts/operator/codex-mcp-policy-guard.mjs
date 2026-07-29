@@ -85,6 +85,35 @@ if (pagination) {
   if (pagination.upstream_fix_in_pinned_stable !== true) warnings.push("upstream_mcp_pagination_fix_not_in_pinned_stable")
 }
 
+const authentication = evidence.mcp_authentication || null
+if (authentication) {
+  const status = text(authentication.status).toLowerCase().replaceAll("-", "_")
+  const discoveryError = text(authentication.discovery_error_class).toLowerCase().replaceAll("-", "_")
+  const retryCount = nonNegativeInteger(authentication.retry_count)
+
+  if (!["unknown", "unsupported", "not_logged_in", "bearer_token", "oauth"].includes(status)) {
+    blocked.push("mcp_auth_status_invalid")
+  }
+
+  const transientDiscoveryFailure = ["rate_limited", "timeout", "transient_http", "transport_error"].includes(discoveryError)
+  if (status === "unsupported" && transientDiscoveryFailure) {
+    blocked.push("transient_mcp_auth_failure_misclassified_as_unsupported")
+  }
+
+  if (status === "unknown") {
+    if (authentication.anonymous_fallback_selected === true) blocked.push("mcp_unknown_auth_anonymous_fallback_forbidden")
+    if (!discoveryError) remediation.push("preserve_mcp_oauth_discovery_error")
+    if (authentication.same_server_and_endpoint_preserved !== true) {
+      remediation.push("retry_exact_mcp_server_and_endpoint")
+    }
+    if (retryCount === null) remediation.push("record_bounded_mcp_auth_retry_count")
+    else if (retryCount > 1) blocked.push("mcp_auth_retry_limit_exceeded")
+    if (authentication.upstream_fix_in_pinned_stable !== true) {
+      warnings.push("upstream_mcp_unknown_auth_fix_not_in_pinned_stable")
+    }
+  }
+}
+
 const network = evidence.network_policy_amendment || null
 if (network) {
   const requestedHost = text(network.requested_host).toLowerCase()
@@ -109,6 +138,42 @@ if (network) {
   }
 }
 
+const githubWrite = evidence.github_connector_write || null
+if (githubWrite?.requested === true) {
+  const model = text(githubWrite.model).toLowerCase()
+  const capabilityClaim = text(githubWrite.capability_claim).toLowerCase().replaceAll("-", "_")
+  const mutationState = text(githubWrite.mutation_state).toLowerCase().replaceAll("-", "_")
+  const continuationRoute = text(githubWrite.continuation_route).toLowerCase().replaceAll("_", "-")
+  const operationId = text(githubWrite.operation_id)
+  const idempotencyKey = text(githubWrite.idempotency_key)
+
+  if (!operationId || !idempotencyKey) remediation.push("record_github_write_operation_and_idempotency_ids")
+  if (!["available", "unavailable", "unknown"].includes(capabilityClaim)) {
+    blocked.push("github_connector_capability_claim_invalid")
+  }
+  if (!["not_dispatched", "completed", "unknown"].includes(mutationState)) {
+    blocked.push("github_connector_mutation_state_invalid")
+  }
+  if (mutationState === "unknown") blocked.push("github_connector_write_state_unknown_replay_forbidden")
+
+  const verifiedConnector = githubWrite.connector_authenticated === true && githubWrite.repository_write_access_verified === true
+  const falseUnavailableClaim = verifiedConnector && capabilityClaim === "unavailable"
+  if (falseUnavailableClaim) {
+    warnings.push("gpt_5_6_github_connector_capability_regression_possible")
+    const approvedContinuation =
+      continuationRoute === "direct-openai-pinned-gpt-5.5" || continuationRoute === "authorized-local-git"
+    if (!approvedContinuation) remediation.push("reroute_github_write_through_explicit_approved_path")
+    if (model.includes("5.6") && githubWrite.capability_canary_passed !== true) {
+      remediation.push("withhold_gpt_5_6_github_write_authority")
+    }
+  }
+
+  if (githubWrite.write_receipt_verified === true) {
+    if (!text(githubWrite.branch_name)) remediation.push("record_github_branch_name")
+    if (!text(githubWrite.final_head_sha)) remediation.push("record_github_visible_final_head_sha")
+  }
+}
+
 const status = blocked.length ? "blocked" : remediation.length ? "remediation_required" : "compatible"
 const report = {
   status,
@@ -119,7 +184,9 @@ const report = {
     mcp_max_pages: 100,
     mcp_max_items: 1_024,
     mcp_max_cursor_bytes: 65_536,
+    mcp_unknown_auth_outcome: "preserve_error_and_retry_exact_server_once",
     failed_network_amendment_outcome: "deny",
+    github_write_continuity_routes: ["direct-openai-pinned-gpt-5.5", "authorized-local-git"],
   },
   evidence_sha256: crypto.createHash("sha256").update(JSON.stringify(evidence)).digest("hex"),
   continuity_route: "pinned direct OpenAI or explicitly authorized local execution",
