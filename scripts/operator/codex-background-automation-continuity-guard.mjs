@@ -87,6 +87,9 @@ let uncertainWritesReconciled
 let approval
 let scheduled
 let remote
+let worktreeEnvironment
+let appServer
+let handoff
 
 try {
   taskId = nonEmptyString(evidence.task_id, "task_id")
@@ -101,6 +104,9 @@ try {
   approval = optionalObject(evidence.pending_approval, "pending_approval")
   scheduled = optionalObject(evidence.scheduled_execution, "scheduled_execution")
   remote = optionalObject(evidence.remote_connection, "remote_connection")
+  worktreeEnvironment = optionalObject(evidence.worktree_environment, "worktree_environment")
+  appServer = optionalObject(evidence.app_server, "app_server")
+  handoff = optionalObject(evidence.context_handoff, "context_handoff")
 } catch (error) {
   console.error(JSON.stringify({ admitted: false, reason: "malformed_evidence", detail: error.message }, null, 2))
   process.exit(2)
@@ -120,6 +126,20 @@ const requiresWorktree = automationType === "cron" && repositoryBacked && writes
 const worktreeIsolationMissing = requiresWorktree && executionEnvironment !== "worktree"
 const worktreeEvidenceMissing =
   requiresWorktree && executionEnvironment === "worktree" && (!savedConfigurationReadBack || !runtimeWorktreeObserved)
+
+const delegatedWorktreeCreation = worktreeEnvironment.delegated_or_programmatic_creation === true
+const selectedEnvironmentBound = worktreeEnvironment.selected_environment_bound === true
+const setupScriptRequired = worktreeEnvironment.setup_script_required === true
+const setupScriptCompleted = worktreeEnvironment.setup_script_completed === true
+const expectedSetupArtifactsVerified = worktreeEnvironment.expected_artifacts_verified === true
+const environmentManagerReady = worktreeEnvironment.environment_manager_ready === true
+const delegatedWorktreeEnvironmentUnverified =
+  requiresWorktree &&
+  executionEnvironment === "worktree" &&
+  delegatedWorktreeCreation &&
+  (!selectedEnvironmentBound ||
+    !environmentManagerReady ||
+    (setupScriptRequired && (!setupScriptCompleted || !expectedSetupArtifactsVerified)))
 
 const localScheduledRun = automationType === "cron" && executionEnvironment === "local"
 const backgroundDriverVerified = boolean(scheduled.background_driver_verified, "scheduled_execution.background_driver_verified")
@@ -147,8 +167,7 @@ const approvalExpiry = optionalString(approval.expires_at, "pending_approval.exp
 const approvalBindingMissing =
   approvalBlocking && (!approvalRequestId || !approvalOperationId || !approvalPayloadHash || !approvalExpiry)
 const approvalSurfaceMissing = approvalBlocking && !exactApprovalVisible
-const approvalAttentionMissing =
-  approvalBlocking && !actionableNotificationObserved && !approvalWatchdogActive
+const approvalAttentionMissing = approvalBlocking && !actionableNotificationObserved && !approvalWatchdogActive
 
 const remoteUsed = remote.used === true
 const remoteEndpointReachable = remote.endpoint_reachable === true
@@ -171,6 +190,58 @@ const completedRemoteReplayAttempted =
 const remoteControllerProjectionStale =
   remoteSequenceGapDetected && remoteCanonicalState === "completed" && !remoteControllerProjectionResynced
 
+const appServerUsed = appServer.used === true
+const appServerUnexpectedExit = appServer.unexpected_exit === true
+const appServerExitSignal = optionalString(appServer.unexpected_exit_signal, "app_server.unexpected_exit_signal").toUpperCase()
+const destroyedStdinObserved = appServer.destroyed_stdin_observed === true
+const appServerFailureDetected =
+  appServerUsed && (appServerUnexpectedExit || appServerExitSignal !== "" || destroyedStdinObserved)
+const extensionHostRestarted = appServer.extension_host_restarted === true
+const canonicalTurnStateReconciled = appServer.canonical_turn_state_reconciled === true
+const externalCommandStateReconciled = appServer.external_command_state_reconciled === true
+const appServerAutomaticReplayAttempted = appServer.automatic_replay_attempted === true
+const appServerReplacementSessionCreated = appServer.replacement_session_created === true
+const appServerContinuationRoute = optionalString(
+  appServer.continuation_route,
+  "app_server.continuation_route",
+).toLowerCase()
+const appServerApprovedExternalRoute = new Set(["approved_local", "approved_linux"]).has(appServerContinuationRoute)
+const appServerContinuationRouteValid = new Set(["same_thread", "approved_local", "approved_linux"]).has(
+  appServerContinuationRoute,
+)
+const appServerControlSurfaceRecovered = extensionHostRestarted || appServerApprovedExternalRoute
+const appServerUnsafeReplay =
+  appServerFailureDetected && (appServerAutomaticReplayAttempted || appServerReplacementSessionCreated)
+const appServerRecoveryMissing =
+  appServerFailureDetected &&
+  (!appServerControlSurfaceRecovered ||
+    !canonicalTurnStateReconciled ||
+    !externalCommandStateReconciled ||
+    !appServerContinuationRouteValid)
+
+const handoffUsed = handoff.used === true
+const handoffLargeContext = handoff.large_context === true
+const handoffDirectMigrationAttempted = handoff.direct_work_migration_attempted === true
+const handoffManualCheckpointRouteUsed = handoff.manual_checkpoint_route_used === true
+const handoffSourceCheckpointExported = handoff.source_checkpoint_exported === true
+const handoffSourceThreadPreserved = handoff.source_thread_preserved === true
+const handoffTargetThreadCreated = handoff.target_thread_created === true
+const handoffTargetThreadIndexed = handoff.target_thread_indexed === true
+const handoffRendererHealthy = handoff.renderer_healthy === true
+const handoffAutomaticReplayAttempted = handoff.automatic_replay_attempted === true
+const largeContextDirectMigrationUntrusted =
+  handoffUsed && handoffLargeContext && handoffDirectMigrationAttempted && !handoffManualCheckpointRouteUsed
+const largeContextCheckpointIncomplete =
+  handoffUsed &&
+  handoffLargeContext &&
+  handoffManualCheckpointRouteUsed &&
+  (!handoffSourceCheckpointExported ||
+    !handoffSourceThreadPreserved ||
+    !handoffTargetThreadCreated ||
+    !handoffTargetThreadIndexed ||
+    !handoffRendererHealthy)
+const handoffUnsafeReplay = handoffUsed && handoffAutomaticReplayAttempted
+
 let admitted = true
 let reason = "background_automation_continuity_verified"
 let exitCode = 0
@@ -183,11 +254,20 @@ if (!uncertainWritesReconciled) {
   admitted = false
   reason = approvalBindingMissing ? "approval_binding_incomplete" : "approval_request_not_visible"
   exitCode = 64
-} else if (completedRemoteReplayAttempted || localResumeUnsafe) {
+} else if (
+  completedRemoteReplayAttempted ||
+  localResumeUnsafe ||
+  appServerUnsafeReplay ||
+  handoffUnsafeReplay
+) {
   admitted = false
   reason = completedRemoteReplayAttempted
     ? "completed_remote_task_resume_forbidden"
-    : "stalled_local_task_must_resume_same_thread"
+    : localResumeUnsafe
+      ? "stalled_local_task_must_resume_same_thread"
+      : appServerUnsafeReplay
+        ? "app_server_failure_replay_forbidden"
+        : "context_handoff_replay_forbidden"
   exitCode = 64
 } else if (worktreeIsolationMissing) {
   admitted = false
@@ -196,6 +276,22 @@ if (!uncertainWritesReconciled) {
 } else if (worktreeEvidenceMissing) {
   admitted = false
   reason = "worktree_configuration_or_runtime_unverified"
+  exitCode = 75
+} else if (delegatedWorktreeEnvironmentUnverified) {
+  admitted = false
+  reason = "delegated_worktree_environment_uninitialized"
+  exitCode = 75
+} else if (appServerRecoveryMissing) {
+  admitted = false
+  reason = "app_server_failure_state_unreconciled"
+  exitCode = 75
+} else if (largeContextDirectMigrationUntrusted) {
+  admitted = false
+  reason = "large_context_direct_work_handoff_untrusted"
+  exitCode = 75
+} else if (largeContextCheckpointIncomplete) {
+  admitted = false
+  reason = "large_context_checkpoint_handoff_unverified"
   exitCode = 75
 } else if (localScheduledRunStalled) {
   admitted = false
@@ -239,6 +335,14 @@ const report = {
   requires_worktree: requiresWorktree,
   saved_configuration_read_back: savedConfigurationReadBack,
   runtime_worktree_observed: runtimeWorktreeObserved,
+  worktree_environment: {
+    delegated_or_programmatic_creation: delegatedWorktreeCreation,
+    selected_environment_bound: selectedEnvironmentBound,
+    setup_script_required: setupScriptRequired,
+    setup_script_completed: setupScriptCompleted,
+    expected_artifacts_verified: expectedSetupArtifactsVerified,
+    environment_manager_ready: environmentManagerReady,
+  },
   scheduled_execution: {
     local_scheduled_run: localScheduledRun,
     background_driver_verified: backgroundDriverVerified,
@@ -270,11 +374,35 @@ const report = {
     controller_projection_resynced: remoteControllerProjectionResynced,
     resume_attempted: remoteResumeAttempted,
   },
+  app_server: {
+    used: appServerUsed,
+    failure_detected: appServerFailureDetected,
+    unexpected_exit_signal: appServerExitSignal || null,
+    destroyed_stdin_observed: destroyedStdinObserved,
+    extension_host_restarted: extensionHostRestarted,
+    canonical_turn_state_reconciled: canonicalTurnStateReconciled,
+    external_command_state_reconciled: externalCommandStateReconciled,
+    automatic_replay_attempted: appServerAutomaticReplayAttempted,
+    replacement_session_created: appServerReplacementSessionCreated,
+    continuation_route: appServerContinuationRoute || null,
+  },
+  context_handoff: {
+    used: handoffUsed,
+    large_context: handoffLargeContext,
+    direct_work_migration_attempted: handoffDirectMigrationAttempted,
+    manual_checkpoint_route_used: handoffManualCheckpointRouteUsed,
+    source_checkpoint_exported: handoffSourceCheckpointExported,
+    source_thread_preserved: handoffSourceThreadPreserved,
+    target_thread_created: handoffTargetThreadCreated,
+    target_thread_indexed: handoffTargetThreadIndexed,
+    renderer_healthy: handoffRendererHealthy,
+    automatic_replay_attempted: handoffAutomaticReplayAttempted,
+  },
   protocol: admitted
-    ? "Continue the isolated automation. Keep the saved worktree configuration, verified background driver, progress heartbeat, exact payload-bound approval, canonical host task state, operation ID, idempotency key, and external state ledger authoritative."
-    : "Stop only the affected automation turn. Preserve task state, repository SHA, diff hash, operation ID, idempotency key, and pending approval evidence. Reconcile uncertain writes. For a stalled Local scheduled run, attach to the exact existing thread and resume once only after verifying no pending approval or uncertain write; otherwise reroute through the explicitly authorized local scheduler. For repository-writing cron jobs, use a verified Worktree. After any Remote Control sequence gap, treat the controller spinner as non-authoritative, reconcile canonical host state, and never resume a host-completed task.",
+    ? "Continue the isolated automation. Keep the saved worktree configuration and initialized environment, verified background driver, progress heartbeat, exact payload-bound approval, canonical host and app-server task state, operation ID, idempotency key, and external state ledger authoritative."
+    : "Stop only the affected turn. Preserve task state, repository SHA, diff hash, operation ID, idempotency key, environment receipt, and pending approval evidence. Reconcile uncertain writes. For delegated worktrees, bind the selected environment and verify setup artifacts before commands run. After app-server failure, recover the same task or use the approved local/Linux route only after canonical turn and external command state are reconciled. For large-context Chat-to-Work handoff, use a compact manual checkpoint rather than replaying the direct migration. Never resume a host-completed task.",
   resume_condition:
-    "Resume only after repository-writing cron execution is verified in an isolated worktree; Local scheduled execution has a verified background driver, first tool start, and progress heartbeat or has been safely moved to the authorized scheduler; every blocking approval is exact and visible; Remote Control sequence gaps are reconciled against canonical host state without replay; and all uncertain writes are reconciled.",
+    "Resume only after repository-writing cron execution is verified in an isolated, initialized worktree; Local scheduled execution has a verified background driver, first tool start, and progress heartbeat or has been safely moved to the authorized scheduler; every blocking approval is exact and visible; app-server or Remote Control failures are reconciled without replay; large-context handoffs use a verified checkpoint route; and all uncertain writes are reconciled.",
 }
 
 const output = JSON.stringify(report, null, 2)
