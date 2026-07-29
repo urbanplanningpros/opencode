@@ -79,8 +79,9 @@ function classify(raw) {
 
 function toUri(pathInfo) {
   if (pathInfo.kind === "windows_drive") {
-    const slashPath = pathInfo.normalized.replaceAll("\\", "/")
-    return `file:///${encodePathSegments(slashPath)}`
+    const drive = pathInfo.normalized.slice(0, 1).toUpperCase()
+    const remainder = pathInfo.normalized.slice(3).replaceAll("\\", "/")
+    return `file:///${drive}:/${encodePathSegments(remainder)}`
   }
   if (pathInfo.kind === "windows_unc") {
     const parts = pathInfo.normalized.slice(2).split("\\")
