@@ -29,6 +29,12 @@ function nonEmptyString(value, name) {
   return value.trim()
 }
 
+function optionalString(value, name) {
+  if (value === undefined || value === null || value === "") return ""
+  if (typeof value !== "string") throw new Error(`${name} must be a string`)
+  return value.trim()
+}
+
 function boolean(value, name, fallback = false) {
   if (value === undefined) return fallback
   if (typeof value !== "boolean") throw new Error(`${name} must be boolean`)
@@ -79,12 +85,13 @@ let savedConfigurationReadBack
 let runtimeWorktreeObserved
 let uncertainWritesReconciled
 let approval
+let scheduled
 let remote
 
 try {
   taskId = nonEmptyString(evidence.task_id, "task_id")
   automationId = nonEmptyString(evidence.automation_id, "automation_id")
-  automationType = nonEmptyString(evidence.automation_type, "automation_type")
+  automationType = nonEmptyString(evidence.automation_type, "automation_type").toLowerCase()
   executionEnvironment = nonEmptyString(evidence.execution_environment, "execution_environment").toLowerCase()
   repositoryBacked = boolean(evidence.repository_backed, "repository_backed")
   writesRepository = boolean(evidence.writes_repository, "writes_repository")
@@ -92,6 +99,7 @@ try {
   runtimeWorktreeObserved = boolean(evidence.runtime_worktree_observed, "runtime_worktree_observed")
   uncertainWritesReconciled = boolean(evidence.uncertain_writes_reconciled, "uncertain_writes_reconciled")
   approval = optionalObject(evidence.pending_approval, "pending_approval")
+  scheduled = optionalObject(evidence.scheduled_execution, "scheduled_execution")
   remote = optionalObject(evidence.remote_connection, "remote_connection")
 } catch (error) {
   console.error(JSON.stringify({ admitted: false, reason: "malformed_evidence", detail: error.message }, null, 2))
@@ -113,15 +121,29 @@ const worktreeIsolationMissing = requiresWorktree && executionEnvironment !== "w
 const worktreeEvidenceMissing =
   requiresWorktree && executionEnvironment === "worktree" && (!savedConfigurationReadBack || !runtimeWorktreeObserved)
 
+const localScheduledRun = automationType === "cron" && executionEnvironment === "local"
+const backgroundDriverVerified = boolean(scheduled.background_driver_verified, "scheduled_execution.background_driver_verified")
+const firstToolStarted = boolean(scheduled.first_tool_started, "scheduled_execution.first_tool_started")
+const progressHeartbeatObserved = boolean(
+  scheduled.progress_heartbeat_observed,
+  "scheduled_execution.progress_heartbeat_observed",
+)
+const manualResumeRequired = boolean(scheduled.manual_resume_required, "scheduled_execution.manual_resume_required")
+const sameThreadResumeOnly = boolean(scheduled.same_thread_resume_only, "scheduled_execution.same_thread_resume_only")
+const localBackgroundExecutionUnverified =
+  localScheduledRun && (!backgroundDriverVerified || !firstToolStarted || !progressHeartbeatObserved)
+const localScheduledRunStalled = localScheduledRun && manualResumeRequired
+const localResumeUnsafe = localScheduledRunStalled && !sameThreadResumeOnly
+
 const approvalBlocking = approval.blocking === true
-const approvalEventType = typeof approval.event_type === "string" ? approval.event_type.trim() : ""
+const approvalEventType = optionalString(approval.event_type, "pending_approval.event_type")
 const exactApprovalVisible = approval.exact_request_visible === true
 const actionableNotificationObserved = approval.actionable_notification_observed === true
 const approvalWatchdogActive = approval.approval_watchdog_active === true
-const approvalRequestId = typeof approval.request_id === "string" ? approval.request_id.trim() : ""
-const approvalOperationId = typeof approval.operation_id === "string" ? approval.operation_id.trim() : ""
-const approvalPayloadHash = typeof approval.payload_sha256 === "string" ? approval.payload_sha256.trim() : ""
-const approvalExpiry = typeof approval.expires_at === "string" ? approval.expires_at.trim() : ""
+const approvalRequestId = optionalString(approval.request_id, "pending_approval.request_id")
+const approvalOperationId = optionalString(approval.operation_id, "pending_approval.operation_id")
+const approvalPayloadHash = optionalString(approval.payload_sha256, "pending_approval.payload_sha256")
+const approvalExpiry = optionalString(approval.expires_at, "pending_approval.expires_at")
 const approvalBindingMissing =
   approvalBlocking && (!approvalRequestId || !approvalOperationId || !approvalPayloadHash || !approvalExpiry)
 const approvalSurfaceMissing = approvalBlocking && !exactApprovalVisible
@@ -133,8 +155,21 @@ const remoteEndpointReachable = remote.endpoint_reachable === true
 const remoteAppReconnected = remote.app_reconnected === true
 const remoteTaskIdentityVerified = remote.task_identity_verified === true
 const remoteStateVerified = remote.state_verified === true
+const remoteSequenceGapDetected = remote.sequence_gap_detected === true
+const remoteCanonicalState = optionalString(remote.canonical_host_state, "remote_connection.canonical_host_state").toLowerCase()
+const remoteCanonicalStateReconciled = remote.canonical_state_reconciled === true
+const remoteControllerProjectionResynced = remote.controller_projection_resynced === true
+const remoteResumeAttempted = remote.resume_attempted === true
 const remoteRecoveryMissing =
   remoteUsed && remoteEndpointReachable && (!remoteAppReconnected || !remoteTaskIdentityVerified || !remoteStateVerified)
+const remoteSequenceStateInvalid =
+  remoteSequenceGapDetected && !new Set(["active", "completed"]).has(remoteCanonicalState)
+const remoteSequenceNotReconciled =
+  remoteSequenceGapDetected && (!remoteTaskIdentityVerified || !remoteCanonicalStateReconciled)
+const completedRemoteReplayAttempted =
+  remoteSequenceGapDetected && remoteCanonicalState === "completed" && remoteResumeAttempted
+const remoteControllerProjectionStale =
+  remoteSequenceGapDetected && remoteCanonicalState === "completed" && !remoteControllerProjectionResynced
 
 let admitted = true
 let reason = "background_automation_continuity_verified"
@@ -148,6 +183,12 @@ if (!uncertainWritesReconciled) {
   admitted = false
   reason = approvalBindingMissing ? "approval_binding_incomplete" : "approval_request_not_visible"
   exitCode = 64
+} else if (completedRemoteReplayAttempted || localResumeUnsafe) {
+  admitted = false
+  reason = completedRemoteReplayAttempted
+    ? "completed_remote_task_resume_forbidden"
+    : "stalled_local_task_must_resume_same_thread"
+  exitCode = 64
 } else if (worktreeIsolationMissing) {
   admitted = false
   reason = "repository_writing_automation_not_isolated"
@@ -156,9 +197,29 @@ if (!uncertainWritesReconciled) {
   admitted = false
   reason = "worktree_configuration_or_runtime_unverified"
   exitCode = 75
+} else if (localScheduledRunStalled) {
+  admitted = false
+  reason = "local_scheduled_run_requires_foreground_resume"
+  exitCode = 75
+} else if (localBackgroundExecutionUnverified) {
+  admitted = false
+  reason = "local_scheduled_background_execution_unverified"
+  exitCode = 75
 } else if (approvalAttentionMissing) {
   admitted = false
   reason = "blocking_approval_has_no_actionable_attention_route"
+  exitCode = 75
+} else if (remoteSequenceStateInvalid) {
+  admitted = false
+  reason = "remote_canonical_state_unknown_after_sequence_gap"
+  exitCode = 75
+} else if (remoteSequenceNotReconciled) {
+  admitted = false
+  reason = "remote_sequence_gap_not_reconciled"
+  exitCode = 75
+} else if (remoteControllerProjectionStale) {
+  admitted = false
+  reason = "remote_controller_projection_stale"
   exitCode = 75
 } else if (remoteRecoveryMissing) {
   admitted = false
@@ -178,6 +239,14 @@ const report = {
   requires_worktree: requiresWorktree,
   saved_configuration_read_back: savedConfigurationReadBack,
   runtime_worktree_observed: runtimeWorktreeObserved,
+  scheduled_execution: {
+    local_scheduled_run: localScheduledRun,
+    background_driver_verified: backgroundDriverVerified,
+    first_tool_started: firstToolStarted,
+    progress_heartbeat_observed: progressHeartbeatObserved,
+    manual_resume_required: manualResumeRequired,
+    same_thread_resume_only: sameThreadResumeOnly,
+  },
   pending_approval: {
     blocking: approvalBlocking,
     event_type: approvalEventType || null,
@@ -195,12 +264,17 @@ const report = {
     app_reconnected: remoteAppReconnected,
     task_identity_verified: remoteTaskIdentityVerified,
     state_verified: remoteStateVerified,
+    sequence_gap_detected: remoteSequenceGapDetected,
+    canonical_host_state: remoteCanonicalState || null,
+    canonical_state_reconciled: remoteCanonicalStateReconciled,
+    controller_projection_resynced: remoteControllerProjectionResynced,
+    resume_attempted: remoteResumeAttempted,
   },
   protocol: admitted
-    ? "Continue the isolated automation. Keep the saved worktree configuration, approval watchdog, exact payload-bound approval, task identity, operation ID, idempotency key, and external state ledger authoritative."
-    : "Stop only the affected automation turn. Preserve task state, repository SHA, diff hash, operation ID, idempotency key, and pending approval evidence. Reconcile uncertain writes. For repository-writing cron jobs, preserve an existing Worktree automation through the supported update path and read it back, or use the explicitly authorized local scheduler to create an isolated temporary worktree. For hidden MCP approvals, surface the exact request through a foreground or read-only watchdog route; never auto-approve. When a remote endpoint returns, reconnect once and verify the same task and repository state before resuming.",
+    ? "Continue the isolated automation. Keep the saved worktree configuration, verified background driver, progress heartbeat, exact payload-bound approval, canonical host task state, operation ID, idempotency key, and external state ledger authoritative."
+    : "Stop only the affected automation turn. Preserve task state, repository SHA, diff hash, operation ID, idempotency key, and pending approval evidence. Reconcile uncertain writes. For a stalled Local scheduled run, attach to the exact existing thread and resume once only after verifying no pending approval or uncertain write; otherwise reroute through the explicitly authorized local scheduler. For repository-writing cron jobs, use a verified Worktree. After any Remote Control sequence gap, treat the controller spinner as non-authoritative, reconcile canonical host state, and never resume a host-completed task.",
   resume_condition:
-    "Resume only after repository-writing cron execution is verified in an isolated worktree, every blocking approval is exact and visible through an actionable notification or active watchdog, remote task identity and state are verified after reconnection, and all uncertain writes are reconciled.",
+    "Resume only after repository-writing cron execution is verified in an isolated worktree; Local scheduled execution has a verified background driver, first tool start, and progress heartbeat or has been safely moved to the authorized scheduler; every blocking approval is exact and visible; Remote Control sequence gaps are reconciled against canonical host state without replay; and all uncertain writes are reconciled.",
 }
 
 const output = JSON.stringify(report, null, 2)
