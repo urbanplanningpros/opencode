@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "upstream_issue": "openai/codex#35877",
+  "observed_at": "2026-07-29T03:10:41Z",
+  "classification": "external-write-authorization",
+  "affected_operation": "gmail_send",
+  "approved_route": "scripts/operator/gmail-send-approved-local.mjs",
+  "direct_connector_write_authority": false,
+  "approval": {
+    "intent": "send_once",
+    "max_lifetime_seconds": 900,
+    "payload_bound": true,
+    "attachment_content_bound": true,
+    "root_owned_receipt_required": true,
+    "followups_allowed": false
+  }
+}
