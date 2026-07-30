@@ -70,6 +70,8 @@ let desktopBuild
 let canonicalTaskState
 let rerouteTarget
 let wmiSnapshotRatePerSecond
+let sandboxCommandDispatchState
+let dpapiErrorCode
 try {
   taskId = text(evidence.task_id, "task_id")
   operationId = text(evidence.operation_id, "operation_id")
@@ -78,6 +80,12 @@ try {
   canonicalTaskState = text(evidence.canonical_task_state, "canonical_task_state", true).toLowerCase()
   rerouteTarget = text(evidence.reroute_target, "reroute_target", true).toLowerCase()
   wmiSnapshotRatePerSecond = finiteNumber(evidence.wmi_snapshot_rate_per_second, "wmi_snapshot_rate_per_second")
+  sandboxCommandDispatchState = text(
+    evidence.sandbox_command_dispatch_state,
+    "sandbox_command_dispatch_state",
+    true,
+  ).toLowerCase()
+  dpapiErrorCode = text(evidence.dpapi_error_code, "dpapi_error_code", true).toLowerCase()
 } catch (error) {
   console.error(JSON.stringify({ admitted: false, reason: "malformed_evidence", detail: error.message }, null, 2))
   process.exit(2)
@@ -86,6 +94,7 @@ try {
 const windows = platform.includes("windows")
 const affectedIpcBuild = desktopBuild === "26.721.4979.0"
 const affectedWmiBuild = desktopBuild === "26.721.11231.0"
+const knownDpapiBuild = new Set(["26.721.41059", "26.721.4979.0"]).has(desktopBuild)
 const browserIntegrationEnabled = bool(evidence.browser_integration_enabled, "browser_integration_enabled")
 const longRunningOrConcurrent =
   bool(evidence.long_running_task, "long_running_task") || Number(evidence.concurrent_task_count || 0) > 1
@@ -106,6 +115,15 @@ const powershellWmiSnapshotChildrenObserved = bool(
 const wmiActivityErrorObserved = bool(evidence.wmi_activity_error_observed, "wmi_activity_error_observed")
 const desktopExecutionIsolated = bool(evidence.desktop_execution_isolated, "desktop_execution_isolated")
 const unsafeWmiSuppressionApplied = bool(evidence.unsafe_wmi_suppression_applied, "unsafe_wmi_suppression_applied")
+const cryptUnprotectDataFailureObserved = bool(
+  evidence.crypt_unprotect_data_failure_observed,
+  "crypt_unprotect_data_failure_observed",
+)
+const nativeWindowsSandboxIsolated = bool(
+  evidence.native_windows_sandbox_isolated,
+  "native_windows_sandbox_isolated",
+)
+const unsafeDpapiRepairAttempted = bool(evidence.unsafe_dpapi_repair_attempted, "unsafe_dpapi_repair_attempted")
 
 const ipcFailure = windows && (epipeObserved || writeEofUncaught || appServerDisconnected)
 const unsafeAffectedPreflight = windows && affectedIpcBuild && browserIntegrationEnabled && longRunningOrConcurrent
@@ -116,7 +134,12 @@ const wmiSnapshotPressure =
     powershellWmiSnapshotChildrenObserved ||
     wmiActivityErrorObserved ||
     wmiSnapshotRatePerSecond >= 1)
+const dpapiErrorMatches = new Set(["2148073483", "0x8009000b", "nte_bad_key_state"]).has(dpapiErrorCode)
+const dpapiSandboxFailure = windows && (cryptUnprotectDataFailureObserved || dpapiErrorMatches)
 const canonicalStateValid = new Set(["active", "completed", "failed", "unknown"]).has(canonicalTaskState)
+const sandboxDispatchStateValid = new Set(["none", "not_dispatched", "completed", "unknown"]).has(
+  sandboxCommandDispatchState || "none",
+)
 const approvedReroute = new Set(["approved_linux_vps", "authorized_local_linux", "none"]).has(rerouteTarget || "none")
 
 let admitted = true
@@ -127,6 +150,14 @@ if (!approvedReroute) {
   admitted = false
   reason = "unapproved_reroute_target"
   exitCode = 64
+} else if (!sandboxDispatchStateValid) {
+  admitted = false
+  reason = "invalid_sandbox_command_dispatch_state"
+  exitCode = 2
+} else if (unsafeDpapiRepairAttempted) {
+  admitted = false
+  reason = "unsafe_dpapi_repair_forbidden"
+  exitCode = 64
 } else if (unsafeWmiSuppressionApplied) {
   admitted = false
   reason = "unsafe_wmi_snapshot_suppression_forbidden"
@@ -135,6 +166,14 @@ if (!approvedReroute) {
   admitted = false
   reason = "automatic_replay_forbidden_after_ipc_failure"
   exitCode = 64
+} else if (dpapiSandboxFailure && sandboxCommandDispatchState !== "not_dispatched") {
+  admitted = false
+  reason = "dpapi_failed_command_non_dispatch_not_proven"
+  exitCode = 75
+} else if (dpapiSandboxFailure && !nativeWindowsSandboxIsolated) {
+  admitted = false
+  reason = "windows_dpapi_sandbox_failure_not_isolated"
+  exitCode = 75
 } else if (ipcFailure && !uncertainWritesReconciled) {
   admitted = false
   reason = "uncertain_writes_not_reconciled"
@@ -159,6 +198,8 @@ if (!approvedReroute) {
   admitted = false
   reason = "windows_wmi_snapshot_pressure_not_isolated"
   exitCode = 75
+} else if (dpapiSandboxFailure && nativeWindowsSandboxIsolated) {
+  reason = "windows_dpapi_sandbox_failure_contained"
 } else if (wmiSnapshotPressure && desktopExecutionIsolated) {
   reason = "windows_wmi_snapshot_pressure_contained"
 } else if (browserClientClosed && !epipeObserved && !writeEofUncaught && !appServerDisconnected) {
@@ -174,6 +215,7 @@ const report = {
   desktop_build: desktopBuild || null,
   affected_ipc_build: affectedIpcBuild,
   affected_wmi_build: affectedWmiBuild,
+  known_dpapi_build: knownDpapiBuild,
   ipc_failure: ipcFailure,
   browser_integration_enabled: browserIntegrationEnabled,
   browser_route_disabled: browserRouteDisabled,
@@ -187,12 +229,16 @@ const report = {
   powershell_wmi_snapshot_children_observed: powershellWmiSnapshotChildrenObserved,
   wmi_activity_error_observed: wmiActivityErrorObserved,
   desktop_execution_isolated: desktopExecutionIsolated,
+  dpapi_sandbox_failure: dpapiSandboxFailure,
+  dpapi_error_code: dpapiErrorCode || null,
+  sandbox_command_dispatch_state: sandboxCommandDispatchState || "none",
+  native_windows_sandbox_isolated: nativeWindowsSandboxIsolated,
   reroute_target: rerouteTarget || "none",
   protocol: admitted
-    ? "Continue through guarded direct OpenAI and the approved execution route. Keep the task ID, operation ID, idempotency ledger, repository state, canonical task state, child-process inventory, and Windows WMI pressure evidence authoritative."
-    : "Stop only the affected Windows Desktop or browser-control turn. Preserve task and repository state, reconcile uncertain writes, read canonical task state, inventory surviving child processes, avoid suppressing WMI snapshots with empty results, isolate Desktop local execution, and continue through the approved Linux VPS or explicitly authorized local Linux route without replaying completed work.",
+    ? "Continue through guarded direct OpenAI and the approved execution route. Keep the task ID, operation ID, idempotency ledger, repository state, canonical task state, child-process inventory, Windows WMI pressure evidence, and Windows sandbox dispatch receipt authoritative."
+    : "Stop only the affected Windows Desktop, browser-control, or native sandbox execution turn. Preserve task and repository state, prove whether the failed command was dispatched, reconcile uncertain writes, read canonical task state, inventory surviving child processes, avoid destructive DPAPI repair or fake WMI suppression, isolate Windows native sandbox execution, and continue through the approved Linux VPS or explicitly authorized local Linux route without replaying completed work.",
   resume_condition:
-    "Restore affected Windows Desktop production authority only after a corrected stable build passes repeated IPC, idle, and active-task canaries with no uncaught EPIPE/EOF, no app-server loss, no recurring PowerShell WMI full-process snapshots, no system-wide input lag, no retry amplification, correct same-task recovery, and no duplicate external writes.",
+    "Restore affected Windows Desktop production authority only after a corrected stable build passes repeated IPC, DPAPI credential-regeneration, idle, and active-task canaries with no uncaught EPIPE/EOF, no app-server loss, no CryptUnprotectData 0x8009000B failure, no recurring PowerShell WMI full-process snapshots, no system-wide input lag, no retry amplification, correct same-task recovery, and no duplicate external writes.",
 }
 
 const output = JSON.stringify(report, null, 2)
