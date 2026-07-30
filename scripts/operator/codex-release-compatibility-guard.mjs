@@ -79,6 +79,52 @@ if (routing.automatic_selector === true) blocked.push("automatic_selector_enable
 if (routing.model_gateway === true) blocked.push("model_gateway_enabled")
 if (provider && !["openai", "approved-local"].includes(provider)) blocked.push("unapproved_provider")
 
+const execInvocation = evidence.exec_invocation || null
+if (execInvocation) {
+  const invocationArgs = execInvocation.arguments
+  if (!Array.isArray(invocationArgs) || invocationArgs.some((value) => typeof value !== "string")) {
+    blocked.push("exec_invocation_arguments_invalid")
+  } else {
+    const legacyFullAuto = invocationArgs.includes("--full-auto")
+    const sandboxIndex = invocationArgs.indexOf("--sandbox")
+    const explicitSandbox = sandboxIndex >= 0 ? text(invocationArgs[sandboxIndex + 1]).toLowerCase() : ""
+
+    if (legacyFullAuto) remediation.push("replace_legacy_full_auto_with_explicit_workspace_write")
+    if (execInvocation.workspace_write_required === true && explicitSandbox !== "workspace-write") {
+      remediation.push("set_explicit_sandbox_workspace_write")
+    }
+    if (execInvocation.deprecated_flag_shim_required === true) {
+      blocked.push("legacy_full_auto_shim_rejected")
+    }
+  }
+}
+
+const migration = evidence.external_agent_migration || null
+if (migration) {
+  const sourceProvider = text(migration.source_provider).toLowerCase()
+  const agentsTargetKind = text(migration.agents_md_target_kind || "missing").toLowerCase()
+  const hooksTargetKind = text(migration.hooks_target_kind || "missing").toLowerCase()
+  const validTargetKinds = new Set(["missing", "regular_file", "symlink", "directory", "other"])
+
+  if (sourceProvider && prohibited.some((name) => sourceProvider.includes(name))) {
+    blocked.push("excluded_external_agent_migration_source")
+  }
+  if (!validTargetKinds.has(agentsTargetKind) || !validTargetKinds.has(hooksTargetKind)) {
+    blocked.push("external_agent_migration_target_kind_invalid")
+  }
+  if (agentsTargetKind === "symlink") blocked.push("agents_md_symlink_migration_target_rejected")
+  if (hooksTargetKind === "symlink") blocked.push("hooks_json_symlink_migration_target_rejected")
+  if (migration.enabled === true && migration.symlink_safe_fix_present !== true) {
+    warnings.push("external_agent_migration_symlink_fix_not_in_pinned_stable")
+    if (migration.lstat_preflight_completed !== true) {
+      remediation.push("run_lstat_preflight_and_skip_non_regular_migration_targets")
+    }
+  }
+  if (migration.write_requested === true && migration.target_state_hashes_recorded !== true) {
+    blocked.push("migration_target_state_hashes_required_before_write")
+  }
+}
+
 const mcp = evidence.mcp || null
 if (mcp) {
   const transport = text(mcp.transport).toLowerCase()
@@ -95,6 +141,25 @@ if (mcp) {
   if (observedHash && !isSha256(observedHash)) blocked.push("observed_tool_catalog_hash_invalid")
   if (writeAuthority && (!approvedHash || !observedHash)) blocked.push("tool_catalog_hash_required_for_write_authority")
   if (approvedHash && observedHash && approvedHash !== observedHash) blocked.push("mcp_tool_catalog_drift")
+
+  const toolCall = mcp.tool_call || null
+  if (toolCall) {
+    const operationClass = text(toolCall.operation_class || "unknown").toLowerCase()
+    const readOnlyHint = toolCall.read_only_hint
+    const hintPresent = typeof readOnlyHint === "boolean"
+
+    if (!["read", "write", "unknown"].includes(operationClass)) blocked.push("mcp_tool_operation_class_invalid")
+    if (readOnlyHint !== undefined && readOnlyHint !== null && !hintPresent) {
+      blocked.push("mcp_read_only_hint_invalid")
+    }
+    if (!hintPresent) warnings.push("mcp_read_only_hint_absent_use_local_authority_policy")
+    if (readOnlyHint === true && operationClass !== "read") blocked.push("mcp_read_only_hint_conflicts_with_operation")
+    if (readOnlyHint === true && toolCall.write_authority_requested === true) {
+      blocked.push("mcp_read_only_tool_requested_write_authority")
+    }
+    if (toolCall.hint_used_as_authority === true) blocked.push("mcp_read_only_hint_cannot_grant_authority")
+    if (toolCall.hint_used_as_outcome_receipt === true) blocked.push("mcp_read_only_hint_cannot_prove_call_outcome")
+  }
 
   const oauth = mcp.oauth || {}
   const oauthStatus = text(oauth.status || "ok").toLowerCase()
