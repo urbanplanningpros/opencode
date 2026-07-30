@@ -46,11 +46,82 @@ try {
     throw new Error("legacy: missing version-floor remediation")
   }
 
+  const legacyFullAuto = structuredClone(base)
+  legacyFullAuto.exec_invocation = {
+    arguments: ["exec", "--full-auto", "summarize"],
+    workspace_write_required: true,
+  }
+  const legacyFullAutoResult = run("legacy-full-auto", legacyFullAuto, 75, "remediation_required")
+  if (!legacyFullAutoResult.remediation.includes("replace_legacy_full_auto_with_explicit_workspace_write")) {
+    throw new Error("legacy-full-auto: missing explicit sandbox migration")
+  }
+
+  const explicitWorkspace = structuredClone(base)
+  explicitWorkspace.exec_invocation = {
+    arguments: ["exec", "--sandbox", "workspace-write", "summarize"],
+    workspace_write_required: true,
+  }
+  run("explicit-workspace-sandbox", explicitWorkspace, 0, "compatible")
+
+  const safeMigration = structuredClone(base)
+  safeMigration.external_agent_migration = {
+    source_provider: "approved-local",
+    enabled: true,
+    symlink_safe_fix_present: false,
+    lstat_preflight_completed: true,
+    agents_md_target_kind: "regular_file",
+    hooks_target_kind: "missing",
+    write_requested: true,
+    target_state_hashes_recorded: true,
+  }
+  const safeMigrationResult = run("safe-migration-preflight", safeMigration, 0, "compatible")
+  if (!safeMigrationResult.warnings.includes("external_agent_migration_symlink_fix_not_in_pinned_stable")) {
+    throw new Error("safe-migration-preflight: missing pinned-stable warning")
+  }
+
+  const symlinkMigration = structuredClone(safeMigration)
+  symlinkMigration.external_agent_migration.agents_md_target_kind = "symlink"
+  const symlinkMigrationResult = run("symlink-migration-target", symlinkMigration, 64, "blocked")
+  if (!symlinkMigrationResult.blocked.includes("agents_md_symlink_migration_target_rejected")) {
+    throw new Error("symlink-migration-target: symlink target was not rejected")
+  }
+
+  const excludedMigration = structuredClone(safeMigration)
+  excludedMigration.external_agent_migration.source_provider = "claude"
+  const excludedMigrationResult = run("excluded-migration-source", excludedMigration, 64, "blocked")
+  if (!excludedMigrationResult.blocked.includes("excluded_external_agent_migration_source")) {
+    throw new Error("excluded-migration-source: excluded source was not rejected")
+  }
+
   const missingIdentity = structuredClone(base)
   missingIdentity.mcp.discovered_server_name = null
   const missingResult = run("missing-identity", missingIdentity, 0, "compatible")
   if (!missingResult.warnings.includes("mcp_server_identity_missing_using_configured_name")) {
     throw new Error("missing-identity: warning was not emitted")
+  }
+
+  const readOnlyTool = structuredClone(base)
+  readOnlyTool.mcp.tool_call = {
+    operation_class: "read",
+    read_only_hint: true,
+    write_authority_requested: false,
+    hint_used_as_authority: false,
+    hint_used_as_outcome_receipt: false,
+  }
+  run("mcp-read-only-hint", readOnlyTool, 0, "compatible")
+
+  const conflictingHint = structuredClone(readOnlyTool)
+  conflictingHint.mcp.tool_call.operation_class = "write"
+  const conflictingHintResult = run("mcp-read-only-hint-conflict", conflictingHint, 64, "blocked")
+  if (!conflictingHintResult.blocked.includes("mcp_read_only_hint_conflicts_with_operation")) {
+    throw new Error("mcp-read-only-hint-conflict: conflict was not blocked")
+  }
+
+  const hintAuthority = structuredClone(readOnlyTool)
+  hintAuthority.mcp.tool_call.hint_used_as_authority = true
+  const hintAuthorityResult = run("mcp-hint-as-authority", hintAuthority, 64, "blocked")
+  if (!hintAuthorityResult.blocked.includes("mcp_read_only_hint_cannot_grant_authority")) {
+    throw new Error("mcp-hint-as-authority: advisory hint granted authority")
   }
 
   const drift = structuredClone(base)
