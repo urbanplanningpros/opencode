@@ -40,6 +40,11 @@ const base = {
   wmi_activity_error_observed: false,
   desktop_execution_isolated: false,
   unsafe_wmi_suppression_applied: false,
+  crypt_unprotect_data_failure_observed: false,
+  dpapi_error_code: "",
+  sandbox_command_dispatch_state: "none",
+  native_windows_sandbox_isolated: false,
+  unsafe_dpapi_repair_attempted: false,
   reroute_target: "approved_linux_vps",
 }
 
@@ -134,6 +139,54 @@ run(
   },
   64,
   "unsafe_wmi_snapshot_suppression_forbidden",
+)
+run(
+  "dpapi-non-dispatch-unknown",
+  {
+    ...base,
+    crypt_unprotect_data_failure_observed: true,
+    dpapi_error_code: "0x8009000B",
+    sandbox_command_dispatch_state: "unknown",
+    native_windows_sandbox_isolated: true,
+  },
+  75,
+  "dpapi_failed_command_non_dispatch_not_proven",
+)
+run(
+  "dpapi-not-isolated",
+  {
+    ...base,
+    crypt_unprotect_data_failure_observed: true,
+    dpapi_error_code: "2148073483",
+    sandbox_command_dispatch_state: "not_dispatched",
+    native_windows_sandbox_isolated: false,
+  },
+  75,
+  "windows_dpapi_sandbox_failure_not_isolated",
+)
+run(
+  "dpapi-contained",
+  {
+    ...base,
+    crypt_unprotect_data_failure_observed: true,
+    dpapi_error_code: "NTE_BAD_KEY_STATE",
+    sandbox_command_dispatch_state: "not_dispatched",
+    native_windows_sandbox_isolated: true,
+  },
+  0,
+  "windows_dpapi_sandbox_failure_contained",
+)
+run(
+  "unsafe-dpapi-repair",
+  {
+    ...base,
+    crypt_unprotect_data_failure_observed: true,
+    dpapi_error_code: "0x8009000B",
+    sandbox_command_dispatch_state: "not_dispatched",
+    unsafe_dpapi_repair_attempted: true,
+  },
+  64,
+  "unsafe_dpapi_repair_forbidden",
 )
 run(
   "prohibited-route",
