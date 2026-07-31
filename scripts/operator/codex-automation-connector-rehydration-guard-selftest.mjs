@@ -72,27 +72,26 @@ const noRevision = structuredClone(base)
 noRevision.connectors.catalog_revision_readback = false
 run("catalog-revision", noRevision, 75, "connector_catalog_revision_not_verified")
 
-const stale = structuredClone(disabled)
-stale.state.stale_answer_accepted = true
+const stale = structuredClone(base)
+stale.turn.apps_instructions_after = false
 stale.turn.explicit_apps_disable = true
-run("reject-stale-answer", stale, 75, "required_connector_families_missing_after_followup")
+stale.connectors.required_families = []
+stale.connectors.registered_families = []
+stale.state.stale_answer_accepted = true
+run("reject-stale-answer", stale, 64, "stale_or_incomplete_answer_rejected_without_live_connectors")
 
-const authMutation = structuredClone(disabled)
-authMutation.turn.explicit_apps_disable = true
-authMutation.connectors.required_families = []
+const authMutation = structuredClone(stale)
+authMutation.state.stale_answer_accepted = false
 authMutation.connectors.oauth_reconnect_requested = true
-run("preserve-auth", authMutation, 75, "connector_read_only_canary_required_after_followup")
+run("preserve-auth", authMutation, 64, "connector_hydration_failure_must_not_trigger_auth_or_permission_mutation")
 
 const replay = structuredClone(base)
 replay.state.automatic_replay_requested = true
 replay.state.external_writes_reconciled = false
 run("reject-replay", replay, 64, "automation_replay_rejected_before_state_and_write_reconciliation")
 
-const globalPause = structuredClone(disabled)
-globalPause.turn.explicit_apps_disable = true
-globalPause.connectors.required_families = []
-globalPause.connectors.read_only_canary_passed = true
-globalPause.connectors.catalog_revision_readback = true
+const globalPause = structuredClone(stale)
+globalPause.state.stale_answer_accepted = false
 globalPause.state.unrelated_work_continues = false
 run("avoid-global-pause", globalPause, 75, "unrelated_automation_work_should_not_be_globally_paused")
 
