@@ -156,6 +156,21 @@ if (unsafeTransport) {
   reason = "connector_reference_authorization_or_tenant_binding_missing"
   action = "verify_exact_reference_authority_without_exposing_credentials_or_urls"
   exitCode = 64
+} else if (automaticReplayRequested && !preservationReady) {
+  admitted = false
+  reason = "materialization_replay_rejected_before_reconciliation"
+  action = "reconcile_prior_artifacts_and_external_writes_before_retry"
+  exitCode = 64
+} else if (localParserStarted && !transferComplete) {
+  admitted = false
+  reason = "local_parser_started_before_materialization_verification"
+  action = "stop_only_the_parser_and_preserve_the_source_reference"
+  exitCode = 64
+} else if (!unrelatedWorkContinues && !transferComplete) {
+  admitted = false
+  reason = "missing_materializer_must_not_pause_independent_work"
+  action = "isolate_only_file_dependent_step_and_continue_safe_work"
+  exitCode = 75
 } else if (opaqueConnectorReference && !consumerContractAvailable) {
   admitted = false
   reason = "opaque_connector_reference_has_no_workspace_materializer"
@@ -177,21 +192,6 @@ if (unsafeTransport) {
   admitted = false
   reason = "materialized_file_integrity_or_cleanup_receipt_incomplete"
   action = "stream_to_private_temp_verify_size_and_sha_then_atomically_rename"
-  exitCode = 75
-} else if (localParserStarted && !transferComplete) {
-  admitted = false
-  reason = "local_parser_started_before_materialization_verification"
-  action = "stop_only_the_parser_and_preserve_the_source_reference"
-  exitCode = 64
-} else if (automaticReplayRequested && !preservationReady) {
-  admitted = false
-  reason = "materialization_replay_rejected_before_reconciliation"
-  action = "reconcile_prior_artifacts_and_external_writes_before_retry"
-  exitCode = 64
-} else if (!unrelatedWorkContinues && !transferComplete) {
-  admitted = false
-  reason = "missing_materializer_must_not_pause_independent_work"
-  action = "isolate_only_file_dependent_step_and_continue_safe_work"
   exitCode = 75
 }
 
