@@ -57,7 +57,8 @@ try {
 
   const saved = JSON.parse(fs.readFileSync(manifest, "utf8"))
   assert.deepEqual(Object.keys(saved.servers).sort(), ["cloudmind", "computer_use"])
-  assert.equal(saved.safeguards.secret_values_captured, false)
+  assert.equal(saved.safeguards.manifest_may_contain_local_secret_material, true)
+  assert.equal(saved.safeguards.commit_manifest_to_repository, false)
   checks += 1
 
   expectStatus(run(["audit", "--config", config, "--manifest", manifest]), 0, "mcp_config_intact")
