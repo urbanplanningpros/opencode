@@ -127,18 +127,31 @@ export async function auditRollout(file, imagePayloadThresholdBytes = 32 * 1024 
 
   const hash = crypto.createHash('sha256')
   const prefix = 'data:image/'
+  const delimiter = 'base64,'
   let prefixIndex = 0
+  let delimiterIndex = 0
+  let subtypeLength = 0
+  let currentUriBytes = 0
   let state = 'search'
-  let metadata = ''
   let imageCount = 0
   let imageBytes = 0
+
+  function resetSearch(char = null) {
+    state = 'search'
+    delimiterIndex = 0
+    subtypeLength = 0
+    currentUriBytes = 0
+    prefixIndex = 0
+    if (char !== null) searchCharacter(char)
+  }
 
   function searchCharacter(char) {
     if (char === prefix[prefixIndex]) {
       prefixIndex += 1
       if (prefixIndex === prefix.length) {
-        state = 'metadata'
-        metadata = ''
+        state = 'subtype'
+        subtypeLength = 0
+        currentUriBytes = prefix.length
         prefixIndex = 0
       }
     } else {
@@ -155,26 +168,33 @@ export async function auditRollout(file, imagePayloadThresholdBytes = 32 * 1024 
         continue
       }
 
-      if (state === 'metadata') {
-        metadata += char
-        if (metadata.endsWith(';base64,')) {
-          imageCount += 1
-          imageBytes += Buffer.byteLength(prefix + metadata)
-          state = 'payload'
-          metadata = ''
-        } else if (metadata.length > 128 || !/^[A-Za-z0-9.+-]*$/.test(metadata.replace(/;base64,$/, ''))) {
-          state = 'search'
-          metadata = ''
-          searchCharacter(char)
-        }
+      if (state === 'subtype') {
+        if (/^[A-Za-z0-9.+-]$/.test(char) && subtypeLength < 96) {
+          subtypeLength += 1
+          currentUriBytes += 1
+        } else if (char === ';' && subtypeLength > 0) {
+          currentUriBytes += 1
+          delimiterIndex = 0
+          state = 'delimiter'
+        } else resetSearch(char)
+        continue
+      }
+
+      if (state === 'delimiter') {
+        if (char === delimiter[delimiterIndex]) {
+          delimiterIndex += 1
+          currentUriBytes += 1
+          if (delimiterIndex === delimiter.length) {
+            imageCount += 1
+            imageBytes += currentUriBytes
+            state = 'payload'
+          }
+        } else resetSearch(char)
         continue
       }
 
       if (isBase64Character(char)) imageBytes += 1
-      else {
-        state = 'search'
-        searchCharacter(char)
-      }
+      else resetSearch(char)
     }
   }
 
