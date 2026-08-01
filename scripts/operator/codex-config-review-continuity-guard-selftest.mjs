@@ -21,7 +21,10 @@ try {
 
   const rollout = path.join(temp, 'rollout.jsonl')
   fs.writeFileSync(rollout, JSON.stringify({ image: 'data:image/png;base64,' + 'A'.repeat(1024) }) + '\n')
-  assert.equal(auditRollout(rollout, 512, 999999).action, 'rotate_context_with_hash_bound_handoff')
+  const rolloutResult = await auditRollout(rollout, 512, 999999)
+  assert.equal(rolloutResult.action, 'rotate_context_with_hash_bound_handoff')
+  assert.equal(rolloutResult.retained_image_count, 1)
+  assert.ok(rolloutResult.retained_image_payload_bytes >= 1024)
 
   const repo = path.join(temp, 'repo')
   fs.mkdirSync(repo)
@@ -40,7 +43,7 @@ try {
   assert.equal(manifest.provider, 'openai')
   assert.equal(manifest.automatic_model_selection, false)
 
-  console.log(JSON.stringify({ status: 'passed', checks: 10 }))
+  console.log(JSON.stringify({ status: 'passed', checks: 12 }))
 } finally {
   fs.rmSync(temp, { recursive: true, force: true })
 }
