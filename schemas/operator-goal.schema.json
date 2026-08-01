@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://urbanplanningpros.com/schemas/operator-goal.schema.json",
+  "title": "UPP Operator Goal",
+  "type": "object",
+  "required": ["version", "goal", "routing", "patching", "modelMigration"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 },
+    "goal": { "type": "string", "minLength": 20 },
+    "routing": {
+      "type": "object",
+      "required": [
+        "approvedProviders",
+        "excludedProviders",
+        "prohibitedRoutes",
+        "automaticModelSelection",
+        "gatewaysAllowed"
+      ],
+      "properties": {
+        "approvedProviders": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["openai", "local"] }
+        },
+        "excludedProviders": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "prohibitedRoutes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "automaticModelSelection": { "const": false },
+        "gatewaysAllowed": { "const": false }
+      },
+      "additionalProperties": false
+    },
+    "patching": {
+      "type": "object",
+      "required": [
+        "mode",
+        "autonomousSafeClasses",
+        "guidedInterventionDefault",
+        "guidedInterventionRequiredFor",
+        "preserveState",
+        "validateWithCanary",
+        "pauseOnlyWhenNoSafeRoute"
+      ],
+      "properties": {
+        "mode": { "const": "autonomous_with_guided_intervention" },
+        "autonomousSafeClasses": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "guidedInterventionDefault": { "const": true },
+        "guidedInterventionRequiredFor": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "preserveState": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "validateWithCanary": { "const": true },
+        "pauseOnlyWhenNoSafeRoute": { "const": true }
+      },
+      "additionalProperties": false
+    },
+    "modelMigration": {
+      "type": "object",
+      "required": [
+        "deadline",
+        "authenticationBoundary",
+        "replacements",
+        "verifyEffectiveModel",
+        "apiKeyCompatibilityRequiresGuidedIntervention"
+      ],
+      "properties": {
+        "deadline": { "const": "2026-08-31" },
+        "authenticationBoundary": { "const": "chatgpt" },
+        "replacements": {
+          "type": "object",
+          "required": ["gpt-5.4", "gpt-5.4-mini"],
+          "properties": {
+            "gpt-5.4": { "const": "gpt-5.6-terra" },
+            "gpt-5.4-mini": { "const": "gpt-5.6-luna" }
+          },
+          "additionalProperties": false
+        },
+        "verifyEffectiveModel": { "const": true },
+        "apiKeyCompatibilityRequiresGuidedIntervention": { "const": true }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
