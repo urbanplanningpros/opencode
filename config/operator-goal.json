@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/operator-goal.schema.json",
+  "version": 1,
+  "goal": "Keep business-critical operator workflows running by autonomously patching controlled systems with guided intervention as the default safety checkpoint.",
+  "routing": {
+    "approvedProviders": ["openai", "local"],
+    "excludedProviders": ["anthropic", "claude", "manus"],
+    "prohibitedRoutes": [
+      "openrouter",
+      "amazon-bedrock",
+      "google-vertex",
+      "github-copilot-auto",
+      "model-gateway",
+      "automatic-selector"
+    ],
+    "automaticModelSelection": false,
+    "gatewaysAllowed": false
+  },
+  "patching": {
+    "mode": "autonomous_with_guided_intervention",
+    "autonomousSafeClasses": [
+      "compatibility_guard",
+      "test",
+      "documentation",
+      "nonproduction_config",
+      "read_only_connector",
+      "state_preservation"
+    ],
+    "guidedInterventionDefault": true,
+    "guidedInterventionRequiredFor": [
+      "production",
+      "deployment",
+      "credential",
+      "billing",
+      "permission_expansion",
+      "destructive_change",
+      "customer_facing",
+      "publication",
+      "external_write",
+      "irreversible_change"
+    ],
+    "preserveState": [
+      "task_id",
+      "thread_id",
+      "operation_id",
+      "idempotency_key",
+      "repository_sha",
+      "diff_hash",
+      "external_write_state"
+    ],
+    "validateWithCanary": true,
+    "pauseOnlyWhenNoSafeRoute": true
+  },
+  "modelMigration": {
+    "deadline": "2026-08-31",
+    "authenticationBoundary": "chatgpt",
+    "replacements": {
+      "gpt-5.4-mini": "gpt-5.6-luna",
+      "gpt-5.4": "gpt-5.6-terra"
+    },
+    "verifyEffectiveModel": true,
+    "apiKeyCompatibilityRequiresGuidedIntervention": true
+  }
+}
