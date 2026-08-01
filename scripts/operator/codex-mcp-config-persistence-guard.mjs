@@ -108,7 +108,7 @@ function extractMcpServers(text) {
   }
 
   return Object.fromEntries(
-    [...blocks.entries()].map(([name, raw]) => [name, { raw, sha256: sha256(raw) }]),
+    [...blocks.entries()].map(([name, raw]) => [name, { raw, sha256: sha256(raw.trimEnd()) }]),
   )
 }
 
@@ -168,7 +168,9 @@ function snapshot(args) {
       }]),
     ),
     safeguards: {
-      secret_values_captured: false,
+      local_manifest_mode: "0600",
+      manifest_may_contain_local_secret_material: true,
+      commit_manifest_to_repository: false,
       restore_missing_only: true,
       overwrite_changed_server: false,
       whole_config_rollback: false,
@@ -177,7 +179,13 @@ function snapshot(args) {
   }
 
   atomicWrite(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`)
-  emit({ status: "snapshot_created", manifest: manifestFile, servers: selectedNames, config_sha256: manifest.source.config_sha256 })
+  emit({
+    status: "snapshot_created",
+    manifest: manifestFile,
+    servers: selectedNames,
+    config_sha256: manifest.source.config_sha256,
+    warning: "Keep the manifest local with mode 0600; do not commit it because MCP tables may contain local authentication material.",
+  })
 }
 
 function compareConfig(config, manifest) {
@@ -259,10 +267,10 @@ function repair(args) {
   const additions = result.missing.map((name) => {
     const raw = String(manifest.servers[name].raw || "")
     if (!raw.trim()) fail("Manifest contains an empty MCP server block", 75, { server: name })
-    return `\n# Restored by codex-mcp-config-persistence-guard for operation ${manifest.operation_id}\n${raw.replace(/^\s+/, "")}`
-  }).join("\n")
+    return raw.trim()
+  }).join("\n\n")
 
-  const nextText = `${result.text.replace(/\s*$/, "\n")}${additions.replace(/^\n/, "")}\n`
+  const nextText = `${result.text.trimEnd()}\n\n${additions}\n`
   atomicWrite(config, nextText)
   const verified = compareConfig(config, manifest)
   if (verified.missing.length || verified.changed.length) {
