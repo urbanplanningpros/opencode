@@ -116,13 +116,68 @@ export function buildReviewManifest({ repo, base, head, operationId }) {
   return { schema_version: 1, created_at: nowIso(), ...immutable, manifest_sha256: sha256(JSON.stringify(immutable)) }
 }
 
-export function auditRollout(file, imagePayloadThresholdBytes = 32 * 1024 * 1024, rolloutThresholdBytes = 512 * 1024 * 1024) {
+function isBase64Character(char) {
+  return /^[A-Za-z0-9+/=]$/.test(char)
+}
+
+export async function auditRollout(file, imagePayloadThresholdBytes = 32 * 1024 * 1024, rolloutThresholdBytes = 512 * 1024 * 1024) {
   const absolute = path.resolve(file)
   const stat = fs.lstatSync(absolute)
   if (stat.isSymbolicLink() || !stat.isFile()) throw new Error('Rollout must be a regular file')
-  const text = fs.readFileSync(absolute, 'utf8')
-  const matches = text.match(/data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+/g) || []
-  const imageBytes = matches.reduce((total, value) => total + Buffer.byteLength(value), 0)
+
+  const hash = crypto.createHash('sha256')
+  const prefix = 'data:image/'
+  let prefixIndex = 0
+  let state = 'search'
+  let metadata = ''
+  let imageCount = 0
+  let imageBytes = 0
+
+  function searchCharacter(char) {
+    if (char === prefix[prefixIndex]) {
+      prefixIndex += 1
+      if (prefixIndex === prefix.length) {
+        state = 'metadata'
+        metadata = ''
+        prefixIndex = 0
+      }
+    } else {
+      prefixIndex = char === prefix[0] ? 1 : 0
+    }
+  }
+
+  for await (const chunk of fs.createReadStream(absolute)) {
+    hash.update(chunk)
+    const text = chunk.toString('utf8')
+    for (const char of text) {
+      if (state === 'search') {
+        searchCharacter(char)
+        continue
+      }
+
+      if (state === 'metadata') {
+        metadata += char
+        if (metadata.endsWith(';base64,')) {
+          imageCount += 1
+          imageBytes += Buffer.byteLength(prefix + metadata)
+          state = 'payload'
+          metadata = ''
+        } else if (metadata.length > 128 || !/^[A-Za-z0-9.+-]*$/.test(metadata.replace(/;base64,$/, ''))) {
+          state = 'search'
+          metadata = ''
+          searchCharacter(char)
+        }
+        continue
+      }
+
+      if (isBase64Character(char)) imageBytes += 1
+      else {
+        state = 'search'
+        searchCharacter(char)
+      }
+    }
+  }
+
   const reasons = []
   if (imageBytes >= imagePayloadThresholdBytes) reasons.push('retained_image_payload_threshold')
   if (stat.size >= rolloutThresholdBytes) reasons.push('rollout_size_threshold')
@@ -130,9 +185,9 @@ export function auditRollout(file, imagePayloadThresholdBytes = 32 * 1024 * 1024
     schema_version: 1,
     audited_at: nowIso(),
     file: absolute,
-    file_sha256: sha256(text),
+    file_sha256: hash.digest('hex'),
     rollout_bytes: stat.size,
-    retained_image_count: matches.length,
+    retained_image_count: imageCount,
     retained_image_payload_bytes: imageBytes,
     action: reasons.length ? 'rotate_context_with_hash_bound_handoff' : 'continue',
     reasons,
@@ -166,7 +221,7 @@ async function main(argv) {
 
   if (command === 'rollout-audit') {
     if (!args.file) throw new Error('--file is required')
-    const result = auditRollout(
+    const result = await auditRollout(
       args.file,
       args['image-threshold-bytes'] ? Number(args['image-threshold-bytes']) : undefined,
       args['rollout-threshold-bytes'] ? Number(args['rollout-threshold-bytes']) : undefined,
