@@ -5,13 +5,18 @@ on:
     paths:
       - 'scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs'
       - 'scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs'
+      - 'scripts/operator/codex-windows-gitstorm-github-keyring-guard.mjs'
+      - 'scripts/operator/codex-windows-gitstorm-github-keyring-guard-selftest.mjs'
       - '.github/workflows/operator-runtime-readiness.yml'
   push:
     branches:
       - 'fix/operator-windows-sandbox-github-install-36473-36475'
+      - 'fix/operator-codex-git-storm-gh-keyring-36478-36479'
     paths:
       - 'scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs'
       - 'scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs'
+      - 'scripts/operator/codex-windows-gitstorm-github-keyring-guard.mjs'
+      - 'scripts/operator/codex-windows-gitstorm-github-keyring-guard-selftest.mjs'
       - '.github/workflows/operator-runtime-readiness.yml'
 
 permissions:
@@ -30,5 +35,9 @@ jobs:
         run: |
           node --check scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs
           node --check scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs
-      - name: Deterministic self-test
-        run: node scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs
+          node --check scripts/operator/codex-windows-gitstorm-github-keyring-guard.mjs
+          node --check scripts/operator/codex-windows-gitstorm-github-keyring-guard-selftest.mjs
+      - name: Deterministic self-tests
+        run: |
+          node scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs
+          node scripts/operator/codex-windows-gitstorm-github-keyring-guard-selftest.mjs
