@@ -1,6 +1,9 @@
 name: Operator model migration guard
 
 on:
+  push:
+    branches:
+      - "fix/operator-autopatch-guided-migration-*"
   pull_request:
   workflow_dispatch:
 
