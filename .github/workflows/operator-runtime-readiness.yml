@@ -1,0 +1,34 @@
+name: Operator runtime readiness
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs'
+      - 'scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs'
+      - '.github/workflows/operator-runtime-readiness.yml'
+  push:
+    branches:
+      - 'fix/operator-windows-sandbox-github-install-36473-36475'
+    paths:
+      - 'scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs'
+      - 'scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs'
+      - '.github/workflows/operator-runtime-readiness.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax check
+        run: |
+          node --check scripts/operator/codex-windows-sandbox-github-readiness-guard.mjs
+          node --check scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs
+      - name: Deterministic self-test
+        run: node scripts/operator/codex-windows-sandbox-github-readiness-guard-selftest.mjs
