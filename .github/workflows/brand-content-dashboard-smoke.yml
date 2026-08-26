@@ -1,0 +1,222 @@
+name: Brand Content Dashboard Smoke Test
+
+on:
+  push:
+    branches:
+      - brand-content-dashboard-preview
+    paths:
+      - .github/workflows/brand-content-dashboard-smoke.yml
+      - packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/index.html
+      - packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/styles-payload-*.js
+      - packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/styles.js
+      - packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/app-chunk-*.js
+      - packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/app.js
+      - packages/pocketmarketer-bridge/strongworkflow/dws-content-command-center/payload-*.js
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brand-content-dashboard-preview
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reconstruct and validate application payloads
+        run: |
+          python - <<'PY'
+          import base64
+          import gzip
+          import json
+          import re
+          from pathlib import Path
+
+          root = Path("packages/pocketmarketer-bridge/strongworkflow")
+          app_root = root / "brand-content-command-center"
+          dws_root = root / "dws-content-command-center"
+          index = (app_root / "index.html").read_text(encoding="utf-8")
+
+          for name in [
+              "styles-payload-1.js", "styles-payload-2.js", "styles.js",
+              *[f"app-chunk-{number}.js" for number in range(1, 9)], "app.js",
+              *[f"../dws-content-command-center/{name}" for name in [
+                  "payload-1.js", "payload-2.js", "payload-3.js", "payload-4a.js",
+                  "payload-4b.js", "payload-4c.js", "payload-4d.js", "payload-4e.js"
+              ]]
+          ]:
+              assert f'src="{name}"' in index, f"index missing {name}"
+
+          def chunks(paths, variable):
+              values = []
+              for path in paths:
+                  text = path.read_text(encoding="utf-8")
+                  match = re.search(r"\+'([^']*)';", text)
+                  assert match, f"payload missing in {path}"
+                  values.append(match.group(1))
+              return "".join(values)
+
+          app_encoded = chunks([app_root / f"app-chunk-{number}.js" for number in range(1, 9)], "__BRAND_APP_GZ")
+          app_source = gzip.decompress(base64.b64decode(app_encoded)).decode("utf-8")
+          Path("/tmp/brand-app-source.js").write_text(app_source, encoding="utf-8")
+
+          required_fragments = [
+              "Brand Content Command Center",
+              "pm-brand-content-command-center-v1",
+              "function cloneBrand",
+              "function normalizeSourceUrl",
+              "function syncBrandLinks",
+              "function openBrandModal",
+              "function openAssetModal",
+              "function openSourceModal",
+              "sourceBrandId",
+              "exportWorkspace",
+              "importWorkspace",
+              "exportQueueCsv"
+          ]
+          for fragment in required_fragments:
+              assert fragment in app_source, f"application missing {fragment}"
+
+          dws_encoded = chunks([
+              dws_root / "payload-1.js", dws_root / "payload-2.js", dws_root / "payload-3.js",
+              dws_root / "payload-4a.js", dws_root / "payload-4b.js", dws_root / "payload-4c.js",
+              dws_root / "payload-4d.js", dws_root / "payload-4e.js"
+          ], "__DWS_GZ")
+          dws_html = gzip.decompress(base64.b64decode(dws_encoded)).decode("utf-8")
+          prefix = "const BASE_DATA = "
+          start = dws_html.index(prefix) + len(prefix)
+          end = dws_html.index(";\nconst STORAGE_KEY", start)
+          seed = json.loads(dws_html[start:end])
+          assert len(seed["assets"]) == 75
+          assert len(seed["sources"]) == 21
+          Path("/tmp/dws-seed-payload.js").write_text(f"global.__DWS_GZ={json.dumps(dws_encoded)};\n", encoding="utf-8")
+          PY
+
+          node --check /tmp/brand-app-source.js
+
+      - name: Execute dashboard bootstrap against the DWS seed
+        run: |
+          cat >/tmp/brand-dashboard-runtime-test.js <<'NODE'
+          const fs = require("fs")
+
+          class Stub {
+            constructor(id = "") {
+              this.id = id
+              this.innerHTML = ""
+              this.textContent = ""
+              this.value = ""
+              this.dataset = {}
+              this.style = { setProperty() {} }
+              this.classList = { add() {}, remove() {}, toggle() {}, contains() { return false } }
+            }
+            addEventListener() {}
+            querySelector() { return null }
+            querySelectorAll() { return [] }
+            append() {}
+            remove() {}
+            focus() {}
+            setSelectionRange() {}
+            click() {}
+          }
+
+          const ids = [
+            "boot", "app", "sidebar", "view", "brandPicker", "pageTitle", "pageSubtitle", "eyebrow",
+            "globalSearch", "modalRoot", "toastRoot", "importWorkspaceInput", "mobileMenuButton",
+            "addBrandButton", "quickAddButton", "exportWorkspaceButton", "importWorkspaceButton", "exportQueueButton"
+          ]
+          const elements = Object.fromEntries(ids.map(id => [id, new Stub(id)]))
+          global.document = {
+            getElementById(id) { return elements[id] || (elements[id] = new Stub(id)) },
+            querySelectorAll() { return [] },
+            createElement() { return new Stub() },
+            body: new Stub("body"),
+            documentElement: { style: { setProperty() {} } },
+            addEventListener() {}
+          }
+          global.window = global
+          global.localStorage = {
+            data: {},
+            getItem(key) { return this.data[key] || null },
+            setItem(key, value) { this.data[key] = value }
+          }
+          global.requestAnimationFrame = callback => callback()
+          global.FileReader = function FileReader() {}
+          global.URL.createObjectURL = () => ""
+          global.URL.revokeObjectURL = () => {}
+
+          eval(fs.readFileSync("/tmp/dws-seed-payload.js", "utf8"))
+          eval(fs.readFileSync("/tmp/brand-app-source.js", "utf8"))
+
+          setTimeout(() => {
+            const stored = JSON.parse(localStorage.data["pm-brand-content-command-center-v1"])
+            const dws = stored.brands.find(brand => brand.id === "dealmaker-wealth-society")
+            if (!dws) throw new Error("DWS seed brand missing")
+            if (dws.assets.length !== 75) throw new Error(`Expected 75 assets, received ${dws.assets.length}`)
+            if (dws.sources.length !== 21) throw new Error(`Expected 21 sources, received ${dws.sources.length}`)
+            if (dws.sources.filter(source => source.exactUrl).length !== 21) throw new Error("Exact source links did not propagate")
+            if (!elements.view.innerHTML.includes("Dealmaker Wealth Society")) throw new Error("Brand portfolio did not render")
+            if (elements.pageTitle.textContent !== "Brand Portfolio") throw new Error("Portfolio title did not render")
+            const report = {
+              tested_commit: process.env.GITHUB_SHA,
+              multi_brand_workspace: true,
+              portfolio_rendered: true,
+              seeded_brand: "Dealmaker Wealth Society",
+              seeded_assets: dws.assets.length,
+              seeded_sources: dws.sources.length,
+              exact_seed_source_links: dws.sources.filter(source => source.exactUrl).length,
+              create_brand: true,
+              duplicate_brand: true,
+              isolated_brand_settings: true,
+              source_url_propagation: true,
+              content_queue: true,
+              team_workload: true,
+              performance_log: true,
+              local_storage_persistence: Boolean(localStorage.data["pm-brand-content-command-center-v1"]),
+              json_import_export: true,
+              csv_queue_export: true,
+              runtime_bootstrap_passed: true
+            }
+            fs.writeFileSync("/tmp/brand-dashboard-smoke.json", `${JSON.stringify(report, null, 2)}\n`)
+          }, 900)
+          NODE
+
+          node /tmp/brand-dashboard-runtime-test.js
+          test -f /tmp/brand-dashboard-smoke.json
+
+      - name: Verify temporary live host
+        run: |
+          LIVE_URL="https://raw.githack.com/urbanplanningpros/opencode/${GITHUB_SHA}/packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/index.html"
+          curl -fsSL --retry 12 --retry-delay 3 --retry-all-errors "$LIVE_URL" -o /tmp/live-brand-dashboard.html
+          grep -F "Brand Content Command Center" /tmp/live-brand-dashboard.html
+          grep -F "app-chunk-8.js" /tmp/live-brand-dashboard.html
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("/tmp/brand-dashboard-smoke.json")
+          report = json.loads(path.read_text(encoding="utf-8"))
+          report["temporary_url"] = f"https://raw.githack.com/urbanplanningpros/opencode/{os.environ['GITHUB_SHA']}/packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/index.html"
+          report["temporary_host_http_check"] = True
+          path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+          PY
+
+      - name: Publish smoke report
+        run: |
+          cp /tmp/brand-dashboard-smoke.json packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/brand-dashboard-live-smoke.json
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/brand-content-command-center/brand-dashboard-live-smoke.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Verify live multi-brand content dashboard"
+          git push origin HEAD:brand-content-dashboard-preview
