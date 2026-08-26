@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Brand Content Command Center</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="boot" class="boot-screen">
+    <div class="boot-mark">PM</div>
+    <h1>Brand Content Command Center</h1>
+    <p>Loading brand workspaces and production systems…</p>
+    <div class="boot-line"><span></span></div>
+  </div>
+
+  <div id="app" class="app-shell is-loading" aria-live="polite">
+    <aside class="sidebar" id="sidebar">
+      <div class="app-brand">
+        <div class="app-logo">PM</div>
+        <div>
+          <strong>Brand Content</strong>
+          <span>Command Center</span>
+        </div>
+      </div>
+
+      <div class="brand-picker-wrap">
+        <label for="brandPicker">Active brand</label>
+        <div class="brand-picker-row">
+          <select id="brandPicker" aria-label="Select active brand"></select>
+          <button class="icon-button" id="addBrandButton" type="button" title="Add brand">＋</button>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Dashboard navigation">
+        <button class="nav-button active" type="button" data-view="portfolio"><span>◫</span><b>Brand Portfolio</b></button>
+        <button class="nav-button" type="button" data-view="overview"><span>⌂</span><b>Brand Overview</b></button>
+        <button class="nav-button" type="button" data-view="queue"><span>▶</span><b>Content Queue</b></button>
+        <button class="nav-button" type="button" data-view="sources"><span>↗</span><b>Source Library</b></button>
+        <button class="nav-button" type="button" data-view="team"><span>◎</span><b>Team Workload</b></button>
+        <button class="nav-button" type="button" data-view="performance"><span>↗</span><b>Performance</b></button>
+        <button class="nav-button" type="button" data-view="settings"><span>⚙</span><b>Brand Setup</b></button>
+      </nav>
+
+      <div class="sidebar-data">
+        <div class="sidebar-label">Workspace</div>
+        <button class="subtle-nav" id="exportWorkspaceButton" type="button"><span>⇩</span> Export workspace</button>
+        <button class="subtle-nav" id="importWorkspaceButton" type="button"><span>⇧</span> Import workspace</button>
+        <button class="subtle-nav" id="exportQueueButton" type="button"><span>▦</span> Export queue CSV</button>
+        <input id="importWorkspaceInput" type="file" accept="application/json" hidden>
+      </div>
+
+      <div class="sidebar-rule">
+        <strong>Source integrity</strong>
+        <p>A source must have an exact usable URL before an editor can pull the moment. Search pages and articles remain research references only.</p>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenuButton" type="button" aria-label="Open navigation">☰</button>
+        <div class="topbar-title">
+          <span id="eyebrow">All brands</span>
+          <h1 id="pageTitle">Brand Portfolio</h1>
+          <p id="pageSubtitle">Operate every brand from one production system.</p>
+        </div>
+        <div class="topbar-actions">
+          <div class="global-search">
+            <span>⌕</span>
+            <input id="globalSearch" type="search" placeholder="Search content, sources, people…">
+          </div>
+          <button class="button secondary" id="quickAddButton" type="button">＋ Add</button>
+        </div>
+      </header>
+
+      <section id="view" class="view-container"></section>
+    </main>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div id="toastRoot" class="toast-root" aria-live="assertive"></div>
+
+  <script src="../dws-content-command-center/payload-1.js"></script>
+  <script src="../dws-content-command-center/payload-2.js"></script>
+  <script src="../dws-content-command-center/payload-3.js"></script>
+  <script src="../dws-content-command-center/payload-4a.js"></script>
+  <script src="../dws-content-command-center/payload-4b.js"></script>
+  <script src="../dws-content-command-center/payload-4c.js"></script>
+  <script src="../dws-content-command-center/payload-4d.js"></script>
+  <script src="../dws-content-command-center/payload-4e.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
