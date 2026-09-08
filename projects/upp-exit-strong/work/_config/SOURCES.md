@@ -7,3 +7,5 @@ SRC-004: older Urban Planning Pros Sites checkout, read-only; absent current boo
 SRC-005: OpenAI-generated fictional parcel artwork, one generation.
 
 Scenario amounts, gates, map, timings, and outcomes are original fictional game content, not real parcel evidence.
+
+Book-journey revision: public /book, /contact/, and home page rechecked 2026-09-08. The book remains $47, 94 illustrated PDF pages; UPP lists per-project feasibility, master land planning, owner representation, and development strategy. Game chapter links use the existing verified summaries only. Service links open existing intake; no automatic game-record transfer or conversion analytics is represented.

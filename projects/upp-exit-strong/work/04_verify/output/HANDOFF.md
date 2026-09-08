@@ -1,7 +1,7 @@
 # Verify handoff
 
 ## Outcome produced
-Seventeen rule tests and resource guard pass. Sol review: PASS WITH DISCLOSED GAPS.
+Twenty-two game/journey tests and the locked resource guard pass. Added checks cover all guided exit paths, indirect prerequisites, blocked guidance, replayed stage milestones, and verified chapter targets.
 
 ## Decisions and source support
 See ../../_config/SOURCES.md and ../../_config/DECISIONS.md.

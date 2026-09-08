@@ -1,7 +1,7 @@
 # Deliver handoff
 
 ## Outcome produced
-Private publication and GitHub draft handoff in progress.
+Initial private game is published at https://upp-exit-strong.chic-raven-1975.chatgpt.site and draft PR is https://github.com/urbanplanningpros/opencode/pull/70. The book-journey revision updates those same targets.
 
 ## Decisions and source support
 See ../../_config/SOURCES.md and ../../_config/DECISIONS.md.

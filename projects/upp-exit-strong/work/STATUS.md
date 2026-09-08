@@ -1,8 +1,8 @@
 # Status
 
 Current stage: `05_deliver`
-Built: interactive Mill Creek campaign, 14 moves, six endings, journal, one local save, final-decision replay, book/service links.
-Verified: 17 game-rule tests and resource check passed.
-Next: independent Sol review, private publication, scoped GitHub draft PR.
-Gaps: no browser QA; no current production checkout source; no paid game entitlement activation; no certified billion-fold consumption reduction.
-Resource posture: one shared artwork; seven runtime files; no gameplay model calls; small ID-only saves.
+Built: four book-stage missions, earned milestones, branching exit map, ambition-led next moves, visible route prerequisites, evidence-to-route feedback, and a book-first / route-specific UPP service handoff. Original campaign, six endings, save format, journal, and replay remain intact.
+Verified: 22 game and journey tests; resource check; JavaScript syntax; local entrypoint references.
+Delivery: update the existing private Exit Strong Site and draft PR #70 in urbanplanningpros/opencode.
+Gaps: browser interaction not tested; paid game entitlements not activated; urbanplanningpros.com installation not performed; no certified billion-fold consumption reduction.
+Resource posture: reuse one artwork; eight runtime files; locked budgets unchanged; small ID-only saves.

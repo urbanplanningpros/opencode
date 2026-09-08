@@ -24,7 +24,7 @@ for(const name of files){const data=await fs.readFile(name),relative=path.relati
 for(const metric of ['files','sourceBytes','initialGzipBytes','codeGzipBytes','campaignGzipBytes']){const limit=metric==='files'?LIMITS.maxFiles:LIMITS[metric];if(metrics[metric]>limit)errors.push(metric+': '+metrics[metric]+' > '+limit);}
 const allIds=[...campaign.actions.map(a=>a.id),...campaign.routes.map(r=>'exit:'+r.id)];if(new Set(allIds).size!==allIds.length)errors.push('Duplicate content ID');
 const ids=new Set(campaign.actions.map(a=>a.id)),reached=new Set();for(let i=0;i<campaign.actions.length;i++)for(const a of campaign.actions)if(a.needs.every(n=>reached.has(n)))reached.add(a.id);
-for(const a of [...campaign.actions,...campaign.routes])for(const needed of a.needs)if(!ids.has(needed))errors.push(a.id+': dangling prerequisite '+needed);
+for(const a of [...campaign.actions,...campaign.routes])for(const needed of [...a.needs,...(a.guidanceNeeds??[])])if(!ids.has(needed))errors.push(a.id+': dangling prerequisite '+needed);
 for(const a of campaign.actions){if(!reached.has(a.id))errors.push('Unreachable move: '+a.id);if(a.cost<0||a.days<1||!Number.isInteger(a.cost)||!Number.isInteger(a.days))errors.push('Invalid move cost: '+a.id);}
 const html=await fs.readFile(path.join(root,'dist/index.html'),'utf8');for(const match of html.matchAll(/(?:src|href)="(\.\/[^"?#]+)"/g)){const target=path.resolve(root,'dist',match[1]);try{await fs.access(target);}catch{errors.push('Missing entrypoint asset: '+match[1]);}}
 const context=await fs.readFile(path.join(root,'CONTINUE.md'));if(context.length>LIMITS.contextBytes)errors.push('Continuation context exceeds '+LIMITS.contextBytes+' bytes');

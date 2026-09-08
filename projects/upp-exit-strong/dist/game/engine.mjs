@@ -40,7 +40,7 @@ export function replay(campaign,history) {
   return history.reduce((s,id)=>apply(campaign,s,id),initial(campaign));
 }
 export function encode(state) {
-  const text=JSON.stringify({version:1,campaignVersion:state.campaignVersion,campaign:state.campaign,history:state.history});
+  const text=JSON.stringify({version:1,campaignVersion:state.campaignVersion,campaign:state.campaign,history:state.history,ambition:state.ambition});
   if(new TextEncoder().encode(text).length>LIMITS.saveBytes) throw new Error('Save exceeds the resource limit.');
   return text;
 }
@@ -48,7 +48,8 @@ export function decode(campaign,text) {
   if(typeof text!=='string'||new TextEncoder().encode(text).length>LIMITS.saveBytes) throw new Error('Save is too large.');
   const record=JSON.parse(text);
   if(!record||record.version!==1||record.campaignVersion!==campaign.version||record.campaign!==campaign.id) throw new Error('This save belongs to a different game version.');
-  return replay(campaign,record.history);
+  if(record.ambition!==undefined&&!campaign.routes.some(r=>r.id===record.ambition))throw new Error('Unknown saved ambition.');
+  return {...replay(campaign,record.history),ambition:record.ambition??'smaller'};
 }
 export function score(campaign,state) {
   const evidence=campaign.gates.filter(g=>state.done.includes(g.action)).length;

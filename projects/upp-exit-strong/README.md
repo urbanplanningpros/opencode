@@ -4,6 +4,8 @@ A playable browser development-strategy game by Urban Planning Pros, based on *B
 
 Play the fictional Mill Creek campaign: manage a diligence budget and deadline, uncover site constraints, and choose among six supported endings. Progress saves on the current device. The final move can be replayed to compare another supported ending. A decision record can be downloaded.
 
+The book is the game journey: four stage missions and earned milestones lead through Evaluate, Plan, Coordinate, and Exit. Players choose an ambition, follow legal prerequisite moves, and use a branching exit map to see how each investigation changes their options. Stage lessons link to verified book chapter notes. The ending offers the book first, then explains the UPP service relevant to that route and opens the existing property intake. Outbound links include campaign/placement parameters; no conversion tracking or transfer of the game record is claimed.
+
 ## Run and verify
 
 Serve `dist/` with an ordinary static HTTP server. Opening the HTML directly through `file:` does not support module loading reliably. The game uses native browser modules and needs no package installation or compilation.
@@ -21,6 +23,7 @@ Run from this module directory. The release check enforces resource budgets, con
 | `dist/index.html` | Game entrypoint |
 | `dist/game/app.mjs` | Shared game interface and interactions |
 | `dist/game/engine.mjs` | Pure moves, prerequisites, state, replay, score |
+| `dist/game/journey.mjs` | Stage milestones, route graph, book lenses, and contextual UPP handoff |
 | `dist/game/content/mill-creek.mjs` | Canonical campaign and book notes |
 | `dist/game/assets/` | Shared media, once per asset |
 | `dist/game/limits.mjs` | Bounded runtime and artifact limits |
@@ -48,3 +51,5 @@ The fictional rural-parcel art was generated once using OpenAI image generation,
 ## Scope of verification
 
 Local automated checks cover all six endings, prerequisite denial, deadline and budget checks, finite extension, corruption handling, bounded save restoration, event uniqueness, and replay. Visual/browser testing and real checkout integration are separate and must not be claimed without evidence.
+
+The selected ambition is saved in the same bounded device save and validated on restore. New pivot guidance includes a specialist-coordination move. Its `guidanceNeeds` are enforced by the current UI and route planner; historical core endings remain replayable so existing saves are not invalidated.
