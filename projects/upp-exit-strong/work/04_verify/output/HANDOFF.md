@@ -17,3 +17,5 @@ Reuse canonical source. One image generation. Bounded Sol review. No whole-repos
 
 ## Next-stage load list
 ../../../CONTINUE.md and the specific source file required by the change.
+
+Cartoon revision: 22 tests remain passing; all 15 actions have encounter copy and all six routes have exactly one direction group. Sol reviewed scene transitions, guided routes, saves, replay, completed runs and native keyboard controls; no must-fix issue found. Browser interaction remains untested.

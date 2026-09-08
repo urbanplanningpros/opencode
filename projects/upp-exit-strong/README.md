@@ -6,6 +6,8 @@ Play the fictional Mill Creek campaign: manage a diligence budget and deadline, 
 
 The book is the game journey: four stage missions and earned milestones lead through Evaluate, Plan, Coordinate, and Exit. Players choose an ambition, follow legal prerequisite moves, and use a branching exit map to see how each investigation changes their options. Stage lessons link to verified book chapter notes. The ending offers the book first, then explains the UPP service relevant to that route and opens the existing property intake. Outbound links include campaign/placement parameters; no conversion tracking or transfer of the game record is claimed.
 
+The cartoon adventure presents one mission at a time: travel to a destination, choose an investigation, then reveal the outcome. Scout guides each step. Details, costs, and complete evidence remain available in expandable panels and the backpack. Change direction presents three broad categories and then one route at a time; the full branching map is available separately. Animations respect reduced-motion preferences, and optional sounds start only after a player turns them on.
+
 ## Run and verify
 
 Serve `dist/` with an ordinary static HTTP server. Opening the HTML directly through `file:` does not support module loading reliably. The game uses native browser modules and needs no package installation or compilation.
@@ -21,7 +23,8 @@ Run from this module directory. The release check enforces resource budgets, con
 | Location | One job |
 | --- | --- |
 | `dist/index.html` | Game entrypoint |
-| `dist/game/app.mjs` | Shared game interface and interactions |
+| `dist/game/app.mjs` | Page-like adventure scenes and interactions |
+| `dist/game/adventure.mjs` | Guide dialogue, destinations, concise discovery summaries, and direction groups |
 | `dist/game/engine.mjs` | Pure moves, prerequisites, state, replay, score |
 | `dist/game/journey.mjs` | Stage milestones, route graph, book lenses, and contextual UPP handoff |
 | `dist/game/content/mill-creek.mjs` | Canonical campaign and book notes |
@@ -46,7 +49,7 @@ Before paid access ships, inspect the actual production checkout implementation,
 
 Book: *Before the Land Deal Gets Expensive*, first edition 2026, Jeremy Wenger, 94-page illustrated edition. Framework: PDF pages 3–7. Phasing: PDF pages 37–39 / printed pages 29–31. Coordination: PDF pages 54–58 / printed pages 43–46. Exits: PDF pages 67–69 / printed pages 53–55. Game notes are adaptations, not a substitute for the complete book. The site links to https://urbanplanningpros.com/book.
 
-The fictional rural-parcel art was generated once using OpenAI image generation, then encoded as one WebP. It is illustrative; map overlays are game geometry, not GIS or survey boundaries.
+The current cartoon map and original Scout fox guide were each generated once using OpenAI image generation, then encoded as two shared WebPs. They replace the earlier visual direction. The world and travel paths are illustrative, not GIS or survey geometry.
 
 ## Scope of verification
 
