@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111d19">
+  <meta name="description" content="Play the land development game from Urban Planning Pros. Investigate Mill Creek, make your next move, and find your way to a stronger exit.">
+  <title>Exit Strong — The UPP Development Game</title>
+  <link rel="stylesheet" href="./game/style.css">
+  <link rel="preload" as="image" href="./game/assets/mill-creek.webp">
+</head>
+<body>
+  <a class="skip-link" href="#play-area">Skip to the game</a>
+  <header class="game-header">
+    <a class="wordmark" href="./" aria-label="Exit Strong home"><span class="mark" aria-hidden="true">ES<span>↗</span></span><span>EXIT <b>STRONG</b><small>AN URBAN PLANNING PROS GAME</small></span></a>
+    <nav aria-label="Game navigation"><button data-panel="campaigns">Campaigns</button><button data-panel="field-guide">Field manual</button><a href="https://urbanplanningpros.com/book" target="_blank" rel="noopener">Get the book <span aria-hidden="true">↗</span></a></nav>
+    <button id="sound" class="icon-button" aria-label="Turn game sounds on" aria-pressed="false" title="Sound">♪</button>
+  </header>
+  <main id="play-area">
+    <div id="save-notice" class="notice" role="status" hidden></div>
+    <section id="launch" class="launch" aria-label="Start your campaign">
+      <div class="launch-shade"></div>
+      <div class="launch-copy"><p class="overline"><span></span> CAMPAIGN 01 · MILL CREEK</p><h1>The land has<br>potential.<br><em>Now prove it.</em></h1><p class="launch-lede">22 acres. A seller’s vision. A clock that’s already running.<br>Every move opens a path—or closes one.</p><div class="launch-actions"><button id="start" class="button bright">Play Mill Creek <span>→</span></button><button id="resume" class="button glass" hidden>Resume campaign <span>↗</span></button></div><p class="launch-detail">FREE CAMPAIGN <i></i> 10–15 MINUTES <i></i> 6 POSSIBLE ENDINGS</p></div>
+      <div class="launch-tag"><span>YOUR FIRST OPPORTUNITY</span><strong>MILL CREEK</strong><p>22 acres / Rural edge / Unverified potential</p><div><span>Evaluate</span><span>Plan</span><span>Coordinate</span><span>Exit</span></div></div>
+      <p class="launch-caption">A fictional land-development simulation inspired by Jeremy Wenger’s book.</p>
+    </section>
+    <section id="game" class="game" hidden aria-label="Mill Creek campaign">
+      <div class="campaign-bar"><div><span class="overline">CAMPAIGN 01</span><h1>The Mill Creek Decision</h1></div><div class="resources"><div><small>DILIGENCE BUDGET</small><strong id="cash">$48,000</strong></div><div><small>DECISION WINDOW</small><strong id="time">45 <em>days left</em></strong></div><div><small>EVIDENCE</small><strong id="evidence">0 <em>/ 6 gates</em></strong></div></div></div>
+      <div class="phase-bar" aria-label="Campaign acts"><button data-phase="0" aria-pressed="true"><span>01</span> Evaluate</button><button data-phase="1" aria-pressed="false"><span>02</span> Plan</button><button data-phase="2" aria-pressed="false"><span>03</span> Coordinate</button><button data-phase="3" aria-pressed="false"><span>04</span> Exit strong</button><span class="save-state" id="save-state">Saved on this device</span></div>
+      <div class="game-grid">
+        <section class="map-section" aria-label="Interactive property map">
+          <div class="map-top"><span><span class="map-dot"></span> MILL CREEK / FICTIONAL SITE</span><button id="layers" aria-pressed="true">Evidence layer <span>◈</span></button></div>
+          <div class="map-window" id="map-window">
+            <div class="map-world" id="map-world">
+              <img src="./game/assets/mill-creek.webp" alt="Illustrative aerial of Mill Creek: a central meadow, a creek along the left edge, and a road along the bottom" width="1280" height="853" draggable="false">
+              <svg class="map-overlay" viewBox="0 0 1000 667" preserveAspectRatio="none" role="img" aria-label="Illustrative parcel and proposed concept overlays; not survey geometry">
+                <polygon class="parcel-boundary" points="232,160 564,119 820,247 802,463 664,539 168,412 125,280"/>
+                <path id="creek-zone" class="constraint-zone" d="M 230,150 L 310,168 L 246,246 L 224,340 L 202,422 L 162,409 L 124,280 Z"/>
+                <path id="road-zone" class="road-zone" d="M 762,266 Q 802,380 791,465 L 663,533"/>
+                <g id="concept-overlay"></g>
+              </svg>
+              <div id="map-markers" class="map-markers"></div>
+            </div>
+            <div class="map-compass" aria-hidden="true">N<span>↑</span></div>
+            <div class="map-hint">Select a marker to investigate</div>
+            <div class="map-controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-reset" aria-label="Reset map view">⌖</button></div>
+          </div>
+          <div class="map-bottom"><div><span class="legend-boundary"></span> Site boundary</div><div><span class="legend-constraint"></span> Constraints</div><span>Illustrative game map · Drag to pan</span></div>
+          <div class="gate-strip" id="gates" aria-label="Feasibility gates"></div>
+        </section>
+        <aside class="decision-panel" aria-label="Your next move"><div class="panel-top"><span id="panel-kicker" class="overline">YOUR NEXT MOVE</span><button id="show-log" aria-label="Open decision journal">Journal <span>↗</span></button></div><div id="decision-content"></div></aside>
+      </div>
+      <section class="move-deck" aria-label="Available moves"><div class="deck-heading"><div><span class="overline" id="deck-kicker">01 / EVALUATE</span><h2 id="deck-title">Find the expensive assumption.</h2></div><span id="deck-count"></span></div><div id="moves" class="moves"></div></section>
+      <div class="game-foot"><p>Fictional costs, deadlines, rules, and outcomes. Real properties need their own evidence.</p><div><button id="restart">New run</button><button id="export">Download your decision record</button></div></div>
+    </section>
+  </main>
+  <dialog id="modal" aria-labelledby="modal-title"><button id="close-modal" class="close-modal" aria-label="Close dialog">×</button><div id="modal-body"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <footer class="site-footer"><span>URBAN PLANNING PROS <b>Plan Proper. Exit Strong.</b></span><a href="https://urbanplanningpros.com/contact/" target="_blank" rel="noopener">Have a real property? Talk to UPP <span>↗</span></a></footer>
+  <noscript><p class="notice">This game needs JavaScript. You can still <a href="https://urbanplanningpros.com/book">read about the book</a>.</p></noscript>
+  <script type="module" src="./game/app.mjs"></script>
+</body>
+</html>

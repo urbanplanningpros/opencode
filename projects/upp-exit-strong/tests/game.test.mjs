@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { campaign } from '../dist/game/content/mill-creek.mjs';
+import { initial, apply, available, routeStatus, replay, encode, decode, score, brief } from '../dist/game/engine.mjs';
+import { LIMITS } from '../dist/game/limits.mjs';
+
+const base=['control','zoning','access','utilities','land','survey','market','concept'];
+const paths={smaller:[...base,'team'],phased:[...base,'phase','team'],pivot:['control','zoning','access','utilities','land','survey','market','storage'],transfer:[...base,'buyer'],original:[...base,'negotiate','team'],walk:['utilities','land']};
+for(const [route,moves] of Object.entries(paths))test('complete supported ending: '+route,()=>{const s=replay(campaign,[...moves,'exit:'+route]);assert.equal(s.ending,route);assert.ok(s.cash>=0);assert.ok(s.day<s.deadline);assert.equal(decode(campaign,encode(s)).ending,route);assert.match(brief(campaign,s),/Fictional educational simulation/);});
+test('unearned exits cannot be selected',()=>{assert.throws(()=>apply(campaign,initial(campaign),'exit:smaller'),/Need:/);});
+test('spending a move twice and acting after ending both fail',()=>{const s=apply(campaign,initial(campaign),'utilities');assert.throws(()=>apply(campaign,s,'utilities'),/Completed/);assert.throws(()=>apply(campaign,apply(campaign,s,'exit:walk'),'access'),/complete/);});
+test('prerequisite, budget and time constraints fail closed',()=>{const s=initial(campaign);assert.match(available(campaign,s,campaign.actions.find(a=>a.id==='survey')),/Site control/);assert.match(available(campaign,{...s,cash:100},campaign.actions[0]),/budget/);assert.match(available(campaign,{...s,day:44},campaign.actions[0]),/window/);});
+test('extension adds finite time and cannot be repeated',()=>{let s=replay(campaign,['control','extension']);assert.equal(s.deadline,60);assert.equal(s.day,2);assert.throws(()=>apply(campaign,s,'extension'),/Completed/);});
+test('all moves can be completed without impossible budgets',()=>{const s=replay(campaign,['control','extension','zoning','access','utilities','land','survey','market','concept','negotiate','phase','storage','buyer','team']);assert.equal(s.done.length,campaign.actions.length);assert.ok(s.cash>=0);assert.ok(s.day<s.deadline);for(const r of campaign.routes)assert.equal(routeStatus(campaign,s,r),'');});
+test('saved state rebuilds facts from canonical history',()=>{const encoded=JSON.stringify({version:1,campaignVersion:campaign.version,campaign:campaign.id,history:['utilities'],cash:99999999,done:['team']});const s=decode(campaign,encoded);assert.equal(s.cash,campaign.budget-3100);assert.deepEqual(s.done,['utilities']);assert.ok(encode(s).length<1024);});
+test('corrupt, oversized, unknown and overlong histories are rejected',()=>{for(const raw of ['{','null',JSON.stringify({version:5,campaign:campaign.id,history:[]}),JSON.stringify({version:1,campaign:campaign.id,history:['fake']}),'x'.repeat(LIMITS.saveBytes+1)])assert.throws(()=>decode(campaign,raw));assert.throws(()=>replay(campaign,Array(LIMITS.historyActions+1).fill('control')));});
+test('events appear once after their trigger',()=>{const s=replay(campaign,['control','zoning','access','utilities','land']);assert.deepEqual(s.events,['rain']);assert.deepEqual(apply(campaign,s,'survey').events,['rain']);});
+test('a supported no-go can score well without a purchase',()=>{const s=replay(campaign,[...base,'negotiate','team','exit:walk']);assert.ok(score(campaign,s)>=80);assert.ok(!('purchase' in s));});
+test('replaying the final decision preserves evidence and resources',()=>{const original=replay(campaign,[...base,'team','exit:smaller']);const before=replay(campaign,original.history.slice(0,-1));const second=apply(campaign,before,'exit:walk');assert.equal(second.cash,original.cash);assert.equal(second.day,original.day);assert.deepEqual(second.done,original.done);});
+test('save from a different campaign revision is rejected',()=>{assert.throws(()=>decode({...campaign,version:2},encode(initial(campaign))),/different game version/);});
