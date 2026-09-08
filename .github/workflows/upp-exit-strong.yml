@@ -1,0 +1,33 @@
+name: Exit Strong game checks
+
+on:
+  pull_request:
+    paths:
+      - 'projects/upp-exit-strong/**'
+      - '.github/workflows/upp-exit-strong.yml'
+  push:
+    branches: [dev]
+    paths:
+      - 'projects/upp-exit-strong/**'
+      - '.github/workflows/upp-exit-strong.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  game-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    defaults:
+      run:
+        working-directory: projects/upp-exit-strong
+    steps:
+      - name: Check out only the game module
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          sparse-checkout: projects/upp-exit-strong
+      - name: Verify locked resource budgets and gameplay
+        run: node scripts/release-check.mjs

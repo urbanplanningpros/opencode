@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "scope": "UPP Exit Strong game module only",
+  "canonicalContent": "dist/game/content/mill-creek.mjs",
+  "sharedAssets": "dist/game/assets",
+  "runtimeModelCallsPerMove": 0,
+  "persistedHistories": 1,
+  "requestedConsumptionRatio": "1/1000000000",
+  "consumptionRatioCertified": false,
+  "reason": "No baseline and workload establish this ratio. Byte, duplication, save, and context limits are enforced separately. No billion-fold savings claim is made.",
+  "guardCommand": "node scripts/check-resources.mjs",
+  "lockScope": "The local release command refuses budget, dependency, content-graph, or duplicate violations. GitHub merge enforcement requires a protected required check configured by the repository owner."
+}

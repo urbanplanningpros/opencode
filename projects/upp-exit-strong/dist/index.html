@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#247aca">
+  <meta name="description" content="An adventure through the stages of Before the Land Deal Gets Expensive. Explore Mill Creek with Scout, uncover surprises, and find your next way forward.">
+  <title>Exit Strong — A Land Adventure</title>
+  <link rel="stylesheet" href="./game/style.css">
+  <link rel="preload" as="image" href="./game/assets/mill-creek.webp">
+</head>
+<body>
+  <a class="skip-link" href="#screen">Skip to your adventure</a>
+  <header class="game-header">
+    <a href="./" class="wordmark" aria-label="Exit Strong home"><span class="brand-star" aria-hidden="true">✦</span><span>EXIT <b>STRONG</b><small>AN URBAN PLANNING PROS ADVENTURE</small></span></a>
+    <nav aria-label="Adventure tools"><button data-command="book">The book <span aria-hidden="true">▤</span></button><button data-command="journal">My backpack <span id="pack-count" aria-hidden="true">0</span></button><button class="menu-button" data-command="menu" aria-label="Open adventure menu">☰</button></nav>
+  </header>
+  <main id="play-area">
+    <div id="save-notice" class="notice" role="status" hidden></div>
+    <section id="adventure-hud" class="adventure-hud" aria-label="Adventure progress" hidden>
+      <nav id="book-trail" class="book-trail" aria-label="The four book stages"></nav>
+      <div class="resource-pills"><span><i aria-hidden="true">●</i> <strong id="cash"></strong><small>game budget</small></span><span><i aria-hidden="true">◷</i> <strong id="time"></strong><small>days left</small></span></div>
+    </section>
+    <div id="screen" class="screen" tabindex="-1"></div>
+    <nav id="guide-controls" class="guide-controls" aria-label="Your next move" hidden><button data-command="guide"><span aria-hidden="true">➜</span> Guide my next move</button><button data-command="directions"><span aria-hidden="true">⇄</span> Change direction</button></nav>
+    <p class="simulation-note">Mill Creek is a fictional adventure. Your game money, property findings, and outcomes are simulated.</p>
+  </main>
+  <dialog id="modal" aria-labelledby="modal-title"><button class="close-modal" data-command="close" aria-label="Close dialog">×</button><div id="modal-body"></div></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <footer class="site-footer"><span>Plan Proper. Exit Strong.</span><a href="https://urbanplanningpros.com/contact/" target="_blank" rel="noopener">Have a real property? Meet UPP ↗</a></footer>
+  <noscript><p>This adventure needs JavaScript. You can still <a href="https://urbanplanningpros.com/book">explore the book</a>.</p></noscript>
+  <script type="module" src="./game/app.mjs"></script>
+</body>
+</html>
