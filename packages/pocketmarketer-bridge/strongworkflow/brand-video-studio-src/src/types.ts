@@ -27,6 +27,7 @@ export type BrandVideoContent = {
   sourceReferenceUrl: string;
   sourceMediaUrl: string;
   backgroundVideoUrl: string;
+  galleryImageUrls: string[];
   voiceoverUrl: string;
 };
 
@@ -60,6 +61,19 @@ const recordOf = (value: unknown): Record<string, unknown> =>
 
 const stringOf = (value: unknown, fallback = ''): string =>
   typeof value === 'string' ? value : typeof value === 'number' ? String(value) : fallback;
+
+const stringArrayOf = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.map((item) => stringOf(item).trim()).filter(Boolean);
+  }
+  if (typeof value === 'string') {
+    return value
+      .split(/\r?\n|,/)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [];
+};
 
 const numberOf = (value: unknown, fallback: number): number => {
   const parsed = typeof value === 'number' ? value : Number(value);
@@ -119,6 +133,7 @@ export const normalizeJob = (input: unknown): BrandVideoJob => {
       sourceReferenceUrl: stringOf(content.sourceReferenceUrl),
       sourceMediaUrl: stringOf(content.sourceMediaUrl),
       backgroundVideoUrl: stringOf(content.backgroundVideoUrl),
+      galleryImageUrls: stringArrayOf(content.galleryImageUrls ?? content.imageUrls ?? content.images),
       voiceoverUrl: stringOf(content.voiceoverUrl),
     },
     output: {
