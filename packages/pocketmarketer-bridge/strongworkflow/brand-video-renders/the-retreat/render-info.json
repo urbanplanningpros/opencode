@@ -1,0 +1,22 @@
+{
+  "source_commit": "feebe10a991cf7e4a88d9566d9abc0efc3d33003",
+  "rendered_at": "2026-09-24T02:33:30.238982+00:00",
+  "composition": "BrandVideo",
+  "asset_id": "RETREAT-EXPERIENCE-001",
+  "video": "retreat-experience-showcase.mp4",
+  "poster": "retreat-experience-showcase-poster.jpg",
+  "watch_page": "index.html",
+  "probe": {
+    "programs": [],
+    "streams": [
+      {
+        "width": 1080,
+        "height": 1920,
+        "duration": "32.000000",
+        "side_data_list": [
+          {}
+        ]
+      }
+    ]
+  }
+}

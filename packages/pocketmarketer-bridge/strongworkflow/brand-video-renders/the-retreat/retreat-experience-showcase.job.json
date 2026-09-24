@@ -1,0 +1,50 @@
+{
+  "id": "retreat-experience-showcase-v1",
+  "assetId": "RETREAT-EXPERIENCE-001",
+  "brand": {
+    "name": "The Retreat",
+    "shortCode": "TR",
+    "primaryColor": "#0C2D28",
+    "accentColor": "#CFA45B",
+    "backgroundColor": "#071A18",
+    "textColor": "#FFF8E8",
+    "logoUrl": "",
+    "fontFamily": "Avenir Next, Montserrat, Arial, sans-serif"
+  },
+  "content": {
+    "headline": "STAY. UNWIND. REPEAT.",
+    "hook": "Some places you visit. This one, you feel.",
+    "body": "Wake up to golden light on glassy water. Kayak a private lake. Chase waterfalls and mountain trails. Gather around a fire beneath the stars.",
+    "proof": "Four destinations. Endless ways to reconnect.",
+    "cta": "BOOK YOUR ESCAPE",
+    "hookLabel": "TENNESSEE, DIFFERENTLY",
+    "messageLabel": "YOUR DAYS HERE",
+    "proofLabel": "ONE EXTRAORDINARY LIFESTYLE",
+    "ctaLabel": "START YOUR RETREAT",
+    "badgeText": "EXPERIENCES",
+    "sourceLabel": "LIVE. ESCAPE. BELONG.",
+    "sourceReferenceUrl": "https://TheRetreatTN.com",
+    "sourceMediaUrl": "",
+    "backgroundVideoUrl": "",
+    "galleryImageUrls": [
+      "https://wander-upload-assets.wander.com/670806492873491044/files/97044e9f-b275-43ab-b2c5-79235fe24863.jpg",
+      "https://assets.wander.com/700506066860902198/fullres.webp",
+      "https://assets.wander.com/700853354728786775/fullres.webp",
+      "https://assets.wander.com/700447190459352587/fullres.webp",
+      "https://assets.wander.com/698624682898753854/fullres.webp",
+      "https://assets.wander.com/708354783601232052/fullres.webp",
+      "https://assets.wander.com/700816108797559578/fullres.webp",
+      "https://assets.wander.com/699696983975136619/fullres.webp"
+    ],
+    "voiceoverUrl": ""
+  },
+  "output": {
+    "variant": "short",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationInSeconds": 32
+  },
+  "captions": [],
+  "createdAt": "2026-09-24T00:00:00.000Z"
+}
