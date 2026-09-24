@@ -23,6 +23,11 @@ export type BrandVideoContent = {
   body: string;
   proof: string;
   cta: string;
+  hookLabel: string;
+  messageLabel: string;
+  proofLabel: string;
+  ctaLabel: string;
+  badgeText: string;
   sourceLabel: string;
   sourceReferenceUrl: string;
   sourceMediaUrl: string;
@@ -129,6 +134,11 @@ export const normalizeJob = (input: unknown): BrandVideoJob => {
       body: stringOf(content.body, 'Use a clear problem, an understandable mechanism, and one next step.'),
       proof: stringOf(content.proof, 'Structure + Content + Support'),
       cta: stringOf(content.cta, 'Book Now'),
+      hookLabel: stringOf(content.hookLabel, 'THE HOOK'),
+      messageLabel: stringOf(content.messageLabel, 'THE MESSAGE'),
+      proofLabel: stringOf(content.proofLabel, 'WHY IT MATTERS'),
+      ctaLabel: stringOf(content.ctaLabel, 'TAKE THE NEXT STEP'),
+      badgeText: stringOf(content.badgeText, variant),
       sourceLabel: stringOf(content.sourceLabel, 'Original Brand Content'),
       sourceReferenceUrl: stringOf(content.sourceReferenceUrl),
       sourceMediaUrl: stringOf(content.sourceMediaUrl),
