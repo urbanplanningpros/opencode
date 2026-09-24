@@ -72,4 +72,5 @@ jobs:
             exit 0
           fi
           git commit -m "Build StrongWorkflow Remotion video studio"
+          git pull --rebase origin brand-remotion-preview
           git push origin HEAD:brand-remotion-preview
