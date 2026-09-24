@@ -21,9 +21,15 @@ const splitBody = (body: string): string[] =>
     .filter(Boolean)
     .slice(0, 4);
 
-const textShadow = '0 8px 34px rgba(0,0,0,.46)';
+const textShadow = '0 8px 34px rgba(0,0,0,.58)';
 
 const safeUrl = (value: string): boolean => /^https?:\/\//i.test(value) || value.startsWith('data:') || value.startsWith('blob:');
+
+const displayReference = (value: string): string =>
+  value
+    .replace(/^https?:\/\//i, '')
+    .replace(/^www\./i, '')
+    .replace(/\/$/, '');
 
 const enterStyle = (frame: number, fps: number, delay = 0): CSSProperties => {
   const progress = spring({frame: frame - delay, fps, config: {damping: 18, mass: 0.72, stiffness: 130}});
@@ -43,6 +49,54 @@ const AccentRule = ({color, width = '42%'}: {color: string; width?: string}) => 
   <div style={{height: 10, width, borderRadius: 999, background: color, boxShadow: `0 0 30px ${color}66`}} />
 );
 
+const GalleryBackground = ({urls, durationInFrames}: {urls: string[]; durationInFrames: number}) => {
+  const frame = useCurrentFrame();
+  if (urls.length === 0) return null;
+  const segment = durationInFrames / urls.length;
+  const fade = Math.min(18, Math.max(8, segment * 0.16));
+
+  return (
+    <AbsoluteFill>
+      {urls.map((url, index) => {
+        const start = index * segment;
+        const end = (index + 1) * segment;
+        const opacity = interpolate(
+          frame,
+          [index === 0 ? -fade : start - fade, index === 0 ? 0 : start + fade, index === urls.length - 1 ? end : end - fade, end + fade],
+          [0, 0.72, 0.72, 0],
+          clamp,
+        );
+        const localProgress = interpolate(frame, [start, end], [0, 1], clamp);
+        const direction = index % 2 === 0 ? 1 : -1;
+        const scale = interpolate(localProgress, [0, 1], [1.08, 1.18], clamp);
+        const translateX = interpolate(localProgress, [0, 1], [-18 * direction, 18 * direction], clamp);
+        const translateY = interpolate(localProgress, [0, 1], [14, -14], clamp);
+
+        return (
+          <AbsoluteFill key={`${url}-${index}`} style={{opacity, overflow: 'hidden'}}>
+            <Img
+              src={url}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: index % 3 === 0 ? '50% 54%' : index % 3 === 1 ? '54% 50%' : '46% 50%',
+                transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+                filter: 'saturate(.9) contrast(1.05) brightness(.88)',
+              }}
+            />
+          </AbsoluteFill>
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
+
+const SectionLabel = ({children, vertical, color}: {children: string; vertical: boolean; color: string}) =>
+  children ? (
+    <div style={{fontSize: vertical ? 25 : 22, fontWeight: 900, letterSpacing: 4, color}}>{children}</div>
+  ) : null;
+
 export const BrandVideo = (rawJob: BrandVideoJob) => {
   const job = normalizeJob(rawJob);
   const frame = useCurrentFrame();
@@ -60,7 +114,9 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
     const milliseconds = (frame / fps) * 1000;
     return milliseconds >= caption.startMs && milliseconds < caption.endMs;
   });
+  const galleryImageUrls = job.content.galleryImageUrls.filter(safeUrl);
   const visualMediaUrl = job.content.backgroundVideoUrl || job.content.sourceMediaUrl;
+  const referenceLabel = displayReference(job.content.sourceReferenceUrl);
   const backgroundStyle: CSSProperties = {
     background: `
       radial-gradient(circle at 18% 12%, ${job.brand.accentColor}44 0, transparent 31%),
@@ -75,21 +131,27 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
     backgroundImage:
       'linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px)',
     backgroundSize: vertical ? '72px 72px' : '86px 86px',
-    opacity: 0.45,
+    opacity: galleryImageUrls.length > 0 || safeUrl(visualMediaUrl) ? 0.14 : 0.45,
     transform: `translateY(${frame * -0.22}px)`,
   };
 
   return (
     <AbsoluteFill style={backgroundStyle}>
-      {safeUrl(visualMediaUrl) ? (
+      {galleryImageUrls.length > 0 ? <GalleryBackground urls={galleryImageUrls} durationInFrames={durationInFrames} /> : null}
+      {galleryImageUrls.length === 0 && safeUrl(visualMediaUrl) ? (
         <OffthreadVideo
           src={visualMediaUrl}
           muted
-          style={{width: '100%', height: '100%', objectFit: 'cover', opacity: 0.22, filter: 'saturate(.7) contrast(1.12)'}}
+          style={{width: '100%', height: '100%', objectFit: 'cover', opacity: 0.46, filter: 'saturate(.8) contrast(1.12) brightness(.82)'}}
         />
       ) : null}
       <AbsoluteFill style={gridStyle} />
-      <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.32))'}} />
+      <AbsoluteFill
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(1,8,11,.50) 0%, rgba(1,8,11,.10) 30%, rgba(1,8,11,.24) 58%, rgba(1,8,11,.70) 100%)',
+        }}
+      />
 
       <div
         style={{
@@ -120,30 +182,34 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
                 fontWeight: 950,
                 fontSize: vertical ? 29 : 25,
                 letterSpacing: 1,
+                boxShadow: '0 12px 36px rgba(0,0,0,.24)',
               }}
             >
               {job.brand.shortCode}
             </div>
           )}
           <div>
-            <div style={{fontSize: vertical ? 28 : 25, fontWeight: 850, letterSpacing: 0.3}}>{job.brand.name}</div>
-            <div style={{fontSize: vertical ? 21 : 18, color: 'rgba(255,255,255,.68)', marginTop: 3}}>{job.content.sourceLabel}</div>
+            <div style={{fontSize: vertical ? 28 : 25, fontWeight: 850, letterSpacing: 0.3, textShadow}}>{job.brand.name}</div>
+            <div style={{fontSize: vertical ? 21 : 18, color: 'rgba(255,255,255,.76)', marginTop: 3, textShadow}}>{job.content.sourceLabel}</div>
           </div>
         </div>
-        <div
-          style={{
-            padding: vertical ? '12px 20px' : '10px 18px',
-            border: '1px solid rgba(255,255,255,.20)',
-            borderRadius: 999,
-            background: 'rgba(2,8,15,.34)',
-            fontSize: vertical ? 20 : 17,
-            fontWeight: 750,
-            textTransform: 'uppercase',
-            letterSpacing: 2,
-          }}
-        >
-          {job.output.variant}
-        </div>
+        {job.content.badgeText ? (
+          <div
+            style={{
+              padding: vertical ? '12px 20px' : '10px 18px',
+              border: '1px solid rgba(255,255,255,.28)',
+              borderRadius: 999,
+              background: 'rgba(2,8,15,.46)',
+              fontSize: vertical ? 20 : 17,
+              fontWeight: 750,
+              textTransform: 'uppercase',
+              letterSpacing: 2,
+              textShadow,
+            }}
+          >
+            {job.content.badgeText}
+          </div>
+        ) : null}
       </div>
 
       <SceneFrame start={0} end={hookEnd}>
@@ -159,7 +225,7 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
             ...enterStyle(frame, fps, 0),
           }}
         >
-          <div style={{fontSize: vertical ? 25 : 22, fontWeight: 900, letterSpacing: 4, color: job.brand.accentColor}}>THE HOOK</div>
+          <SectionLabel vertical={vertical} color={job.brand.accentColor}>{job.content.hookLabel}</SectionLabel>
           <div style={{fontSize: titleSize, lineHeight: 0.99, fontWeight: 950, maxWidth: vertical ? 940 : 1450, textShadow}}>{job.content.hook}</div>
           <AccentRule color={job.brand.accentColor} width={vertical ? '58%' : '34%'} />
         </div>
@@ -177,8 +243,8 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
           }}
         >
           <div style={{...enterStyle(frame - hookEnd, fps, 0)}}>
-            <div style={{fontSize: vertical ? 24 : 21, color: job.brand.accentColor, fontWeight: 900, letterSpacing: 3}}>THE MESSAGE</div>
-            <div style={{fontSize: titleSize * 0.82, lineHeight: 1.02, marginTop: 22, fontWeight: 950, textShadow}}>{job.content.headline}</div>
+            <SectionLabel vertical={vertical} color={job.brand.accentColor}>{job.content.messageLabel}</SectionLabel>
+            <div style={{fontSize: titleSize * 0.82, lineHeight: 1.02, marginTop: job.content.messageLabel ? 22 : 0, fontWeight: 950, textShadow}}>{job.content.headline}</div>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', gap: vertical ? 24 : 20}}>
             {bodyLines.map((line, index) => (
@@ -192,9 +258,10 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
                   alignItems: 'start',
                   padding: vertical ? '23px 25px' : '19px 22px',
                   borderRadius: 22,
-                  background: 'rgba(2,8,15,.46)',
-                  border: '1px solid rgba(255,255,255,.12)',
-                  boxShadow: '0 20px 50px rgba(0,0,0,.18)',
+                  background: 'rgba(2,8,15,.60)',
+                  border: '1px solid rgba(255,255,255,.16)',
+                  boxShadow: '0 20px 50px rgba(0,0,0,.30)',
+                  backdropFilter: 'blur(8px)',
                 }}
               >
                 <div
@@ -212,7 +279,7 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
                 >
                   {index + 1}
                 </div>
-                <div style={{fontSize: bodySize, lineHeight: 1.18, fontWeight: 720}}>{line}</div>
+                <div style={{fontSize: bodySize, lineHeight: 1.18, fontWeight: 720, textShadow}}>{line}</div>
               </div>
             ))}
           </div>
@@ -232,7 +299,7 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
             ...enterStyle(frame - bodyEnd, fps, 0),
           }}
         >
-          <div style={{fontSize: vertical ? 25 : 22, fontWeight: 900, letterSpacing: 4, color: job.brand.accentColor}}>WHY IT MATTERS</div>
+          <SectionLabel vertical={vertical} color={job.brand.accentColor}>{job.content.proofLabel}</SectionLabel>
           <div style={{fontSize: vertical ? 72 : 68, lineHeight: 1.04, fontWeight: 950, maxWidth: vertical ? 940 : 1440, textShadow}}>{job.content.proof}</div>
           <AccentRule color={job.brand.accentColor} width={vertical ? '48%' : '28%'} />
         </div>
@@ -249,15 +316,17 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
             padding: outerPadding,
           }}
         >
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 34, ...enterStyle(frame - proofEnd, fps, 0)}}>
-            <div style={{fontSize: vertical ? 31 : 27, fontWeight: 850, color: 'rgba(255,255,255,.76)', letterSpacing: 1.5}}>TAKE THE NEXT STEP</div>
+          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 30, ...enterStyle(frame - proofEnd, fps, 0)}}>
+            {job.content.ctaLabel ? (
+              <div style={{fontSize: vertical ? 31 : 27, fontWeight: 850, color: 'rgba(255,255,255,.82)', letterSpacing: 1.5, textShadow}}>{job.content.ctaLabel}</div>
+            ) : null}
             <div
               style={{
-                padding: vertical ? '30px 52px' : '25px 48px',
+                padding: vertical ? '30px 44px' : '25px 48px',
                 borderRadius: 24,
                 background: job.brand.accentColor,
                 color: job.brand.backgroundColor,
-                fontSize: vertical ? 64 : 58,
+                fontSize: vertical ? (job.content.cta.length > 20 ? 48 : 64) : job.content.cta.length > 20 ? 44 : 58,
                 lineHeight: 1,
                 fontWeight: 950,
                 boxShadow: `0 22px 70px ${job.brand.accentColor}55`,
@@ -265,7 +334,8 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
             >
               {job.content.cta}
             </div>
-            <div style={{fontSize: vertical ? 26 : 22, color: 'rgba(255,255,255,.68)'}}>{job.brand.name}</div>
+            <div style={{fontSize: vertical ? 28 : 23, color: 'rgba(255,255,255,.82)', fontWeight: 800, textShadow}}>{job.brand.name}</div>
+            {referenceLabel ? <div style={{fontSize: vertical ? 25 : 21, color: job.brand.accentColor, fontWeight: 900, letterSpacing: 1.2, textShadow}}>{referenceLabel}</div> : null}
           </div>
         </div>
       </SceneFrame>
