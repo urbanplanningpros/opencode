@@ -23,6 +23,7 @@ export const sampleJob: BrandVideoJob = {
     sourceReferenceUrl: '',
     sourceMediaUrl: '',
     backgroundVideoUrl: '',
+    galleryImageUrls: [],
     voiceoverUrl: '',
   },
   output: {
