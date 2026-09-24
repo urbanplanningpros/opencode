@@ -1,0 +1,66 @@
+name: Render Brand Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_path:
+        description: Repository path to a BrandVideoJob JSON file
+        required: false
+        default: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/example/brand-video-job.json
+      job_url:
+        description: Optional public URL to a BrandVideoJob JSON file; overrides job_path
+        required: false
+        default: ''
+      output_name:
+        description: MP4 filename without folders
+        required: false
+        default: brand-video.mp4
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brand-remotion-preview
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Install dependencies
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun install --no-save
+      - name: Resolve render job
+        id: job
+        env:
+          JOB_PATH: ${{ inputs.job_path }}
+          JOB_URL: ${{ inputs.job_url }}
+        run: |
+          PACKAGE="packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src"
+          if [ -n "$JOB_URL" ]; then
+            curl -fsSL --retry 5 --retry-all-errors "$JOB_URL" -o "$PACKAGE/render-job.json"
+            echo "path=render-job.json" >> "$GITHUB_OUTPUT"
+          else
+            cp "$JOB_PATH" "$PACKAGE/render-job.json"
+            echo "path=render-job.json" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Validate job
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run validate-job -- ${{ steps.job.outputs.path }}
+      - name: Ensure rendering browser
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bunx remotion browser ensure
+      - name: Render MP4
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run render -- ${{ steps.job.outputs.path }} ./out/${{ inputs.output_name }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: strongworkflow-brand-video-${{ github.run_id }}
+          path: |
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/${{ inputs.output_name }}
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/*.render.json
+          if-no-files-found: error
+          retention-days: 14
