@@ -1,0 +1,46 @@
+{
+  "id": "brand-video-render-smoke",
+  "assetId": "SMOKE-001",
+  "brand": {
+    "name": "StrongWorkflow",
+    "shortCode": "SW",
+    "primaryColor": "#071a2f",
+    "accentColor": "#e1ad45",
+    "backgroundColor": "#06111f",
+    "textColor": "#ffffff",
+    "logoUrl": "",
+    "fontFamily": "Inter, Arial, sans-serif"
+  },
+  "content": {
+    "headline": "BRAND VIDEO ENGINE",
+    "hook": "One content brief. One preview. One render-ready workflow.",
+    "body": "Preview and export from the same source of truth.",
+    "proof": "StrongWorkflow × Remotion",
+    "cta": "BUILD IT ONCE",
+    "sourceLabel": "Render Smoke Test",
+    "sourceReferenceUrl": "",
+    "sourceMediaUrl": "",
+    "backgroundVideoUrl": "",
+    "voiceoverUrl": ""
+  },
+  "output": {
+    "variant": "short",
+    "width": 360,
+    "height": 640,
+    "fps": 24,
+    "durationInSeconds": 6
+  },
+  "captions": [
+    {
+      "startMs": 0,
+      "endMs": 2800,
+      "text": "One content brief. One preview. One render-ready workflow."
+    },
+    {
+      "startMs": 2800,
+      "endMs": 5600,
+      "text": "Preview and export from the same source of truth."
+    }
+  ],
+  "createdAt": "2026-09-24T00:00:00.000Z"
+}
