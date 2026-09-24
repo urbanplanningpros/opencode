@@ -1,0 +1,109 @@
+name: Render The Retreat Experience Showcase
+
+on:
+  push:
+    branches:
+      - brand-remotion-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/example/retreat-experience-showcase.json
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/src/BrandVideo.tsx
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/src/types.ts
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/src/sample-job.ts
+      - .github/workflows/retreat-experience-showcase-render.yml
+  workflow_dispatch:
+
+concurrency:
+  group: retreat-experience-showcase-render
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brand-remotion-preview
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Install dependencies
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun install --no-save
+      - name: Validate render job
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run validate-job -- ./example/retreat-experience-showcase.json
+      - name: Typecheck composition
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run typecheck
+      - name: Ensure rendering browser
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bunx remotion browser ensure
+      - name: Render vertical showcase
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run render -- ./example/retreat-experience-showcase.json ./out/retreat-experience-showcase.mp4
+      - name: Verify and create poster
+        run: |
+          PACKAGE="packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src"
+          test -s "$PACKAGE/out/retreat-experience-showcase.mp4"
+          test -s "$PACKAGE/out/retreat-experience-showcase.render.json"
+          ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration -of json "$PACKAGE/out/retreat-experience-showcase.mp4" | tee /tmp/retreat-video-probe.json
+          ffmpeg -y -ss 00:00:16 -i "$PACKAGE/out/retreat-experience-showcase.mp4" -frames:v 1 -q:v 2 "$PACKAGE/out/retreat-experience-showcase-poster.jpg"
+          test -s "$PACKAGE/out/retreat-experience-showcase-poster.jpg"
+      - name: Publish rendered showcase
+        run: |
+          PACKAGE="packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src"
+          TARGET="packages/pocketmarketer-bridge/strongworkflow/brand-video-renders/the-retreat"
+          mkdir -p "$TARGET"
+          cp "$PACKAGE/out/retreat-experience-showcase.mp4" "$TARGET/retreat-experience-showcase.mp4"
+          cp "$PACKAGE/out/retreat-experience-showcase-poster.jpg" "$TARGET/retreat-experience-showcase-poster.jpg"
+          cp "$PACKAGE/out/retreat-experience-showcase.render.json" "$TARGET/retreat-experience-showcase.render.json"
+          cp "$PACKAGE/example/retreat-experience-showcase.json" "$TARGET/retreat-experience-showcase.job.json"
+          python - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          target = Path('packages/pocketmarketer-bridge/strongworkflow/brand-video-renders/the-retreat')
+          probe = json.loads(Path('/tmp/retreat-video-probe.json').read_text())
+          (target / 'render-info.json').write_text(json.dumps({
+              'source_commit': os.environ['GITHUB_SHA'],
+              'rendered_at': datetime.now(timezone.utc).isoformat(),
+              'composition': 'BrandVideo',
+              'asset_id': 'RETREAT-EXPERIENCE-001',
+              'video': 'retreat-experience-showcase.mp4',
+              'poster': 'retreat-experience-showcase-poster.jpg',
+              'probe': probe,
+          }, indent=2) + '\n')
+          PY
+      - name: Commit rendered showcase
+        run: |
+          git config user.name "strongworkflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add packages/pocketmarketer-bridge/strongworkflow/brand-video-renders/the-retreat
+          if git diff --cached --quiet; then
+            echo "No rendered output changes"
+            exit 0
+          fi
+          git commit -m "Render The Retreat experience showcase"
+          for attempt in 1 2 3; do
+            git pull --rebase origin brand-remotion-preview || true
+            if git push origin HEAD:brand-remotion-preview; then
+              exit 0
+            fi
+            sleep $((attempt * 3))
+          done
+          exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: retreat-experience-showcase-${{ github.run_id }}
+          path: |
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/retreat-experience-showcase.mp4
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/retreat-experience-showcase-poster.jpg
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/retreat-experience-showcase.render.json
+          if-no-files-found: error
+          retention-days: 14
