@@ -1,0 +1,58 @@
+name: Smoke Test Brand Remotion Render
+
+on:
+  push:
+    branches:
+      - brand-remotion-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/src/**
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/scripts/render.mjs
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/example/brand-video-smoke-job.json
+      - .github/workflows/brand-remotion-render-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: brand-remotion-render-smoke
+  cancel-in-progress: true
+
+jobs:
+  render-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brand-remotion-preview
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - name: Install dependencies
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun install --no-save
+      - name: Validate smoke job
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run validate-job -- ./example/brand-video-smoke-job.json
+      - name: Ensure rendering browser
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bunx remotion browser ensure
+      - name: Render smoke MP4
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: bun run render -- ./example/brand-video-smoke-job.json ./out/remotion-smoke.mp4
+      - name: Verify rendered files
+        working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
+        run: |
+          test -s ./out/remotion-smoke.mp4
+          test -s ./out/remotion-smoke.render.json
+          ls -lh ./out/remotion-smoke.mp4 ./out/remotion-smoke.render.json
+          cat ./out/remotion-smoke.render.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: brand-remotion-smoke-${{ github.run_id }}
+          path: |
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/remotion-smoke.mp4
+            packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src/out/remotion-smoke.render.json
+          if-no-files-found: error
+          retention-days: 7
