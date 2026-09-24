@@ -60,6 +60,7 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
     const milliseconds = (frame / fps) * 1000;
     return milliseconds >= caption.startMs && milliseconds < caption.endMs;
   });
+  const visualMediaUrl = job.content.backgroundVideoUrl || job.content.sourceMediaUrl;
   const backgroundStyle: CSSProperties = {
     background: `
       radial-gradient(circle at 18% 12%, ${job.brand.accentColor}44 0, transparent 31%),
@@ -80,9 +81,9 @@ export const BrandVideo = (rawJob: BrandVideoJob) => {
 
   return (
     <AbsoluteFill style={backgroundStyle}>
-      {safeUrl(job.content.backgroundVideoUrl) ? (
+      {safeUrl(visualMediaUrl) ? (
         <OffthreadVideo
-          src={job.content.backgroundVideoUrl}
+          src={visualMediaUrl}
           muted
           style={{width: '100%', height: '100%', objectFit: 'cover', opacity: 0.22, filter: 'saturate(.7) contrast(1.12)'}}
         />
