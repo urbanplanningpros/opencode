@@ -8,6 +8,10 @@
   <script src="styles-payload-1.js"></script>
   <script src="styles-payload-2.js"></script>
   <script src="styles.js"></script>
+  <style>
+    .remotion-link { text-decoration: none; }
+    .remotion-top-button { white-space: nowrap; }
+  </style>
 </head>
 <body>
   <div id="boot" class="boot-screen">
@@ -40,6 +44,7 @@
         <button class="nav-button" type="button" data-view="overview"><span>⌂</span><b>Brand Overview</b></button>
         <button class="nav-button" type="button" data-view="queue"><span>▶</span><b>Content Queue</b></button>
         <button class="nav-button" type="button" data-view="sources"><span>↗</span><b>Source Library</b></button>
+        <a class="nav-button remotion-link" href="../brand-video-studio/index.html"><span>◉</span><b>Video Studio</b></a>
         <button class="nav-button" type="button" data-view="team"><span>◎</span><b>Team Workload</b></button>
         <button class="nav-button" type="button" data-view="performance"><span>↗</span><b>Performance</b></button>
         <button class="nav-button" type="button" data-view="settings"><span>⚙</span><b>Brand Setup</b></button>
@@ -72,6 +77,7 @@
             <span>⌕</span>
             <input id="globalSearch" type="search" placeholder="Search content, sources, people…">
           </div>
+          <a class="button secondary remotion-top-button" href="../brand-video-studio/index.html">▶ Video Studio</a>
           <button class="button secondary" id="quickAddButton" type="button">＋ Add</button>
         </div>
       </header>
