@@ -1,11 +1,10 @@
 import {Composition} from 'remotion';
 import {BrandVideo} from './BrandVideo';
 import {sampleJob} from './sample-job';
-import type {BrandVideoJob} from './types';
 import {normalizeJob, toDurationInFrames} from './types';
 
 export const RemotionRoot = () => (
-  <Composition<BrandVideoJob>
+  <Composition
     id="BrandVideo"
     component={BrandVideo}
     defaultProps={sampleJob}
