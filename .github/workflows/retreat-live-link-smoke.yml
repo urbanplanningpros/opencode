@@ -1,0 +1,43 @@
+name: Verify The Retreat Showcase Live Link
+
+on:
+  push:
+    branches:
+      - brand-remotion-preview
+    paths:
+      - packages/pocketmarketer-bridge/strongworkflow/brand-video-renders/the-retreat/**
+      - .github/workflows/retreat-live-link-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live-links:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: brand-remotion-preview
+      - name: Verify pinned watch page and MP4
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: |
+          BASE="https://raw.githack.com/urbanplanningpros/opencode/${COMMIT_SHA}/packages/pocketmarketer-bridge/strongworkflow/brand-video-renders/the-retreat"
+          for attempt in $(seq 1 15); do
+            if curl -fsSL --retry 3 --retry-delay 2 --retry-all-errors "$BASE/index.html" -o /tmp/retreat-watch.html; then
+              break
+            fi
+            sleep 4
+          done
+          grep -F "The Retreat Experience Showcase" /tmp/retreat-watch.html
+          grep -F "retreat-experience-showcase.mp4" /tmp/retreat-watch.html
+          curl -fsSL --retry 10 --retry-delay 3 --retry-all-errors --range 0-1048575 "$BASE/retreat-experience-showcase.mp4" -o /tmp/retreat-video-start.bin
+          test -s /tmp/retreat-video-start.bin
+          python - <<'PY'
+          from pathlib import Path
+          data = Path('/tmp/retreat-video-start.bin').read_bytes()
+          assert b'ftyp' in data[:64], 'MP4 file signature not found'
+          print('RETREAT_SHOWCASE_LIVE_LINK_VERIFIED')
+          PY
