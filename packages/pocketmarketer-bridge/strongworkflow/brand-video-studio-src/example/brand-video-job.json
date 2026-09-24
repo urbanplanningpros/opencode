@@ -1,0 +1,56 @@
+{
+  "id": "sample-brand-short",
+  "assetId": "BRAND-001",
+  "brand": {
+    "name": "Pocket Marketer",
+    "shortCode": "PM",
+    "primaryColor": "#071a2f",
+    "accentColor": "#e1ad45",
+    "backgroundColor": "#06111f",
+    "textColor": "#ffffff",
+    "logoUrl": "",
+    "fontFamily": "Inter, Arial, sans-serif"
+  },
+  "content": {
+    "headline": "STRUCTURE + CONTENT + SUPPORT",
+    "hook": "Creating effective videos while running your business is harder than it looks.",
+    "body": "Start with proven attention. Distill the strongest idea. Build one clear video around one next step. Then distribute it through a repeatable workflow.",
+    "proof": "Organic marketing · Paid ads · Employee training",
+    "cta": "BOOK NOW",
+    "sourceLabel": "Brand Content Command Center",
+    "sourceReferenceUrl": "",
+    "sourceMediaUrl": "",
+    "backgroundVideoUrl": "",
+    "voiceoverUrl": ""
+  },
+  "output": {
+    "variant": "short",
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "durationInSeconds": 35
+  },
+  "captions": [
+    {
+      "startMs": 0,
+      "endMs": 4500,
+      "text": "Creating effective videos while running your business is harder than it looks."
+    },
+    {
+      "startMs": 4500,
+      "endMs": 11000,
+      "text": "Start with proven attention and distill the strongest idea."
+    },
+    {
+      "startMs": 11000,
+      "endMs": 22000,
+      "text": "Build one clear video around one next step."
+    },
+    {
+      "startMs": 22000,
+      "endMs": 32000,
+      "text": "Then distribute it through a repeatable workflow."
+    }
+  ],
+  "createdAt": "2026-08-26T00:00:00.000Z"
+}
