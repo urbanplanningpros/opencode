@@ -9,6 +9,10 @@ on:
       - .github/workflows/brand-remotion-studio-build.yml
   workflow_dispatch:
 
+concurrency:
+  group: brand-remotion-studio-preview
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -48,11 +52,12 @@ jobs:
           import json
           import os
           from pathlib import Path
+          from datetime import datetime, timezone
           target = Path('packages/pocketmarketer-bridge/strongworkflow/brand-video-studio')
           (target / 'build-info.json').write_text(json.dumps({
               'source_commit': os.environ['GITHUB_SHA'],
               'remotion_version': '4.0.527',
-              'built_at': __import__('datetime').datetime.now(__import__('datetime').timezone.utc).isoformat(),
+              'built_at': datetime.now(timezone.utc).isoformat(),
           }, indent=2) + '\n')
           PY
           test -f "$TARGET/index.html"
