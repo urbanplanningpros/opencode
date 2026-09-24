@@ -1,0 +1,31 @@
+{
+  "name": "@strongworkflow/brand-video-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "studio": "remotion studio src/remotion-index.ts",
+    "render": "node scripts/render.mjs",
+    "validate-job": "node scripts/validate-job.mjs"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.527",
+    "@remotion/player": "4.0.527",
+    "@remotion/renderer": "4.0.527",
+    "@remotion/transitions": "4.0.527",
+    "remotion": "4.0.527",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.527",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.0.4",
+    "typescript": "5.9.3",
+    "vite": "7.1.4"
+  }
+}
