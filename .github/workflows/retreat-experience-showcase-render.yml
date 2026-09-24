@@ -34,6 +34,10 @@ jobs:
       - name: Install dependencies
         working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
         run: bun install --no-save
+      - name: Install media verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
       - name: Validate render job
         working-directory: packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src
         run: bun run validate-job -- ./example/retreat-experience-showcase.json
@@ -54,6 +58,16 @@ jobs:
           ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration -of json "$PACKAGE/out/retreat-experience-showcase.mp4" | tee /tmp/retreat-video-probe.json
           ffmpeg -y -ss 00:00:16 -i "$PACKAGE/out/retreat-experience-showcase.mp4" -frames:v 1 -q:v 2 "$PACKAGE/out/retreat-experience-showcase-poster.jpg"
           test -s "$PACKAGE/out/retreat-experience-showcase-poster.jpg"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          probe = json.loads(Path('/tmp/retreat-video-probe.json').read_text())
+          stream = probe['streams'][0]
+          assert stream['width'] == 1080, stream
+          assert stream['height'] == 1920, stream
+          duration = float(stream.get('duration') or 0)
+          assert 31.5 <= duration <= 32.5, stream
+          PY
       - name: Publish rendered showcase
         run: |
           PACKAGE="packages/pocketmarketer-bridge/strongworkflow/brand-video-studio-src"
@@ -63,6 +77,21 @@ jobs:
           cp "$PACKAGE/out/retreat-experience-showcase-poster.jpg" "$TARGET/retreat-experience-showcase-poster.jpg"
           cp "$PACKAGE/out/retreat-experience-showcase.render.json" "$TARGET/retreat-experience-showcase.render.json"
           cp "$PACKAGE/example/retreat-experience-showcase.json" "$TARGET/retreat-experience-showcase.job.json"
+          cat > "$TARGET/index.html" <<'HTML'
+          <!doctype html>
+          <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+            <meta name="theme-color" content="#071A18">
+            <title>The Retreat — Experience Showcase</title>
+            <style>
+              *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#071A18;color:#FFF8E8;font-family:Inter,Avenir Next,Arial,sans-serif}body{display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 15% 10%,#CFA45B2e,transparent 32%),linear-gradient(145deg,#071A18,#0C2D28 66%,#030807)}main{width:min(100%,520px);text-align:center}.eyebrow{letter-spacing:.22em;text-transform:uppercase;color:#CFA45B;font-weight:800;font-size:12px;margin-bottom:12px}h1{font-size:clamp(28px,7vw,44px);line-height:1;margin:0 0 18px}video{width:100%;max-height:78vh;border-radius:26px;box-shadow:0 30px 90px #0009;border:1px solid #ffffff24;background:#000}p{color:#d9e3df;line-height:1.55}.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:18px}a{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;border-radius:999px;text-decoration:none;font-weight:850}.primary{background:#CFA45B;color:#071A18}.secondary{border:1px solid #ffffff38;color:#FFF8E8;background:#ffffff0c}
+            </style>
+          </head>
+          <body><main><div class="eyebrow">Live · Escape · Belong</div><h1>The Retreat Experience Showcase</h1><video controls autoplay muted loop playsinline poster="retreat-experience-showcase-poster.jpg"><source src="retreat-experience-showcase.mp4" type="video/mp4"></video><p>A 32-second vertical experience reel built for The Retreat TN.</p><div class="actions"><a class="primary" href="https://theretreattn.com" target="_blank" rel="noreferrer">Explore The Retreat</a><a class="secondary" href="retreat-experience-showcase.mp4">Open MP4</a></div></main></body>
+          </html>
+          HTML
           python - <<'PY'
           import json
           import os
@@ -77,6 +106,7 @@ jobs:
               'asset_id': 'RETREAT-EXPERIENCE-001',
               'video': 'retreat-experience-showcase.mp4',
               'poster': 'retreat-experience-showcase-poster.jpg',
+              'watch_page': 'index.html',
               'probe': probe,
           }, indent=2) + '\n')
           PY
